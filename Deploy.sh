@@ -1,25 +1,23 @@
 #!/usr/bin/env bash
 set -e
 
-# 1. Build project
+# Build project on main
 pnpm build
 
-# 2. Sync dist → live-worktree, but keep .git, CNAME, .nojekyll
+# Sync dist → ./deploy-live, protect .git, CNAME, .nojekyll
 rsync -av --delete \
   --exclude='.git' \
   --exclude='CNAME' \
   --exclude='.nojekyll' \
-  dist/ ../live-worktree/
+  dist/ ./deploy-live/
 
-# 3. Ensure CNAME and .nojekyll exist in live-worktree
-echo "ismetalp.com" > ../live-worktree/CNAME
-touch ../live-worktree/.nojekyll
+# Ensure CNAME and .nojekyll exist
+echo "ismetalp.com" > ./deploy-live/CNAME
+touch ./deploy-live/.nojekyll
 
-# 4. Commit & push in live branch
-cd ../live-worktree
+# Commit & push on live
+cd ./deploy-live
 git add -A
 git commit -m "Deploy $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 git push origin live
-
-# 5. Back to main branch working dir
 cd -
