@@ -21,3 +21,8 @@ git add -A
 git commit -m "Deploy $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 git push origin deploy-live
 cd -
+
+# Optional preview: use ./deploy.sh --preview
+if [[ "${1:-}" == "--preview" ]]; then
+  pnpm dlx serve ./deploy-live
+fi
