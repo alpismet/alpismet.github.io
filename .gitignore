@@ -1,23 +1,16 @@
 
-node_modules
+# Build & cache
+dist/
+.astro/
+_astro/
+pagefind/
+*.pf_fragment
+*.pf_index
+*.pf_meta
+*.pagefind
 
-dist
-
-.astro
-
+# Deps & IDE
+node_modules/
+.local/
+.idea/
 .DS_Store
-
-.env
-
-.env
-
-!.env.example
-
-.env.*
-
-*.log
-
-coverage
-
-/.idea
-Deploy.sh
