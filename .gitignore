@@ -20,3 +20,4 @@ dist
 coverage
 
 /.idea
+Deploy.sh
