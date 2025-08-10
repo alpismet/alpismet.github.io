@@ -1,0 +1,1 @@
+import{t as e}from"./animation.g7IiHLND.js";document.addEventListener("astro:page-load",()=>{const n=()=>{e("backdrop",!0,"hidden"),e("nav-panel",!0,"hidden!")};document.getElementById("nav-open-button")?.addEventListener("click",n)});
