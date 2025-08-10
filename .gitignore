@@ -14,3 +14,4 @@ node_modules/
 .local/
 .idea/
 .DS_Store
+/deploy-live/
