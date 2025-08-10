@@ -77,11 +77,14 @@
     "viewerjs": "^1.11.7"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "pnpm exec lint-staged"
   },
   "lint-staged": {
-    "*": [
-      "eslint"
+    "src/**/*.{js,jsx,ts,tsx,astro,md,mdx}": [
+      "eslint --max-warnings=0 --cache --fix"
+    ],
+    "*.{json,css,scss}": [
+      "prettier --write --ignore-unknown"
     ]
   },
   "pnpm": {

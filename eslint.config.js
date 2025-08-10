@@ -7,7 +7,19 @@ import prettier from 'eslint-config-prettier/flat'
 export default ts.config(
   {
     // https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
-    ignores: ['dist/', '.astro/', '.local/'],
+    ignores: [
+      'dist/**',
+      '.astro/**',
+      '.local/**',
+      '_astro/**',
+      'pagefind/**',
+      '*.pf_fragment',
+      '*.pf_index',
+      '*.pf_meta',
+      '*.pagefind',
+      'node_modules/**',
+      '.idea/**',
+    ],
   },
   {
     // https://eslint.org/docs/latest/use/configure/language-options
