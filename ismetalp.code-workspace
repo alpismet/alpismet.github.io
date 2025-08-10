@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "deploy-live"
+    }
+  ],
+  "settings": {},
+  "extensions": {
+    "recommendations": [
+      "astro-build.astro-vscode",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "ms-vscode.live-server",
+      "ms-vscode.live-preview"
+    ]
+  }
+}

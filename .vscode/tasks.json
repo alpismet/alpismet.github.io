@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "pnpm dev",
+      "type": "shell",
+      "command": "pnpm dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "pnpm build",
+      "type": "shell",
+      "command": "pnpm build",
+      "problemMatcher": []
+    },
+    {
+      "label": "pnpm deploy (deploy.sh)",
+      "type": "shell",
+      "command": "pnpm deploy",
+      "problemMatcher": []
+    }
+  ]
+}

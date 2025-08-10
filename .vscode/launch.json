@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Open site in Chrome (Astro dev)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:4321",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "pnpm dev"
+    },
+    {
+      "name": "Attach to Chrome (already running)",
+      "type": "pwa-chrome",
+      "request": "attach",
+      "port": 9222
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Dev + Browser",
+      "configurations": [
+        "Open site in Chrome (Astro dev)"
+      ]
+    }
+  ]
+}
