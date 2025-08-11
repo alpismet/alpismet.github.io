@@ -1,14 +1,15 @@
 ---
-import { UI } from '~/config'
-import type { HTMLAttributes } from 'astro/types'
+import type { HTMLAttributes } from "astro/types";
+import { UI } from "~/config";
 
-interface Props extends HTMLAttributes<'a'> {
-  href?: string
-  title?: string
-  rel?: string
-  external?: boolean
-  enableNewTabWarning?: boolean
-  children: HTMLElement | HTMLElement[] | string
+interface Props extends HTMLAttributes<"a"> {
+  href?: string;
+  title?: string;
+  rel?: string;
+  external?: boolean;
+  enableNewTabWarning?: boolean;
+  newTab?: boolean; // force open in new tab (used for social links)
+  children: HTMLElement | HTMLElement[] | string;
 }
 
 const {
@@ -16,35 +17,36 @@ const {
   title,
   rel,
   external = false,
+  newTab = false,
   enableNewTabWarning = false,
   class: className,
   ...rest
-} = Astro.props
+} = Astro.props;
 
-const { externalLink } = UI
+const { externalLink } = UI;
 
-const openInNewTab = external && externalLink.newTab
-const targetAttr = openInNewTab ? '_blank' : undefined
+const openInNewTab = (external && externalLink.newTab) || newTab;
+const targetAttr = openInNewTab ? "_blank" : undefined;
 const relAttr =
   rel || openInNewTab
-    ? `${openInNewTab ? 'noopener noreferrer' : ''} ${rel ? rel : ''}`.trim()
-    : undefined
-const ariaLabel = title ? title : openInNewTab ? 'Open in new tab' : undefined
+    ? `${openInNewTab ? "noopener noreferrer" : ""} ${rel ? rel : ""}`.trim()
+    : undefined;
+const ariaLabel = title ? title : openInNewTab ? "Open in new tab" : undefined;
 
 const showCursor =
   openInNewTab &&
   enableNewTabWarning &&
   externalLink.cursorType &&
-  externalLink.cursorType !== 'pointer'
+  externalLink.cursorType !== "pointer";
 
 const showIcon =
-  openInNewTab && enableNewTabWarning && externalLink.showNewTabIcon
+  openInNewTab && enableNewTabWarning && externalLink.showNewTabIcon;
 ---
 
 <a
   class:list={[
-    'op-60 no-underline hover:op-100',
-    { 'external-link-cursor': showCursor },
+    "op-60 no-underline hover:op-100",
+    { "external-link-cursor": showCursor },
     className,
   ]}
   {href}
@@ -55,9 +57,10 @@ const showIcon =
   {...rest}
 >
   {
-    Astro.slots.has('default') && (
+    Astro.slots.has("default") && (
       <>
-        <slot />{showIcon && (
+        <slot />
+        {showIcon && (
           <span
             u-i-carbon-arrow-up-right
             class="new-tab-icon ml-0!"
@@ -67,7 +70,7 @@ const showIcon =
       </>
     )
   }{
-    Astro.slots.has('title') && (
+    Astro.slots.has("title") && (
       <span class="text-lg leading-1.3em align-middle">
         <slot name="title" />
         {showIcon && (

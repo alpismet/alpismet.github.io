@@ -1,42 +1,42 @@
 ---
-import Link from '~/components/base/Link.astro'
-import { resolvePath } from '~/utils/path'
+import Link from "~/components/base/Link.astro";
+import { resolvePath } from "~/utils/path";
 
-import type { InternalNav, SocialLink } from '~/types'
+import type { InternalNav, SocialLink } from "~/types";
 
 type Props =
   | {
-      type: 'internal'
-      item: InternalNav
-      mergeOnMobile: boolean
-      mobileItemType?: 'text' | 'icon'
+      type: "internal";
+      item: InternalNav;
+      mergeOnMobile: boolean;
+      mobileItemType?: "text" | "icon";
     }
   | {
-      type: 'social'
-      item: SocialLink
-      mergeOnMobile: boolean
-      mobileItemType?: 'text' | 'icon'
-    }
+      type: "social";
+      item: SocialLink;
+      mergeOnMobile: boolean;
+      mobileItemType?: "text" | "icon";
+    };
 
-const { type, item, mergeOnMobile, mobileItemType } = Astro.props
+const { type, item, mergeOnMobile, mobileItemType } = Astro.props;
 
-const href = type == 'internal' ? resolvePath(item.path) : item.link
-const rel = type === 'internal' ? undefined : 'me'
-const external = type === 'internal' ? false : true
+const href = type == "internal" ? resolvePath(item.path) : item.link;
+const rel = type === "internal" ? undefined : "me";
+const external = type === "internal" ? false : true;
 const ariaCurrent =
-  type === 'internal'
+  type === "internal"
     ? Astro.url.pathname === resolvePath(item.path)
-      ? 'page'
+      ? "page"
       : false
-    : undefined
+    : undefined;
 ---
 
 {
   mergeOnMobile ? (
     mobileItemType ? (
-      mobileItemType === 'text' ? (
-        (item.displayMode === 'alwaysText' ||
-          item.displayMode === 'iconToTextOnMobile') && (
+      mobileItemType === "text" ? (
+        (item.displayMode === "alwaysText" ||
+          item.displayMode === "iconToTextOnMobile") && (
           <li class="block py-3 border-b b-[var(--c-scrollbar)] leading-6">
             <Link
               class="block op-transition"
@@ -44,6 +44,7 @@ const ariaCurrent =
               title={item.title}
               rel={rel}
               external={external}
+              newTab={type === "social"}
               aria-current={ariaCurrent}
             >
               <span>{item.text}</span>
@@ -51,14 +52,15 @@ const ariaCurrent =
           </li>
         )
       ) : (
-        (item.displayMode === 'alwaysIcon' ||
-          item.displayMode === 'textToIconOnMobile') && (
+        (item.displayMode === "alwaysIcon" ||
+          item.displayMode === "textToIconOnMobile") && (
           <Link
             class="block op-transition"
             href={href}
             title={item.title}
             rel={rel}
             external={external}
+            newTab={type === "social"}
             aria-current={ariaCurrent}
           >
             <div class={item.icon} />
@@ -72,16 +74,17 @@ const ariaCurrent =
         title={item.title}
         rel={rel}
         external={external}
+        newTab={type === "social"}
         aria-current={ariaCurrent}
       >
-        {(item.displayMode === 'alwaysIcon' ||
-          item.displayMode === 'iconHiddenOnMobile' ||
-          item.displayMode === 'iconToTextOnMobile') && (
+        {(item.displayMode === "alwaysIcon" ||
+          item.displayMode === "iconHiddenOnMobile" ||
+          item.displayMode === "iconToTextOnMobile") && (
           <div class={item.icon} />
         )}
-        {(item.displayMode === 'alwaysText' ||
-          item.displayMode === 'textHiddenOnMobile' ||
-          item.displayMode === 'textToIconOnMobile') && (
+        {(item.displayMode === "alwaysText" ||
+          item.displayMode === "textHiddenOnMobile" ||
+          item.displayMode === "textToIconOnMobile") && (
           <span>{item.text}</span>
         )}
       </Link>
@@ -89,28 +92,29 @@ const ariaCurrent =
   ) : (
     <Link
       class={`${
-        item.displayMode === 'iconHiddenOnMobile' ||
-        item.displayMode === 'textHiddenOnMobile'
-          ? 'lt-md:hidden'
-          : ''
+        item.displayMode === "iconHiddenOnMobile" ||
+        item.displayMode === "textHiddenOnMobile"
+          ? "lt-md:hidden"
+          : ""
       } op-transition`}
       href={href}
       title={item.title}
       rel={rel}
       external={external}
+      newTab={type === "social"}
       aria-current={ariaCurrent}
     >
-      {(item.displayMode === 'alwaysText' ||
-        item.displayMode === 'textHiddenOnMobile') && <span>{item.text}</span>}
-      {(item.displayMode === 'alwaysIcon' ||
-        item.displayMode === 'iconHiddenOnMobile') && <div class={item.icon} />}
-      {item.displayMode === 'textToIconOnMobile' && (
+      {(item.displayMode === "alwaysText" ||
+        item.displayMode === "textHiddenOnMobile") && <span>{item.text}</span>}
+      {(item.displayMode === "alwaysIcon" ||
+        item.displayMode === "iconHiddenOnMobile") && <div class={item.icon} />}
+      {item.displayMode === "textToIconOnMobile" && (
         <>
           <span class="lt-md:hidden">{item.text}</span>
           <div class={`md:hidden ${item.icon}`} />
         </>
       )}
-      {item.displayMode === 'iconToTextOnMobile' && (
+      {item.displayMode === "iconToTextOnMobile" && (
         <>
           <span class="md:hidden">{item.text}</span>
           <div class={`lt-md:hidden ${item.icon}`} />

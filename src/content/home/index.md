@@ -88,8 +88,8 @@ If you find this theme helpful, consider supporting the project maintainer or th
 <div class="min-h-[60vh] flex flex-col items-center justify-center text-center gap-6 py-20">
   <h1 class="text-5xl font-600 tracking-tight leading-tight">Welcome and sorry!</h1>
   <p class="text-xl max-w-xl leading-relaxed opacity-85">
-    I am re-designing my website.<br/>
-    But for now, you can reach my resume.<br/>
+  I am re-designing my website.<br/>
+  But for now, you can reach my <a href="https://drive.google.com/file/d/1C17YUl8kN3iKlb6n0QXeIwOC3Us_LaWa/view?usp=sharing" style="color:inherit; text-decoration:underline;" rel="noopener noreferrer" target="_blank">resume</a>.<br/>
     See you soon!
   </p>
 </div>
