@@ -1,3 +1,5 @@
+<!-- ORIGINAL HOMEPAGE CONTENT (commented out on 2025-08-11 by ALP for redesign) -->
+<!--
 Glad you made it here İsmet! This is a flexible and feature-rich :link[Astro 5]{id=withastro/astro} theme for developers and creators, inspired by the minimalist style of :link[antfu.me]{id=https://antfu.me/ img=https://github.com/antfu.png .rounded}. The design has been refined and its functionality expanded for greater flexibility.
 
 This live demo will guide you through setup and customization, offering helpful insights along the way. Enjoy exploring all the features this theme provides! ✨
@@ -80,4 +82,14 @@ If you find this theme helpful, consider supporting the project maintainer or th
     <span class="i-ph-heart-duotone"></span> Support Stephanie Lin (Maintainer)</a>
   <a class="btn-yellow" href="https://github.com/sponsors/antfu">
     <span class="i-ph-lightning-duotone"></span> Support Anthony Fu (Designer)</a>
+</div>
+-->
+
+<div class="min-h-[60vh] flex flex-col items-center justify-center text-center gap-6 py-20">
+  <h1 class="text-5xl font-600 tracking-tight leading-tight">Welcome and sorry!</h1>
+  <p class="text-xl max-w-xl leading-relaxed opacity-85">
+    I am re-designing my website.<br/>
+    But for now, you can reach my resume.<br/>
+    See you soon!
+  </p>
 </div>
