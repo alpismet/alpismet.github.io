@@ -1,0 +1,68 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Hakkında | Gmd Popper">
+  <div class="container" style="padding: 4rem 2rem;">
+    <div class="profile">
+      <div class="text">
+        <h1>Hakkımda</h1>
+        <p class="lead">
+          Oyunlar, sadece eğlence değil; teknolojinin sanatla buluştuğu
+          noktadır.
+        </p>
+        <p>
+          Ben Gmd Popper. 10 yıldan fazla süredir Unity, Unreal Engine ve son
+          zamanlarda WebGL teknolojileri ile deneyimler üretiyorum. Amacım,
+          tarayıcı içinde konsol kalitesinde oyunlar çalıştırabilmek.
+        </p>
+        <p>
+          Bu portfolyo sitesi de bu vizyonun bir parçası. Astro kullanarak, web
+          performansının sınırlarını zorluyorum.
+        </p>
+
+        <hr
+          style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;"
+        />
+
+        <h3>Yetenekler</h3>
+        <ul class="skills">
+          <li>Game Design</li>
+          <li>C# / C++</li>
+          <li>WebGL / Three.js</li>
+          <li>Astro & React</li>
+          <li>Shader Programming</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .profile {
+    max-width: 800px;
+  }
+
+  .lead {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: 2rem;
+  }
+
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .skills li {
+    padding: 0.5rem 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+</style>

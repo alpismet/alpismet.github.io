@@ -4,7 +4,7 @@ export const SITE: Site = {
   website: "https://ismetalp.com",
   base: "/",
   title: "İsmet ALP",
-  description: "Site is under maintenance — we will be back soon.",
+  description: "Personal site by İsmet Alp — projects, posts and photos.",
   author: "Ismet Alp",
   lang: "en",
   ogLocale: "en_US",

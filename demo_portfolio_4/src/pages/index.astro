@@ -1,0 +1,107 @@
+---
+import { getCollection } from "astro:content";
+import Hero from "../components/Hero.astro";
+import InteractiveCounter from "../components/InteractiveCounter.jsx";
+import ProjectCard from "../components/ProjectCard.astro";
+import Layout from "../layouts/Layout.astro";
+
+const allProjects = await getCollection("projects");
+const featuredProjects = allProjects.filter((p) => p.data.featured);
+const otherProjects = allProjects.filter((p) => !p.data.featured);
+---
+
+<Layout title="Gmd Popper | Game Developer & Creative Coder">
+  <Hero />
+
+  <section id="features" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Öne Çıkan Projeler</h2>
+        <p>En son çalışmalarım ve deneysel demolarım.</p>
+      </div>
+      <div class="project-grid">
+        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt-bg">
+    <div class="container">
+      <div class="split-layout">
+        <div class="info">
+          <h2>Astro Islands Architecture</h2>
+          <p>
+            Astro, varsayılan olarak <strong>sıfır JavaScript</strong> gönderir.
+            Ancak interaktifliğe ihtiyaç duyduğunuzda, "Islands" mimarisiyle sadece
+            o bileşeni hydrate edebilirsiniz.
+          </p>
+          <p>
+            Yandaki sayaç örneği, <strong>Preact</strong> ile yazılmıştır ve sadece
+            kendisi için gerekli JS kodunu yükler. Sayfanın geri kalanı tamamen statiktir.
+          </p>
+          <a
+            href="https://docs.astro.build/en/concepts/islands/"
+            target="_blank"
+            class="btn btn-secondary">Daha Fazla Bilgi</a
+          >
+        </div>
+        <div class="demo">
+          <!-- client:visible directive tells Astro to load JS only when component is visible -->
+          <InteractiveCounter client:visible />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Diğer Çalışmalar</h2>
+      </div>
+      <div class="project-grid">
+        {otherProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .section {
+    padding: 5rem 0;
+  }
+
+  .alt-bg {
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+    max-width: 600px;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .split-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .split-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,64 @@
+---
+interface Props {
+  videoUrl: string;
+}
+
+const { videoUrl } = Astro.props;
+
+// Basit embed URL kontrolü (YouTube için)
+// Gerçek projede daha kapsamlı regex kullanılabilir.
+const isYoutube =
+  videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be");
+---
+
+<div class="video-container">
+  {
+    isYoutube ? (
+      <iframe
+        src={videoUrl}
+        title="Video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      />
+    ) : (
+      <div class="placeholder">
+        <p>
+          Video formatı desteklenmiyor veya yerel dosya:{" "}
+          <a href={videoUrl} target="_blank">
+            {videoUrl}
+          </a>
+        </p>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: black;
+    margin: 2rem 0;
+  }
+
+  .video-container iframe,
+  .video-container .placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+  }
+</style>

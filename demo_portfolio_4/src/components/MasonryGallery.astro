@@ -1,0 +1,70 @@
+---
+interface Props {
+  images: string[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="masonry-grid">
+  {
+    images.map((_, index) => (
+      <div class={`masonry-item item-${index % 5}`}>
+        <img
+          src={`/images/${["projects.png", "blog.png", "og-image.png", "getting-started.png", "recreating-current-pages.png", "project-structure.png"][index % 6]}`}
+          alt="Gallery item"
+        />
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(350px, 1fr)
+    ); /* Larger columns */
+    grid-auto-rows: 250px; /* Taller rows */
+    gap: 1.5rem;
+    margin: 4rem 0;
+  }
+
+  .masonry-item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .masonry-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .masonry-item:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Bazı öğeleri daha büyük yapıp düzensiz (masonry) bir his verelim */
+  .item-0 {
+    grid-row: span 2;
+    grid-column: span 2;
+  }
+  .item-3 {
+    grid-row: span 2;
+  }
+
+  @media (max-width: 600px) {
+    .item-0 {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    .item-3 {
+      grid-row: auto;
+    }
+  }
+</style>

@@ -1,0 +1,60 @@
+You are an expert AI assistant working on the "alpismet.github.io" Astro site repository. Follow these rules strictly when responding and when proposing code changes.
+
+Context & Permissions
+- You may read and modify repository files under the user's direction.
+- You must not modify unrelated files or reformat large portions of the codebase.
+
+Primary Goals
+- Fix bugs, implement small features, and produce minimal, well-scoped patches via diffs.
+- Always ensure TypeScript types pass: run `pnpm check` (or request user to run it) after changes.
+
+Coding & Commit Rules
+- Use minimal diffs: change only the lines necessary.
+- When editing config types, update `src/types.ts` first and run type checks.
+- Add or update docs for any non-trivial change.
+
+Build & Verification
+- Provide exact commands to run locally (use zsh syntax). Typical commands:
+  - `pnpm install`
+  - `pnpm dev`
+  - `pnpm check`
+  - `pnpm build`
+  - `pnpm deploy`
+
+Project-specific Rules
+- Do NOT mutate `SITE`, `UI`, or `FEATURES` at runtime.
+- For `FEATURES` checks use: `Array.isArray(FEATURES.foo) && FEATURES.foo[0]`.
+- When adding remark/rehype plugins, append to `plugins/index.ts` and preserve conditional insertion patterns.
+- Avoid adding heavy UI libraries; prefer Astro/UnoCSS components.
+
+If you need to change many files or perform long-running tasks, propose the plan and get user approval first.
+
+When asked to produce a changelist, include: changed file paths, a short rationale, commands to test, and what to verify in the UI.
+
+End of prompt.
+
+Related repository docs (how the AI should use them)
+- `AI_ONBOARDING.md`: A comprehensive onboarding guide for humans and AI. It contains:
+  - Project overview (Astro, UnoCSS, content layout)
+  - Important files and directories to inspect (`src/`, `plugins/`, `src/config.ts`, `src/types.ts`, `public/og-images/`, etc.)
+  - Coding conventions and rules (do not mutate `SITE`/`UI`/`FEATURES`, feature tuple pattern, plugin insertion patterns)
+  - CLI commands and workflows (`pnpm install`, `pnpm dev`, `pnpm check`, `pnpm build`, `pnpm deploy`)
+  - Debug tips for common issues (TypeScript OOM, Allura font in production, OG image regeneration)
+  - AI-specific notes: what checks to run before/after edits (run `pnpm check`, avoid large reformatting, update docs when changing types).
+
+- How the AI should treat `AI_ONBOARDING.md`:
+  - Read it when starting work on the repo to understand conventions and constraints.
+  - Use its CLI and debugging tips as part of the verification steps for any change.
+  - If you add or change behavior, update this file with brief notes so future agents/humans can follow the rationale.
+
+- `PROJECT_TASKS.md`: A human-editable task tracker for goals, backlog, and PR/branch rules. It contains:
+  - High-level goals and prioritized items (e.g., verify production font, OG image tests)
+  - Backlog entries and suggested next work
+  - PR/branch naming conventions and code-review checklist
+
+- How the AI should treat `PROJECT_TASKS.md`:
+  - When implementing a change, add or update a short task line describing the work and mark it done with the commit reference.
+  - Use the file to propose next actions (small, verifiable steps) and include testing commands for each task.
+  - Do not replace this file with a large automated list; keep entries concise and human readable.
+
+End of additions.

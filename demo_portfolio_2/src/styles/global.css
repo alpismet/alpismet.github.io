@@ -1,0 +1,116 @@
+/* Brutalist Theme */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Space+Mono:wght@400;700&display=swap");
+
+:root {
+  --color-bg: #ffffff;
+  --color-text: #000000;
+  --color-border: #000000;
+
+  --color-primary: #ccff00; /* Neon Lime */
+  --color-secondary: #ff3333; /* Red */
+  --color-accent: #0000ff; /* Blue */
+
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+
+  --border-width: 2px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 1rem 0;
+  line-height: 1;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 5rem; /* Massive */
+  letter-spacing: -2px;
+}
+
+p {
+  line-height: 1.5;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+a:hover {
+  background: var(--color-text);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  border-left: var(--border-width) solid var(--color-border);
+  border-right: var(--border-width) solid var(--color-border);
+  min-height: 100vh;
+}
+
+/* Brutalist Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--color-primary);
+  color: var(--color-text) !important;
+  border: var(--border-width) solid var(--color-border);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.1s;
+  box-shadow: 4px 4px 0px var(--color-text);
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--color-text);
+  background: var(--color-primary);
+  color: var(--color-text);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--color-text);
+}
+
+.btn-secondary {
+  background: white;
+}

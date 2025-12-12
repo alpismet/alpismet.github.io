@@ -1,0 +1,38 @@
+---
+import { withBasePath } from '~/utils/path'
+
+const catalogHref = withBasePath('/feature-catalog/')
+const isCatalogPage = Astro.url.pathname === catalogHref
+---
+
+{import.meta.env.DEV && !isCatalogPage && (
+  <script is:inline define:vars={{ catalogHref }}>
+    document.addEventListener('astro:page-load', () => {
+      const toolbar = document.querySelector('astro-dev-toolbar')
+      if (!toolbar) return
+      const shadow = toolbar.shadowRoot
+      const bar = shadow?.querySelector('#bar-container')
+      const settingsBtn = shadow?.querySelector('[data-app-id="astro:settings"]')
+      if (!shadow || !bar || !settingsBtn || shadow.getElementById('dev-catalog-app')) return
+
+      const bookSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 0 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z"/></svg>`
+
+      const btn = document.createElement('a')
+      btn.id = 'dev-catalog-app'
+      btn.className = 'item'
+      btn.href = catalogHref
+      btn.setAttribute('title', 'Özellik Kataloğu')
+      btn.innerHTML = `<div class="icon">${bookSvg}<div class="notification"></div></div><span class="item-tooltip">Özellik Kataloğu</span>`
+      btn.addEventListener('click', (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+        event.preventDefault()
+        window.location.href = catalogHref
+      })
+
+      const separator = document.createElement('div')
+      separator.className = 'separator'
+      bar.insertBefore(separator, settingsBtn)
+      bar.insertBefore(btn, settingsBtn)
+    })
+  </script>
+)}

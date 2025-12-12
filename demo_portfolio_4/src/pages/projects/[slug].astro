@@ -1,0 +1,233 @@
+---
+import { getCollection } from "astro:content";
+import MasonryGallery from "../../components/MasonryGallery.astro";
+import VideoPlayer from "../../components/VideoPlayer.astro";
+import Layout from "../../layouts/Layout.astro";
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+// 2. For your template, you can access the prop from the project
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<Layout title={`${project.data.title} | Gmd Popper`}>
+  <div class="project-header">
+    <div class="container">
+      <a href="/" class="back-link">← Ana Sayfaya Dön</a>
+      <h1>{project.data.title}</h1>
+      <div class="meta">
+        <time>{project.data.publishDate.toLocaleDateString()}</time>
+        <div class="tags">
+          {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+        </div>
+      </div>
+      {
+        project.data.image && (
+          <div class="hero-image">
+            <img
+              src={`/images/${["projects.png", "blog.png", "og-image.png", "getting-started.png"][Math.floor(Math.random() * 4)]}`}
+              alt={project.data.title}
+            />
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    project.data.videoUrl && (
+      <div class="container video-section">
+        <h3>Proje Videosu</h3>
+        <VideoPlayer videoUrl={project.data.videoUrl} />
+      </div>
+    )
+  }
+
+  {
+    project.data.gallery && (
+      <div class="container gallery-section">
+        <h3>Proje Galerisi</h3>
+        <MasonryGallery images={project.data.gallery} />
+      </div>
+    )
+  }
+
+  <div class="container content-wrapper">
+    <article class="prose">
+      <Content />
+    </article>
+
+    <aside class="sidebar">
+      <div class="sticky-box">
+        <h3>Proje Detayları</h3>
+        <ul class="details-list">
+          {
+            project.data.category && (
+              <li>
+                <strong>Kategori:</strong>
+                <span class="category-badge">{project.data.category}</span>
+              </li>
+            )
+          }
+          <li>
+            <strong>Tarih:</strong>
+            <span>{project.data.publishDate.toLocaleDateString()}</span>
+          </li>
+          {
+            project.data.githubUrl && (
+              <li>
+                <strong>Kaynak Kod:</strong>
+                <a href={project.data.githubUrl} target="_blank">
+                  GitHub'da İncele
+                </a>
+              </li>
+            )
+          }
+          {
+            project.data.demoUrl && (
+              <li>
+                <strong>Canlı Demo:</strong>
+                <a href={project.data.demoUrl} target="_blank">
+                  Oyna / İndir
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </div>
+    </aside>
+  </div>
+</Layout>
+
+<style>
+  .project-header {
+    padding: 4rem 0 2rem;
+    background: linear-gradient(
+      to bottom,
+      var(--color-bg),
+      var(--color-surface)
+    );
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .meta {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+    color: var(--color-text-muted);
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.85rem;
+  }
+
+  .hero-image {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 4rem;
+    padding: 4rem 2rem;
+  }
+
+  /* Typography for MDX Content */
+  .prose {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .prose :global(h2) {
+    font-size: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-primary);
+  }
+
+  .prose :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .prose :global(pre) {
+    background: #1e1e2e !important;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 2rem 0;
+  }
+
+  .sticky-box {
+    position: sticky;
+    top: 6rem;
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .details-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0 0;
+  }
+
+  .details-list li {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+  }
+
+  .details-list strong {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .content-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .sticky-box {
+      position: static;
+    }
+  }
+</style>

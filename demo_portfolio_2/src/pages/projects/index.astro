@@ -1,0 +1,75 @@
+---
+import { getCollection } from "astro:content";
+import CategoryFilter from "../../components/CategoryFilter.jsx";
+import ProjectCard from "../../components/ProjectCard.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const allProjects = await getCollection("projects");
+const sortedProjects = allProjects.sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<Layout title="Projeler | İsmet ALP">
+  <div class="header-section">
+    <div class="container">
+      <h1>Projelerim</h1>
+      <p>
+        Oyun geliştirme, 3D sanat, yazılım ve tasarım alanındaki çalışmalarım.
+      </p>
+    </div>
+  </div>
+
+  <div class="container content-section">
+    <!-- Client-side filtering component -->
+    <CategoryFilter client:load />
+
+    <div class="project-grid">
+      {
+        sortedProjects.map((project) => (
+          <div class="project-item" data-category={project.data.category}>
+            <ProjectCard project={project} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .header-section {
+    padding: 4rem 0 2rem;
+    text-align: center;
+    background: linear-gradient(
+      to bottom,
+      var(--color-bg),
+      var(--color-surface)
+    );
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .header-section h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .header-section p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .content-section {
+    padding: 4rem 2rem;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .project-item {
+    transition: all 0.3s ease;
+  }
+</style>

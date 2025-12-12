@@ -1,0 +1,104 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Showcase | Astro Teknolojileri">
+  <div class="container" style="padding: 4rem 2rem;">
+    <h1>Bu Site Nasıl Yapıldı?</h1>
+    <p class="intro">
+      Astro'nun modern web geliştirme özelliklerinin canlı bir demosu.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <h2>⚡️ Zero JS by Default</h2>
+        <p>
+          Astro, varsayılan olarak JavaScript'i tarayıcıya göndermez. Sadece
+          HTML ve CSS. Bu, sayfa yükleme hızını inanılmaz derecede artırır.
+        </p>
+        <div class="metric">
+          <span class="value">100</span>
+          <span class="label">Lighthouse Score</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🏝 Islands Architecture</h2>
+        <p>
+          Anasayfadaki sayaç bileşeni, <strong>Preact</strong> ile yazıldı ve
+          <code>client:visible</code> direktifi ile monte edildi. Diğer her şey statik
+          kaldı.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>📄 Content Collections</h2>
+        <p>
+          Projeler ve blog yazıları, Type-safe (TypeScript destekli)
+          koleksiyonlar olarak sistemde tutuluyor. Yanlış veri girişi derleme
+          zamanında engelleniyor.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>🔄 View Transitions</h2>
+        <p>
+          Sayfalar arası geçişlerde tarayıcı yenilemesi olmuyor. Astro'nun SPA
+          benzeri deneyimi sayesinde geçişler yumuşak ve animasyonlu.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>🎨 Scoped CSS & Global Styles</h2>
+        <p>
+          Bileşen tabanlı stil sistemi sayesinde CSS çakışmaları tarih oldu.
+          Aynı zamanda global değişkenlerle tutarlı bir tema yönetimi sağlandı.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .intro {
+    font-size: 1.5rem;
+    margin-bottom: 4rem;
+    max-width: 800px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .card {
+    padding: 2rem;
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+  }
+
+  .card h2 {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .metric {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .metric .value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #4ade80;
+  }
+</style>

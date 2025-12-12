@@ -1,0 +1,97 @@
+---
+
+---
+
+<section class="hero">
+  <div class="container hero-content">
+    <span class="badge">Astro 5.0 Powered Portfolio</span>
+    <h1>
+      Dijital & Fiziksel <br />
+      <span class="text-gradient">Dünyalar Üretiyorum</span>
+    </h1>
+    <p>
+      Merhaba, ben <strong>İsmet ALP</strong>. Oyun geliştirmeden heykel
+      sanatına, 3D modellemeden yazılım mimarisine uzanan geniş bir yelpazede
+      eserler üretiyorum. Teknolojiyi ve sanatı birleştirerek benzersiz
+      deneyimler tasarlıyorum.
+    </p>
+    <div class="cta-group">
+      <a href="/projects" class="btn">Projelerimi Gör</a>
+      <a href="#features" class="btn btn-secondary">Teknolojiyi Keşfet</a>
+    </div>
+  </div>
+  <div class="hero-bg"></div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 8rem 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+    background: repeating-linear-gradient(
+      45deg,
+      #ffffff,
+      #ffffff 10px,
+      #f0f0f0 10px,
+      #f0f0f0 20px
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: 6rem;
+    line-height: 0.9;
+    margin-bottom: 2rem;
+    color: var(--color-text);
+  }
+
+  .text-gradient {
+    background: none;
+    -webkit-text-fill-color: initial;
+    color: var(--color-text);
+    text-shadow: 4px 4px 0px var(--color-primary);
+  }
+
+  p {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    max-width: 800px;
+    border-left: 5px solid var(--color-primary);
+    padding-left: 2rem;
+  }
+
+  .cta-group {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 4rem 0;
+    }
+
+    h1 {
+      font-size: 3rem;
+    }
+
+    .cta-group {
+      flex-direction: column;
+    }
+  }
+</style>

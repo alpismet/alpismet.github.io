@@ -13,6 +13,7 @@ import BackLink from "~/components/widgets/BackLink.astro";
 import Footer from "~/components/base/Footer.astro";
 import ToTopButton from "~/components/widgets/ToTopButton.astro";
 import Backdrop from "~/components/base/Backdrop.astro";
+import DevCatalogButton from "~/components/widgets/DevCatalogButton.astro";
 
 import { SITE, UI, FEATURES } from "~/config";
 import { withBasePath } from "~/utils/path";
@@ -100,6 +101,7 @@ if (hasCustomCursor) style["--external-link-cursor"] = cursorType;
     <!-- Footer -->
     <Footer />
     <ToTopButton />
+    <DevCatalogButton />
 
     <!-- Panel Backdrop (on mobile) -->
     <Backdrop />

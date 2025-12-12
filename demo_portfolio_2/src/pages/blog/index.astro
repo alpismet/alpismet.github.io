@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const posts = await getCollection("blog");
+const sortedPosts = posts.sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<Layout title="Blog | Gmd Popper">
+  <div class="container" style="padding: 4rem 2rem;">
+    <h1>Geliştirici Günlükleri</h1>
+    <div class="post-list">
+      {
+        sortedPosts.map((post) => (
+          <article class="post-item">
+            <span class="date">
+              {post.data.publishDate.toLocaleDateString()}
+            </span>
+            <h2>{post.data.title}</h2>
+            <p>{post.data.description}</p>
+            <div class="meta">
+              <span class="author">Yazan: {post.data.author}</span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .post-list {
+    max-width: 800px;
+    margin-top: 3rem;
+  }
+
+  .post-item {
+    padding: 2rem;
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: border-color 0.3s;
+  }
+
+  .post-item:hover {
+    border-color: var(--color-primary);
+  }
+
+  .date {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-primary);
+  }
+
+  h2 {
+    margin: 0.5rem 0 1rem 0;
+    font-size: 1.75rem;
+  }
+
+  .meta {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+</style>
