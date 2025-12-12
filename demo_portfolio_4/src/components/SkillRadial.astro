@@ -1,0 +1,162 @@
+---
+interface Props {
+  skills: Array<{ name: string; level: number }>; // level: 0-100
+}
+
+const { skills } = Astro.props;
+---
+
+<div class="skill-radial-container">
+  {
+    skills.map((skill) => (
+      <div class="skill-radial-item" data-level={skill.level}>
+        <div class="radial-chart">
+          <svg viewBox="0 0 100 100" class="radial-svg">
+            <circle
+              class="radial-bg"
+              cx="50"
+              cy="50"
+              r="40"
+              fill="none"
+              stroke="rgba(255,255,255,0.05)"
+              stroke-width="8"
+            />
+            <circle
+              class="radial-progress"
+              cx="50"
+              cy="50"
+              r="40"
+              fill="none"
+              stroke="url(#gradient)"
+              stroke-width="8"
+              stroke-linecap="round"
+              stroke-dasharray="251.2"
+              stroke-dashoffset="251.2"
+              transform="rotate(-90 50 50)"
+            />
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style="stop-color:var(--color-aurora-2);stop-opacity:1"
+                />
+                <stop
+                  offset="100%"
+                  style="stop-color:var(--color-aurora-3);stop-opacity:1"
+                />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="radial-content">
+            <span class="radial-percentage">{skill.level}%</span>
+          </div>
+        </div>
+        <span class="skill-label">{skill.name}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .skill-radial-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+  }
+
+  .skill-radial-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    transform: scale(0.8);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+
+  .skill-radial-item.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .radial-chart {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+
+  .radial-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.3));
+  }
+
+  .radial-progress {
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .radial-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .radial-percentage {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(
+      to right,
+      var(--color-aurora-2),
+      var(--color-aurora-3)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .skill-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: center;
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          const target = entry.target as HTMLElement;
+          const level = parseInt(target.dataset.level || "0");
+
+          setTimeout(() => {
+            target.classList.add("visible");
+            const circle = target.querySelector(
+              ".radial-progress"
+            ) as SVGCircleElement;
+            if (circle) {
+              const circumference = 2 * Math.PI * 40; // r=40
+              const offset = circumference - (level / 100) * circumference;
+              circle.style.strokeDashoffset = offset.toString();
+            }
+          }, index * 80);
+
+          observer.unobserve(target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll(".skill-radial-item").forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>

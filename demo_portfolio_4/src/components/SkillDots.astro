@@ -1,0 +1,161 @@
+---
+interface Props {
+  skills: Array<{ name: string; level: number }>; // level: 0-100
+}
+
+const { skills } = Astro.props;
+
+// Calculate dot count based on level (max 10 dots)
+const getDotsForLevel = (level: number) => {
+  return Math.round((level / 100) * 10);
+};
+---
+
+<div class="skill-dots-container">
+  {
+    skills.map((skill) => {
+      const filledDots = getDotsForLevel(skill.level);
+      return (
+        <div class="skill-dot-item" data-filled={filledDots}>
+          <div class="skill-dot-header">
+            <span class="skill-dot-name">{skill.name}</span>
+            <span class="skill-dot-level">{skill.level}%</span>
+          </div>
+          <div class="dots-grid">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div
+                class={`dot ${i < filledDots ? "filled" : ""}`}
+                data-index={i}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    })
+  }
+</div>
+
+<style>
+  .skill-dots-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .skill-dot-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.5s ease-out;
+  }
+
+  .skill-dot-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .skill-dot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .skill-dot-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .skill-dot-level {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-aurora-2);
+    font-weight: 600;
+  }
+
+  .dots-grid {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0);
+  }
+
+  .skill-dot-item.visible .dot {
+    transform: scale(1);
+  }
+
+  .dot.filled {
+    background: linear-gradient(
+      135deg,
+      var(--color-aurora-2),
+      var(--color-aurora-3)
+    );
+    border-color: var(--color-aurora-2);
+    box-shadow: 0 0 8px rgba(236, 72, 153, 0.6);
+  }
+
+  /* Stagger dot animations */
+  .dot:nth-child(1) {
+    transition-delay: 0.05s;
+  }
+  .dot:nth-child(2) {
+    transition-delay: 0.1s;
+  }
+  .dot:nth-child(3) {
+    transition-delay: 0.15s;
+  }
+  .dot:nth-child(4) {
+    transition-delay: 0.2s;
+  }
+  .dot:nth-child(5) {
+    transition-delay: 0.25s;
+  }
+  .dot:nth-child(6) {
+    transition-delay: 0.3s;
+  }
+  .dot:nth-child(7) {
+    transition-delay: 0.35s;
+  }
+  .dot:nth-child(8) {
+    transition-delay: 0.4s;
+  }
+  .dot:nth-child(9) {
+    transition-delay: 0.45s;
+  }
+  .dot:nth-child(10) {
+    transition-delay: 0.5s;
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add("visible");
+          }, index * 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll(".skill-dot-item").forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>
