@@ -29,31 +29,33 @@ const {
     <div id="aurora-bg" class="aurora-bg" transition:persist></div>
     <canvas id="spaceCanvas"></canvas>
 
-    <header class="site-header" transition:persist>
-      <div class="container header-inner">
-        <a href="/" class="logo">İSMET<span class="dot">.</span>ALP</a>
-        <nav>
-          <a href="/projects">Projects</a>
-          <a href="/blog">Blog</a>
-          <a href="/about">About</a>
-        </nav>
-      </div>
-    </header>
+    <div class="site-wrapper">
+      <header class="site-header" transition:persist>
+        <div class="container header-inner">
+          <a href="/" class="logo">İSMET<span class="dot">.</span>ALP</a>
+          <nav>
+            <a href="/projects">Projects</a>
+            <a href="/blog">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </div>
+      </header>
 
-    <main>
-      <slot />
-    </main>
+      <main>
+        <slot />
+      </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <p>
-          &copy; {new Date().getFullYear()} İsmet ALP. Powered by <a
-            href="https://astro.build"
-            target="_blank">Astro</a
-          >.
-        </p>
-      </div>
-    </footer>
+      <footer class="site-footer">
+        <div class="container">
+          <p>
+            &copy; {new Date().getFullYear()} İsmet ALP. Powered by <a
+              href="https://astro.build"
+              target="_blank">Astro</a
+            >.
+          </p>
+        </div>
+      </footer>
+    </div>
 
     <script>
       // Star field animation
@@ -79,7 +81,7 @@ const {
         starPoolSize: 2000,
         starHorizon: 0.8,
         starFadeStrength: 3.0,
-        parallax: false,
+        parallax: true,
       };
 
       // Pre-generated star pool
@@ -89,27 +91,12 @@ const {
         Math.random() * (max - min) + min;
 
       const getContentHeight = () => {
-        const mainEl = document.querySelector("main");
-        const headerEl = document.querySelector(".site-header");
-        const footerEl = document.querySelector(".site-footer");
-        const mainHeight = Math.max(
-          mainEl?.scrollHeight ?? 0,
-          mainEl?.offsetHeight ?? 0,
-          mainEl?.getBoundingClientRect().height ?? 0
+        const wrapper = document.querySelector(".site-wrapper");
+        if (!wrapper) return window.innerHeight;
+        return Math.max(
+          window.innerHeight,
+          wrapper.getBoundingClientRect().height
         );
-        const mainStyles = mainEl ? getComputedStyle(mainEl) : null;
-        const mainMargin =
-          (parseFloat(mainStyles?.marginTop ?? "0") || 0) +
-          (parseFloat(mainStyles?.marginBottom ?? "0") || 0);
-
-        const headerHeight = headerEl?.getBoundingClientRect().height ?? 0;
-        const footerHeight = footerEl?.getBoundingClientRect().height ?? 0;
-
-        const composedHeight =
-          headerHeight + mainHeight + mainMargin + footerHeight;
-
-        // Avoid feeding back aurora/canvas overflow; only trust content measurements
-        return Math.max(window.innerHeight, composedHeight);
       };
 
       class Star {
@@ -147,7 +134,8 @@ const {
 
       function initStarPool(customHeight?: number) {
         starPool.length = 0;
-        poolHeight = customHeight ?? Math.max(height || window.innerHeight, 10000);
+        poolHeight =
+          customHeight ?? Math.max(height || window.innerHeight, 10000);
 
         for (let i = 0; i < config.starPoolSize; i++) {
           const star = new Star();
@@ -205,8 +193,8 @@ const {
         if (!config.parallax) return;
         const cx = window.innerWidth / 2;
         const cy = window.innerHeight / 2;
-        mouseX = (e.clientX - cx) * 0.15;
-        mouseY = (e.clientY - cy) * 0.15;
+        mouseX = (e.clientX - cx) * 0.05;
+        mouseY = (e.clientY - cy) * 0.05;
       };
 
       function observeContentHeight() {
@@ -216,7 +204,8 @@ const {
         const mainEl = document.querySelector("main");
         if (mainEl) resizeObserver.observe(mainEl);
         if (document.body) resizeObserver.observe(document.body);
-        if (document.documentElement) resizeObserver.observe(document.documentElement);
+        if (document.documentElement)
+          resizeObserver.observe(document.documentElement);
       }
 
       function scheduleStabilizeResizes() {
@@ -279,12 +268,41 @@ const {
 </html>
 
 <style>
+  html {
+    background-color: var(--color-bg);
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-bg) 0%,
+      var(--color-bg) 80%,
+      #000000 100%
+    );
+    background-attachment: scroll;
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    position: relative;
+    background: transparent;
+  }
+
+  .site-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
   .site-header {
     position: sticky;
     top: 2rem;
     z-index: 100;
     margin: 0 auto;
     max-width: 800px;
+    width: 100%;
   }
 
   .header-inner {
@@ -338,8 +356,10 @@ const {
     padding: 4rem 0;
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    margin-top: 6rem;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+    margin-top: auto;
+    padding-top: 6rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    width: 100%;
   }
 
   /* Aurora Background - Scrollable */
