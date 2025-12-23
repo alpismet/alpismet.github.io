@@ -7,9 +7,12 @@
   --color-text-muted: #94a3b8;
 
   /* Aurora Colors */
-  --color-aurora-1: #4f46e5;
-  --color-aurora-2: #ec4899;
-  --color-aurora-3: #8b5cf6;
+  --color-aurora-1: #e62720;
+  --color-aurora-2: #ff8f1f;
+  --color-aurora-3: #ff4a2f;
+  --color-aurora-1-rgb: 230, 39, 32;
+  --color-aurora-2-rgb: 255, 143, 31;
+  --color-aurora-3-rgb: 255, 74, 47;
 
   --font-sans: "Outfit", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
@@ -55,9 +58,10 @@
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     to bottom,
-    #ff69b4,
-    #9d67ff
-  ); /* Slightly brighter hover state */
+    var(--color-aurora-2),
+    var(--color-aurora-3)
+  );
+  box-shadow: 0 0 8px rgba(var(--color-aurora-2-rgb), 0.5);
 }
 
 body {
@@ -85,7 +89,7 @@ h6 {
 
 h1 {
   font-size: 4.5rem;
-  /* Standardized Pink-Purple Gradient */
+  /* Standardized Orange-Pink Gradient */
   background: linear-gradient(
     to right,
     var(--color-aurora-2),
@@ -94,7 +98,7 @@ h1 {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 2em rgba(236, 72, 153, 0.3));
+  filter: drop-shadow(0 0 2em rgba(var(--color-aurora-2-rgb), 0.3));
 }
 
 /* Utility for other headers to match */

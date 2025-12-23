@@ -50,7 +50,7 @@ export default function InteractiveCounter() {
             fontSize: "2rem",
             fontWeight: "bold",
             fontFamily: "monospace",
-            color: "#8b5cf6",
+            color: "var(--color-aurora-2)",
             minWidth: "3ch",
           }}
         >
@@ -61,7 +61,7 @@ export default function InteractiveCounter() {
           onClick={() => setCount(count + 1)}
           style={{
             padding: "0.5rem 1rem",
-            background: "#8b5cf6",
+            background: "var(--color-aurora-2)",
             border: "none",
             color: "white",
             borderRadius: "6px",

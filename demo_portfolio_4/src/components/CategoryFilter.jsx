@@ -83,7 +83,7 @@ export default function CategoryFilter() {
           background: linear-gradient(135deg, var(--color-aurora-1), var(--color-aurora-3));
           border-color: transparent;
           color: white;
-          box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+          box-shadow: 0 0 20px rgba(var(--color-aurora-1-rgb), 0.4);
         }
       `}</style>
     </div>
