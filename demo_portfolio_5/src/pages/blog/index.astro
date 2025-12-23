@@ -1,0 +1,124 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const posts = await getCollection("blog");
+const sortedPosts = posts.sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<Layout title="Blog | Gmd Popper">
+  <div class="container" style="padding: 4rem 2rem;">
+    <h1>Geliştirici Günlükleri</h1>
+    <div class="post-list">
+      {
+        sortedPosts.map((post) => (
+          <article class="post-item">
+            {/* Stretched Link for Clickability */}
+            <a href={`/blog/${post.slug}`} class="post-link">
+              <span class="sr-only">Read {post.data.title}</span>
+            </a>
+
+            <div class="post-content">
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+              <div class="meta">
+                <span class="date">
+                  {post.data.publishDate.toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .post-list {
+    max-width: 800px;
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .post-item {
+    position: relative; /* Context for stretched link */
+    padding: 2.5rem;
+
+    /* Glass / Card Styles */
+    background: rgba(255, 255, 255, 0.03);
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-lg);
+
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease,
+      background 0.3s;
+  }
+
+  .post-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.08); /* Slightly lighter on hover */
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+    border-color: var(--color-aurora-1);
+  }
+
+  /* Stretched Link */
+  .post-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .date {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-aurora-2);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  h2 {
+    margin: 0.5rem 0 1rem 0;
+    font-size: 2rem;
+    background: linear-gradient(to right, #fff, #e2e8f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .post-item:hover h2 {
+    background: linear-gradient(
+      to right,
+      var(--color-aurora-2),
+      var(--color-aurora-3)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p {
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+
+  .meta {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+</style>

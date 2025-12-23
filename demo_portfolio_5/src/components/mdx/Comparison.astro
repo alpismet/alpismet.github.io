@@ -1,0 +1,51 @@
+---
+const { leftTitle = "Left", rightTitle = "Right" } = Astro.props;
+---
+
+<div class="comparison">
+  <div class="column">
+    <h3>{leftTitle}</h3>
+    <slot name="left" />
+  </div>
+  <div class="column">
+    <h3>{rightTitle}</h3>
+    <slot name="right" />
+  </div>
+</div>
+
+<style>
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .column {
+    padding: 1.5rem;
+  }
+
+  .column:first-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .comparison {
+      grid-template-columns: 1fr;
+    }
+    .column:first-child {
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+</style>

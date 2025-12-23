@@ -1,0 +1,56 @@
+---
+interface Props {
+  type?: "info" | "warning" | "error" | "success";
+  title?: string;
+}
+
+const { type = "info", title } = Astro.props;
+
+const colors = {
+  info: "border-blue-500 bg-blue-500/10 text-blue-200",
+  warning: "border-yellow-500 bg-yellow-500/10 text-yellow-200",
+  error: "border-red-500 bg-red-500/10 text-red-200",
+  success: "border-green-500 bg-green-500/10 text-green-200",
+}[type];
+---
+
+<div class={`alert ${type}`}>
+  {title && <div class="alert-title">{title}</div>}
+  <div class="alert-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .alert {
+    padding: 1rem 1.5rem;
+    border-left: 4px solid;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin: 1.5rem 0;
+    background: rgba(255, 255, 255, 0.05); /* Fallback */
+  }
+
+  /* Tema renkleri (Vanilla CSS) */
+  .alert.info {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+  }
+  .alert.warning {
+    border-color: #eab308;
+    background: rgba(234, 179, 8, 0.1);
+  }
+  .alert.error {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+  }
+  .alert.success {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.1);
+  }
+
+  .alert-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 1.1em;
+  }
+</style>

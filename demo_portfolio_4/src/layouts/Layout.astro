@@ -25,8 +25,9 @@ const {
     <ClientRouter />
   </head>
   <body>
-    <!-- Persistent Aurora Background -->
-    <div class="aurora-bg" transition:persist></div>
+    <!-- Aurora Background -->
+    <div id="aurora-bg" class="aurora-bg" transition:persist></div>
+    <canvas id="spaceCanvas"></canvas>
 
     <header class="site-header" transition:persist>
       <div class="container header-inner">
@@ -53,6 +54,227 @@ const {
         </p>
       </div>
     </footer>
+
+    <script>
+      // Star field animation
+      // Module-level variables
+      let canvas: HTMLCanvasElement | null = null;
+      let ctx: CanvasRenderingContext2D | null = null;
+      let bgDiv: HTMLElement | null = null;
+      let width = window.innerWidth;
+      let height = 0;
+      let particles: Star[] = [];
+      let mouseX = 0,
+        mouseY = 0;
+      let targetX = 0,
+        targetY = 0;
+      let animationFrameId = 0;
+      let resizeObserver: ResizeObserver | null = null;
+      let listenersBound = false;
+      let poolHeight = 10000;
+      let lastMeasure = 0;
+      const measureInterval = 250; // ms
+
+      const config = {
+        starPoolSize: 2000,
+        starHorizon: 0.8,
+        starFadeStrength: 3.0,
+        parallax: false,
+      };
+
+      // Pre-generated star pool
+      const starPool: Star[] = [];
+
+      const random = (min: number, max: number) =>
+        Math.random() * (max - min) + min;
+
+      const getContentHeight = () => {
+        const mainEl = document.querySelector("main");
+        const headerEl = document.querySelector(".site-header");
+        const footerEl = document.querySelector(".site-footer");
+        const mainHeight = Math.max(
+          mainEl?.scrollHeight ?? 0,
+          mainEl?.offsetHeight ?? 0,
+          mainEl?.getBoundingClientRect().height ?? 0
+        );
+        const mainStyles = mainEl ? getComputedStyle(mainEl) : null;
+        const mainMargin =
+          (parseFloat(mainStyles?.marginTop ?? "0") || 0) +
+          (parseFloat(mainStyles?.marginBottom ?? "0") || 0);
+
+        const headerHeight = headerEl?.getBoundingClientRect().height ?? 0;
+        const footerHeight = footerEl?.getBoundingClientRect().height ?? 0;
+
+        const composedHeight =
+          headerHeight + mainHeight + mainMargin + footerHeight;
+
+        // Avoid feeding back aurora/canvas overflow; only trust content measurements
+        return Math.max(window.innerHeight, composedHeight);
+      };
+
+      class Star {
+        x = 0;
+        y = 0;
+        size = 0;
+        z = 0;
+        baseAlpha = 0;
+        twinklePhase = 0;
+
+        draw() {
+          this.twinklePhase += 0.05;
+          let alpha = this.baseAlpha + Math.sin(this.twinklePhase) * 0.15;
+
+          const progress = this.y / height;
+          if (progress > config.starHorizon) {
+            const depth =
+              (progress - config.starHorizon) / (1 - config.starHorizon);
+            alpha -= depth * config.starFadeStrength;
+          }
+
+          if (alpha <= 0.02) return;
+
+          const dx = this.x + (config.parallax ? targetX * this.z : 0);
+          const dy = this.y + (config.parallax ? targetY * this.z : 0);
+
+          if (ctx) {
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.arc(dx, dy, this.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
+
+      function initStarPool(customHeight?: number) {
+        starPool.length = 0;
+        poolHeight = customHeight ?? Math.max(height || window.innerHeight, 10000);
+
+        for (let i = 0; i < config.starPoolSize; i++) {
+          const star = new Star();
+          star.x = Math.random() * width;
+          star.y = Math.random() * poolHeight;
+          star.size = Math.random() < 0.95 ? random(0.5, 1.5) : random(2, 3);
+          star.z = random(0.1, 0.4);
+          star.baseAlpha = random(0.3, 0.9);
+          star.twinklePhase = random(0, Math.PI * 2);
+          starPool.push(star);
+        }
+      }
+
+      function resize() {
+        if (!canvas || !ctx) return;
+
+        const newWidth = window.innerWidth;
+        const newHeight = getContentHeight();
+
+        if (!newHeight) return;
+
+        width = newWidth;
+        height = newHeight;
+        canvas.width = width;
+        canvas.height = height;
+        if (bgDiv) bgDiv.style.height = height + "px";
+
+        const desiredPoolHeight = Math.max(height, 10000);
+        if (starPool.length === 0 || desiredPoolHeight > poolHeight) {
+          initStarPool(desiredPoolHeight);
+        }
+
+        // Filter stars within current page height
+        particles = starPool.filter((star) => star.y <= height);
+      }
+
+      function animate(_timestamp: number) {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+
+        if (_timestamp - lastMeasure > measureInterval) {
+          lastMeasure = _timestamp;
+          resize();
+        }
+
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
+
+        particles.forEach((p) => p.draw());
+
+        animationFrameId = requestAnimationFrame(animate);
+      }
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!config.parallax) return;
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        mouseX = (e.clientX - cx) * 0.15;
+        mouseY = (e.clientY - cy) * 0.15;
+      };
+
+      function observeContentHeight() {
+        if (!("ResizeObserver" in window)) return;
+        if (resizeObserver) resizeObserver.disconnect();
+        resizeObserver = new ResizeObserver(() => resize());
+        const mainEl = document.querySelector("main");
+        if (mainEl) resizeObserver.observe(mainEl);
+        if (document.body) resizeObserver.observe(document.body);
+        if (document.documentElement) resizeObserver.observe(document.documentElement);
+      }
+
+      function scheduleStabilizeResizes() {
+        resize();
+        requestAnimationFrame(() => resize());
+        setTimeout(() => resize(), 150);
+      }
+
+      function initStars() {
+        canvas = document.getElementById("spaceCanvas") as HTMLCanvasElement;
+        if (!canvas) return;
+        ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        bgDiv = document.querySelector(".aurora-bg") as HTMLElement;
+        if (!bgDiv) return;
+
+        // Initialize star pool
+        if (starPool.length === 0) {
+          initStarPool();
+        }
+
+        // Set up event listeners once
+        if (!listenersBound) {
+          window.addEventListener("resize", resize);
+          window.addEventListener("mousemove", handleMouseMove);
+          window.addEventListener("load", scheduleStabilizeResizes);
+          document.addEventListener("click", (e) => {
+            const target = (e.target as HTMLElement | null)?.closest("a");
+            if (!target) return;
+            if (!(target as HTMLElement).matches("header nav a")) return;
+            setTimeout(() => scheduleStabilizeResizes(), 80);
+          });
+          listenersBound = true;
+        }
+
+        observeContentHeight();
+
+        // Start
+        scheduleStabilizeResizes();
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(animate);
+      }
+
+      // Update on page load and transitions
+      document.addEventListener("astro:page-load", () => {
+        initStars();
+      });
+      document.addEventListener("astro:after-swap", () => {
+        // On page transition, recalculate height and reattach observer
+        requestAnimationFrame(() => {
+          observeContentHeight();
+          scheduleStabilizeResizes();
+        });
+      });
+
+      // Initial call
+      initStars();
+    </script>
   </body>
 </html>
 
@@ -120,47 +342,70 @@ const {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
   }
 
-  /* Persistent Background */
+  /* Aurora Background - Scrollable */
   .aurora-bg {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     z-index: -1;
-    background:
-      radial-gradient(
-        circle at 10% 20%,
-        var(--color-aurora-1) 0%,
-        transparent 40%
-      ),
-      radial-gradient(
-        circle at 90% 80%,
-        var(--color-aurora-2) 0%,
-        transparent 40%
-      ),
-      radial-gradient(
-        circle at 50% 50%,
-        var(--color-aurora-3) 0%,
-        transparent 60%
-      );
-    /* Reduced blur for performance */
-    filter: blur(60px);
-    opacity: 0.4;
-    animation: aurora-move 20s infinite alternate;
+    background: linear-gradient(
+      135deg,
+      var(--color-bg) 0%,
+      #1e293b 50%,
+      var(--color-bg) 100%
+    );
+    overflow: hidden;
     pointer-events: none;
-    background-color: var(--color-bg); /* Opaque base layer */
-    transform: translateZ(0); /* Force GPU */
-    will-change: transform;
+  }
+
+  .aurora-bg::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 30% 50%,
+      rgba(79, 70, 229, 0.15) 0%,
+      transparent 50%
+    );
+    animation: aurora-move 20s ease-in-out infinite;
+    transform: translateZ(0); /* GPU acceleration */
+  }
+
+  .aurora-bg::after {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 70% 50%,
+      rgba(236, 72, 153, 0.1) 0%,
+      transparent 50%
+    );
+    animation: aurora-move 25s ease-in-out infinite reverse;
+    transform: translateZ(0); /* GPU acceleration */
   }
 
   @keyframes aurora-move {
     0% {
       transform: scale(1) translateZ(0);
     }
-    100% {
+    50% {
       transform: scale(1.1) translateZ(0);
     }
+    100% {
+      transform: scale(1) translateZ(0);
+    }
+  }
+
+  canvas#spaceCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    pointer-events: none;
   }
 </style>
 
@@ -203,4 +448,3 @@ const {
     });
   });
 </script>
-```

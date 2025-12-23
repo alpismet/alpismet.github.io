@@ -1,0 +1,300 @@
+<canvas id="orbital-canvas"></canvas>
+
+<style>
+  #orbital-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Viewport height for background */
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      #000000 0%,
+      #020b1e 20%,
+      #0f4c81 60%,
+      #87ceeb 100%
+    );
+  }
+</style>
+
+<script>
+  function initOrbitalSim() {
+    const canvas = document.getElementById(
+      "orbital-canvas"
+    ) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Remove UI panel logic for background usage, keep visuals
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let docHeight = document.documentElement.scrollHeight; // Use scrollHeight for full page stars
+    let mouseX = 0;
+    let scrollY = window.scrollY;
+
+    // Configuration
+    const STAR_COUNT = 500;
+    const ASTEROID_SPAWN_INTERVAL = 500;
+    const DRAG = 0.995;
+    const GRAVITY = 0.03;
+    // Ablation relative to doc height
+    // If docHeight is small, might need adjustments.
+    // We'll use dynamic detection.
+    const MELT_RATE = 0.05;
+
+    // Objects
+    const stars: any[] = [];
+    const asteroids: any[] = [];
+
+    const random = (min: number, max: number) =>
+      Math.random() * (max - min) + min;
+
+    class Star {
+      x: number;
+      y: number;
+      z: number;
+      baseRadius: number;
+      alphaMult: number;
+      radius: number;
+      twinklePhase: number;
+      twinkleSpeed: number;
+      baseAlpha: number;
+
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = random(0, width);
+        this.y = random(0, docHeight);
+        this.z = random(0.1, 1.0);
+
+        const isLarge = Math.random() < 0.05;
+        if (isLarge) {
+          this.baseRadius = random(2.0, 3.0);
+          this.alphaMult = 1.0;
+        } else {
+          this.baseRadius = random(0.5, 1.5);
+          this.alphaMult = 0.8;
+        }
+
+        this.radius = this.baseRadius;
+        this.twinklePhase = random(0, Math.PI * 2);
+        this.twinkleSpeed = random(0.02, 0.08);
+        this.baseAlpha = random(0.3, 0.8) * this.alphaMult;
+      }
+
+      // Removed type annotations for methods to avoid TS issues in vanilla scripts inside Astro if strict
+      update() {
+        this.twinklePhase += this.twinkleSpeed;
+      }
+
+      draw(ctx: CanvasRenderingContext2D, scrollY: number) {
+        const parallaxX = (mouseX - width / 2) * this.z * 0.02;
+        const screenY = this.y - scrollY;
+
+        const horizonY = docHeight * 0.74;
+        let alpha = this.baseAlpha + Math.sin(this.twinklePhase) * 0.15;
+
+        if (this.y > horizonY) {
+          const fadeStart = horizonY;
+          const fadeEnd = docHeight * 0.85;
+          const dist = Math.max(0, this.y - fadeStart);
+          const range = fadeEnd - fadeStart;
+          const fadeFactor = 1 - Math.min(1, dist / range);
+          alpha *= fadeFactor;
+        }
+
+        if (screenY < -10 || screenY > height + 10 || alpha <= 0) return;
+
+        ctx.beginPath();
+        ctx.arc(this.x + parallaxX, screenY, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fill();
+      }
+    }
+
+    class Asteroid {
+      x: number;
+      y: number;
+      radius: number;
+      vx: number;
+      vy: number;
+      active: boolean;
+      heat: number;
+
+      constructor() {
+        const fromLeft = Math.random() > 0.5;
+        this.x = fromLeft ? -50 : width + 50;
+        // Spawn from top of universe (absolute 0 to 0.3*height)
+        // OR top of viewport? The standalone used `random(0, height * 0.3) + scrollY`.
+        // Let's use that to ensure they are visible.
+        this.y = random(0, height * 0.3) + scrollY;
+
+        this.radius = random(3.0, 6.0);
+
+        let angleDeg;
+        if (fromLeft) {
+          angleDeg = random(0, 15);
+        } else {
+          angleDeg = random(165, 180);
+        }
+        const rad = angleDeg * (Math.PI / 180);
+        const speed = random(4.0, 10.0);
+
+        this.vx = Math.cos(rad) * speed;
+        this.vy = Math.sin(rad) * speed;
+        this.active = true;
+        this.heat = 0;
+      }
+
+      update() {
+        if (!this.active) return;
+        this.vy += GRAVITY;
+        this.vx *= DRAG;
+        this.vy *= DRAG;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        const burnThreshold = docHeight * 0.25; // 25% of doc
+        if (this.y > burnThreshold) {
+          const depth = this.y - burnThreshold;
+          this.heat = Math.min(1, depth / (docHeight * 0.2));
+          this.radius -= MELT_RATE * (1 + this.heat * 2);
+
+          if (this.radius <= 0) {
+            this.radius = 0;
+            this.active = false;
+          }
+        }
+      }
+
+      draw(ctx: CanvasRenderingContext2D, scrollY: number) {
+        if (!this.active) return;
+        const screenY = this.y - scrollY;
+
+        if (screenY < -100 || screenY > height + 100) return;
+
+        const tailLen = (Math.abs(this.vx) + Math.abs(this.vy)) * 6;
+        const angle = Math.atan2(this.vy, this.vx);
+        const tailAngle = angle + Math.PI;
+
+        const perpAngle = angle + Math.PI / 2;
+        const r = this.radius;
+
+        const p1x = this.x + Math.cos(perpAngle) * r;
+        const p1y = this.y + Math.sin(perpAngle) * r - scrollY;
+
+        const p2x = this.x + Math.cos(perpAngle + Math.PI) * r;
+        const p2y = this.y + Math.sin(perpAngle + Math.PI) * r - scrollY;
+
+        const tipX = this.x + Math.cos(tailAngle) * tailLen;
+        const tipY = this.y + Math.sin(tailAngle) * tailLen - scrollY;
+
+        let colorStop1, colorStop2;
+        if (this.heat < 0.3) {
+          colorStop1 = "rgba(100, 200, 255, 0.8)";
+          colorStop2 = "rgba(100, 200, 255, 0)";
+        } else if (this.heat < 0.7) {
+          colorStop1 = "rgba(255, 200, 50, 0.9)";
+          colorStop2 = "rgba(255, 100, 50, 0)";
+        } else {
+          colorStop1 = "rgba(255, 50, 50, 0.9)";
+          colorStop2 = "rgba(255, 0, 0, 0)";
+        }
+
+        const grad = ctx.createLinearGradient(this.x, screenY, tipX, tipY);
+        grad.addColorStop(0, colorStop1);
+        grad.addColorStop(1, colorStop2);
+
+        ctx.beginPath();
+        ctx.moveTo(p1x, p1y);
+        ctx.lineTo(p2x, p2y);
+        ctx.lineTo(tipX, tipY);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(this.x, screenY, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+      }
+    }
+
+    let lastTime = 0;
+    let spawnTimer = 0;
+    let animationFrameId: number;
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      docHeight = document.documentElement.scrollHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    function animate(time: number) {
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
+      ctx.clearRect(0, 0, width, height);
+
+      if (time - spawnTimer > ASTEROID_SPAWN_INTERVAL) {
+        asteroids.push(new Asteroid());
+        spawnTimer = time;
+      }
+
+      stars.forEach((star) => {
+        star.update();
+        star.draw(ctx, scrollY);
+      });
+
+      for (let i = asteroids.length - 1; i >= 0; i--) {
+        const a = asteroids[i];
+        a.update();
+        a.draw(ctx, scrollY);
+        if (!a.active) asteroids.splice(i, 1);
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    function onScroll() {
+      scrollY = window.scrollY;
+    }
+
+    function onMouseMove(e: MouseEvent) {
+      mouseX = e.clientX;
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    window.addEventListener("scroll", onScroll);
+    window.addEventListener("mousemove", onMouseMove);
+
+    // Initial stars
+    for (let i = 0; i < STAR_COUNT; i++) {
+      // @ts-ignore
+      stars.push(new Star());
+    }
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    // Cleanup on destroy/navigation
+    // In Astro, scripts run once per page load.
+    // If using View Transitions, we might need to handle cleanup or let it persist if 'transition:persist' is used.
+    // The previous prompt used transition:persist.
+    // If this component is remounted, the script runs again.
+  }
+
+  // Run on load
+  initOrbitalSim();
+
+  // Re-run on view transition swap if not persisting the component itself
+  document.addEventListener("astro:after-swap", initOrbitalSim);
+</script>

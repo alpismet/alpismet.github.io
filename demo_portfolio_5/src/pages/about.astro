@@ -1,0 +1,232 @@
+---
+import AnimatedBackground from "../components/AnimatedBackground.astro";
+import SkillBars from "../components/SkillBars.astro";
+import SkillDots from "../components/SkillDots.astro";
+import SkillHexagon from "../components/SkillHexagon.astro";
+import SkillRadial from "../components/SkillRadial.astro";
+import Layout from "../layouts/Layout.astro";
+
+// Core Technical Skills
+const technicalSkills = [
+  { name: "Unity", level: 95 },
+  { name: "Unreal Engine", level: 88 },
+  { name: "C#", level: 92 },
+  { name: "C++", level: 85 },
+  { name: "JavaScript", level: 84 },
+  { name: "TypeScript", level: 82 },
+];
+
+// Creative/Design Skills
+const creativeSkills = [
+  { name: "3D Modeling", level: 75 },
+  { name: "Shader Programming", level: 90 },
+  { name: "Animation", level: 80 },
+  { name: "UI/UX Design", level: 81 },
+  { name: "Game Design", level: 93 },
+];
+
+// Web Technologies
+const webSkills = [
+  { name: "WebGL", level: 78 },
+  { name: "Three.js", level: 82 },
+  { name: "Astro", level: 72 },
+  { name: "React", level: 79 },
+  { name: "Node.js", level: 77 },
+  { name: "Performance Optimization", level: 89 },
+];
+
+// Soft Skills & Tools
+const softSkills = [
+  { name: "Problem Solving", level: 95 },
+  { name: "Team Leadership", level: 85 },
+  { name: "Project Management", level: 80 },
+  { name: "Version Control (Git)", level: 94 },
+  { name: "Agile/Scrum", level: 82 },
+  { name: "Technical Writing", level: 78 },
+  { name: "Code Review", level: 88 },
+];
+---
+
+<Layout title="Hakkında | Gmd Popper">
+  <div class="container" style="padding: 4rem 2rem;">
+    <!-- Profile Section -->
+    <div class="profile">
+      <div class="text">
+        <h1>Hakkımda</h1>
+        <p class="lead">
+          Oyunlar, sadece eğlence değil; teknolojinin sanatla buluştuğu
+          noktadır.
+        </p>
+        <p>
+          Ben Gmd Popper. 10 yıldan fazla süredir Unity, Unreal Engine ve son
+          zamanlarda WebGL teknolojileri ile deneyimler üretiyorum. Amacım,
+          tarayıcı içinde konsol kalitesinde oyunlar çalıştırabilmek.
+        </p>
+        <p>
+          Bu portfolyo sitesi de bu vizyonun bir parçası. Astro kullanarak, web
+          performansının sınırlarını zorluyorum.
+        </p>
+      </div>
+    </div>
+
+    <!-- Skills Section -->
+    <section class="skills-section">
+      <h2 class="main-title">Yetenekler ve Deneyim</h2>
+
+      <!-- Technical Skills - Radial with Particles Background -->
+      <div class="skill-category">
+        <AnimatedBackground variant="particles" />
+        <div class="category-content">
+          <div class="category-header">
+            <h3 class="category-title">🎮 Temel Teknolojiler</h3>
+            <p class="category-desc">
+              Oyun geliştirme ve programlama dillerinde uzmanlık
+            </p>
+          </div>
+          <SkillRadial skills={technicalSkills} />
+        </div>
+      </div>
+
+      <!-- Creative Skills - Hexagon with Gradient Orbs Background -->
+      <div class="skill-category">
+        <AnimatedBackground variant="gradient" />
+        <div class="category-content">
+          <div class="category-header">
+            <h3 class="category-title">🎨 Yaratıcı Yetenekler</h3>
+            <p class="category-desc">
+              Görsel tasarım, animasyon ve sanatsal beceriler
+            </p>
+          </div>
+          <SkillHexagon skills={creativeSkills} />
+        </div>
+      </div>
+
+      <!-- Web Technologies - Bars with Grid Background -->
+      <div class="skill-category">
+        <AnimatedBackground variant="grid" />
+        <div class="category-content">
+          <div class="category-header">
+            <h3 class="category-title">🌐 Web Teknolojileri</h3>
+            <p class="category-desc">
+              Modern web geliştirme ve performans optimizasyonu
+            </p>
+          </div>
+          <SkillBars skills={webSkills} />
+        </div>
+      </div>
+
+      <!-- Soft Skills - Dots with Waves Background -->
+      <div class="skill-category">
+        <AnimatedBackground variant="waves" />
+        <div class="category-content">
+          <div class="category-header">
+            <h3 class="category-title">💼 Profesyonel Beceriler</h3>
+            <p class="category-desc">
+              Takım çalışması, yönetim ve geliştirme araçları
+            </p>
+          </div>
+          <SkillDots skills={softSkills} />
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .profile {
+    max-width: 800px;
+    margin-bottom: 5rem;
+  }
+
+  .lead {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .skills-section {
+    margin-top: 3rem;
+  }
+
+  .main-title {
+    font-size: 3rem;
+    margin-bottom: 4rem;
+    text-align: center;
+    background: linear-gradient(
+      to right,
+      var(--color-aurora-2),
+      var(--color-aurora-3)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .skill-category {
+    position: relative;
+    margin-bottom: 6rem;
+    padding: 3rem;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    overflow: hidden;
+  }
+
+  .skill-category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -15px rgba(79, 70, 229, 0.2);
+    border-color: rgba(236, 72, 153, 0.3);
+  }
+
+  .category-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .category-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .category-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .category-desc {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .skill-category {
+      padding: 2rem 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .main-title {
+      font-size: 2rem;
+    }
+
+    .category-title {
+      font-size: 1.5rem;
+    }
+  }
+</style>

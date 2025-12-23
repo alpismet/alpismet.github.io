@@ -1,0 +1,411 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "İsmet ALP | Portfolio",
+  description = "Game Developer & Digital Artist",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ClientRouter />
+
+    <!-- Google Fonts & Material Symbols (Kept for potential usage, though UI is removed) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="relative min-h-screen text-white">
+    <!-- Orbital Background Elements -->
+    <div class="atmosphere-background" id="bgGradient" style="height: 100%;">
+    </div>
+    <canvas id="spaceCanvas"></canvas>
+
+    <!-- Original Portfolio Content -->
+    <header class="site-header" transition:persist>
+      <div class="container header-inner">
+        <a href="/" class="logo">İSMET<span class="dot">.</span>ALP</a>
+        <nav>
+          <a href="/projects">Projects</a>
+          <a href="/blog">Blog</a>
+          <a href="/about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          &copy; {new Date().getFullYear()} İsmet ALP. Powered by <a
+            href="https://astro.build"
+            target="_blank">Astro</a
+          >.
+        </p>
+      </div>
+    </footer>
+
+    <style is:global>
+      /* Aurora Background (adapted from Demo 4) */
+      .atmosphere-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100vh;
+        z-index: -2;
+        background: linear-gradient(
+          135deg,
+          var(--color-bg) 0%,
+          #1e293b 50%,
+          var(--color-bg) 100%
+        );
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .atmosphere-background::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle at 30% 50%,
+          rgba(79, 70, 229, 0.15) 0%,
+          transparent 50%
+        );
+        animation: aurora-move 20s ease-in-out infinite;
+        transform: translateZ(0);
+      }
+
+      .atmosphere-background::after {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle at 70% 50%,
+          rgba(236, 72, 153, 0.1) 0%,
+          transparent 50%
+        );
+        animation: aurora-move 25s ease-in-out infinite reverse;
+        transform: translateZ(0);
+      }
+
+      @keyframes aurora-move {
+        0% {
+          transform: scale(1) translateZ(0);
+        }
+        50% {
+          transform: scale(1.1) translateZ(0);
+        }
+        100% {
+          transform: scale(1) translateZ(0);
+        }
+      }
+
+      canvas#spaceCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      /* Portfolio Specific Styles Restored */
+      .site-header {
+        position: sticky;
+        top: 2rem;
+        z-index: 100;
+        margin: 0 auto;
+        max-width: 800px;
+      }
+
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-full);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .logo {
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: 1.25rem;
+        letter-spacing: 0.05em;
+        color: white;
+        text-decoration: none;
+      }
+
+      .dot {
+        color: var(--color-aurora-2);
+      }
+
+      nav {
+        display: flex;
+        gap: 2rem;
+      }
+
+      nav a {
+        font-size: 0.9rem;
+        font-weight: 400;
+        opacity: 0.7;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s;
+      }
+
+      nav a:hover {
+        opacity: 1;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding-top: 4rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .site-footer {
+        padding: 4rem 0;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        margin-top: 6rem;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+        position: relative;
+        z-index: 1;
+      }
+
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+      }
+    </style>
+
+    <!-- ORBITAL PHYSICS SCRIPT -->
+    <script>
+      function initApp() {
+        const canvas = document.getElementById(
+          "spaceCanvas"
+        ) as HTMLCanvasElement;
+        const ctx = canvas?.getContext("2d");
+        const bgDiv = document.getElementById("bgGradient");
+        if (!canvas || !ctx || !bgDiv) return;
+
+        // State
+        let width = window.innerWidth;
+        let height = 0;
+        let particles: Star[] = [];
+        let mouseX = 0,
+          mouseY = 0;
+        let targetX = 0,
+          targetY = 0;
+
+        let animationFrameId = 0;
+
+        // HARDCODED CONFIGURATION (Stars Only)
+        const config = {
+          starPoolSize: 2000,
+          starHorizon: 0.8,
+          starFadeStrength: 3.0,
+          parallax: false,
+        };
+
+        // Pre-generated star pool
+        const starPool: Star[] = [];
+
+        const random = (min: number, max: number) =>
+          Math.random() * (max - min) + min;
+
+        /* --- CLASSES --- */
+        class Star {
+          x = 0;
+          y = 0;
+          size = 0;
+          z = 0;
+          baseAlpha = 0;
+          twinklePhase = 0;
+
+          constructor() {
+            this.reset();
+          }
+          reset() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.size = Math.random() < 0.95 ? random(0.5, 1.5) : random(2, 3);
+            this.z = random(0.1, 0.4);
+            this.baseAlpha = random(0.3, 0.9);
+            this.twinklePhase = random(0, Math.PI * 2);
+          }
+          draw() {
+            this.twinklePhase += 0.05;
+            let alpha = this.baseAlpha + Math.sin(this.twinklePhase) * 0.15;
+
+            const progress = this.y / height;
+            if (progress > config.starHorizon) {
+              const depth =
+                (progress - config.starHorizon) / (1 - config.starHorizon);
+              alpha -= depth * config.starFadeStrength;
+            }
+
+            if (alpha <= 0.02) return;
+
+            const dx = this.x + (config.parallax ? targetX * this.z : 0);
+            const dy = this.y + (config.parallax ? targetY * this.z : 0);
+
+            if (ctx) {
+              ctx.beginPath();
+              ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+              ctx.arc(dx, dy, this.size, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+
+        function initStarPool() {
+          starPool.length = 0;
+          const maxHeight = 10000;
+
+          for (let i = 0; i < config.starPoolSize; i++) {
+            const star = new Star();
+            star.x = Math.random() * width;
+            star.y = Math.random() * maxHeight;
+            star.size = Math.random() < 0.95 ? random(0.5, 1.5) : random(2, 3);
+            star.z = random(0.1, 0.4);
+            star.baseAlpha = random(0.3, 0.9);
+            star.twinklePhase = random(0, Math.PI * 2);
+            starPool.push(star);
+          }
+        }
+
+        /* --- SYSTEM --- */
+        function resize() {
+          const newWidth = window.innerWidth;
+          const newHeight = Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+            window.innerHeight
+          );
+
+          if (newHeight !== height || newWidth !== width) {
+            width = newWidth;
+            height = newHeight;
+            canvas.width = width;
+            canvas.height = height;
+            if (bgDiv) bgDiv.style.height = height + "px";
+
+            // Initialize pool if not done
+            if (starPool.length === 0) {
+              initStarPool();
+            }
+
+            // Filter stars within current page height
+            particles = starPool.filter((star) => star.y <= height);
+          }
+        }
+
+        function animate(_timestamp: number) {
+          if (!ctx) return;
+          ctx.clearRect(0, 0, width, height);
+
+          targetX += (mouseX - targetX) * 0.05;
+          targetY += (mouseY - targetY) * 0.05;
+
+          particles.forEach((p) => p.draw());
+
+          animationFrameId = requestAnimationFrame(animate);
+        }
+
+        /* --- Listeners --- */
+        window.addEventListener("resize", resize);
+
+        const onMouseMove = (e: MouseEvent) => {
+          if (!config.parallax) return;
+          const cx = window.innerWidth / 2;
+          const cy = window.innerHeight / 2;
+          mouseX = (e.clientX - cx) * 0.15;
+          mouseY = (e.clientY - cy) * 0.15;
+        };
+        window.addEventListener("mousemove", onMouseMove);
+
+        // Init
+        resize();
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(animate);
+
+        console.log("Orbital Background initialized without UI");
+      }
+
+      // Scroll Reveal Logic
+      function initScrollReveal() {
+        const observerOptions = {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.15,
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          const intersectingEntries = entries.filter((e) => e.isIntersecting);
+          intersectingEntries.sort((a, b) => {
+            return a.boundingClientRect.left - b.boundingClientRect.left;
+          });
+
+          intersectingEntries.forEach((entry, index) => {
+            const target = entry.target as HTMLElement;
+            target.style.transitionDelay = `${index * 150}ms`;
+            target.classList.add("visible");
+            observer.unobserve(target);
+          });
+        }, observerOptions);
+
+        const hiddenElements = document.querySelectorAll(".project-card");
+        hiddenElements.forEach((el) => {
+          el.classList.remove("visible");
+          (el as HTMLElement).style.transitionDelay = "0ms";
+          observer.observe(el);
+        });
+      }
+
+      document.addEventListener("astro:page-load", () => {
+        initApp();
+        initScrollReveal();
+      });
+
+      if (document.readyState === "complete") {
+        initApp();
+        initScrollReveal();
+      } else {
+        window.addEventListener("load", () => {
+          initApp();
+          initScrollReveal();
+        });
+      }
+    </script>
+  </body>
+</html>

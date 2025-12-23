@@ -1,0 +1,122 @@
+---
+interface Props {
+  skills: Array<{ name: string; level: number }>; // level: 0-100
+}
+
+const { skills } = Astro.props;
+---
+
+<div class="skill-bars-container">
+  {
+    skills.map((skill) => (
+      <div class="skill-item" data-level={skill.level}>
+        <div class="skill-header">
+          <span class="skill-name">{skill.name}</span>
+          <span class="skill-percentage">{skill.level}%</span>
+        </div>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" style={`width: ${skill.level}%`} />
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .skill-bars-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .skill-item {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+
+  .skill-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .skill-percentage {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-aurora-2);
+    font-weight: 700;
+  }
+
+  .skill-bar-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      var(--color-aurora-2),
+      var(--color-aurora-3)
+    );
+    border-radius: 100px;
+    width: 0; /* Start at 0 for animation */
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+  }
+
+  .skill-item.visible .skill-bar-fill {
+    width: var(--target-width);
+  }
+</style>
+
+<script>
+  // Animate bars on scroll
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          const target = entry.target as HTMLElement;
+          const level = target.dataset.level || "0";
+
+          // Stagger animation
+          setTimeout(() => {
+            target.classList.add("visible");
+            const fill = target.querySelector(".skill-bar-fill") as HTMLElement;
+            if (fill) {
+              fill.style.setProperty("--target-width", `${level}%`);
+              fill.style.width = `${level}%`;
+            }
+          }, index * 100);
+
+          observer.unobserve(target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll(".skill-item").forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>

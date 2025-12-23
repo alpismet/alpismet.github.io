@@ -32,6 +32,7 @@
     "@expressive-code/plugin-collapsible-sections": "^0.41.3",
     "@expressive-code/plugin-line-numbers": "^0.41.3",
     "@iconify/json": "^2.2.360",
+    "@playwright/test": "^1.57.0",
     "@types/node": "^24.0.15",
     "@types/nprogress": "^0.2.3",
     "@types/p5": "^1.7.6",

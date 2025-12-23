@@ -1,0 +1,168 @@
+---
+interface Props {
+  skills: Array<{ name: string; level: number }>; // level: 0-100
+}
+
+const { skills } = Astro.props;
+
+// Generate hexagon path
+const hexPath = "M50 5 L90 27.5 L90 72.5 L50 95 L10 72.5 L10 27.5 Z";
+---
+
+<div class="skill-hex-container">
+  {
+    skills.map((skill) => (
+      <div class="skill-hex-item" data-level={skill.level}>
+        <div class="hex-chart">
+          <svg viewBox="0 0 100 100" class="hex-svg">
+            {/* Background hexagon */}
+            <path
+              d={hexPath}
+              fill="rgba(255,255,255,0.03)"
+              stroke="rgba(255,255,255,0.1)"
+              stroke-width="2"
+            />
+            {/* Animated fill hexagon */}
+            <clipPath id={`hex-clip-${skill.name.replace(/\s/g, "-")}`}>
+              <path d={hexPath} />
+            </clipPath>
+            <rect
+              x="0"
+              y="100"
+              width="100"
+              height="100"
+              fill="url(#hex-gradient)"
+              clip-path={`url(#hex-clip-${skill.name.replace(/\s/g, "-")})`}
+              class="hex-fill"
+            />
+            <defs>
+              <linearGradient
+                id="hex-gradient"
+                x1="0%"
+                y1="100%"
+                x2="0%"
+                y2="0%"
+              >
+                <stop
+                  offset="0%"
+                  style="stop-color:var(--color-aurora-2);stop-opacity:1"
+                />
+                <stop
+                  offset="100%"
+                  style="stop-color:var(--color-aurora-3);stop-opacity:1"
+                />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="hex-content">
+            <span class="hex-percentage">{skill.level}%</span>
+          </div>
+        </div>
+        <span class="skill-hex-label">{skill.name}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .skill-hex-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 2.5rem;
+    justify-items: center;
+  }
+
+  .skill-hex-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    transform: rotateY(90deg);
+    transition:
+      opacity 0.7s ease-out,
+      transform 0.7s ease-out;
+  }
+
+  .skill-hex-item.visible {
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
+
+  .hex-chart {
+    position: relative;
+    width: 140px;
+    height: 140px;
+  }
+
+  .hex-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 12px rgba(236, 72, 153, 0.4));
+  }
+
+  .hex-fill {
+    transition: y 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hex-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hex-percentage {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(
+      to bottom,
+      var(--color-aurora-2),
+      var(--color-aurora-3)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .skill-hex-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: center;
+    max-width: 140px;
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          const target = entry.target as HTMLElement;
+          const level = parseInt(target.dataset.level || "0");
+
+          setTimeout(() => {
+            target.classList.add("visible");
+            const fill = target.querySelector(".hex-fill") as SVGRectElement;
+            if (fill) {
+              // Animate from bottom (y=100) to top based on level
+              const finalY = 100 - level;
+              fill.setAttribute("y", finalY.toString());
+            }
+          }, index * 100);
+
+          observer.unobserve(target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll(".skill-hex-item").forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>
