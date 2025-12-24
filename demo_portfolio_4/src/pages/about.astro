@@ -162,11 +162,11 @@ const softSkills = [
     text-align: center;
     background: linear-gradient(
       to right,
-      var(--color-aurora-2),
-      var(--color-aurora-3)
+      var(--color-heading-gradient-start),
+      var(--color-heading-gradient-end)
     );
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: var(--color-transparent);
   }
 
   .skill-category {
@@ -175,10 +175,10 @@ const softSkills = [
     padding: 3rem;
     background: linear-gradient(
       145deg,
-      rgba(255, 255, 255, 0.03) 0%,
-      rgba(255, 255, 255, 0.01) 100%
+      var(--color-white-03) 0%,
+      var(--color-white-01) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-white-08);
     border-radius: var(--radius-lg);
     transition:
       transform 0.3s ease,
@@ -188,8 +188,8 @@ const softSkills = [
 
   .skill-category:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px -15px rgba(var(--color-aurora-1-rgb), 0.2);
-    border-color: rgba(var(--color-aurora-2-rgb), 0.3);
+    box-shadow: 0 20px 40px -15px var(--color-glow-about-card);
+    border-color: var(--color-border-about-card);
   }
 
   .category-content {

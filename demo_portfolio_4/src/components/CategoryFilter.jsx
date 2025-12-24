@@ -61,10 +61,10 @@ export default function CategoryFilter() {
         .filter-btn {
           padding: 0.5rem 1.5rem;
           border-radius: 100px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--color-white-10);
+          background: var(--color-white-05);
           backdrop-filter: blur(10px);
-          color: #e2e8f0;
+          color: var(--color-text-strong);
           cursor: pointer;
           font-family: var(--font-sans);
           font-weight: 500;
@@ -73,17 +73,17 @@ export default function CategoryFilter() {
         }
 
         .filter-btn:hover {
-          background: rgba(255, 255, 255, 0.15);
-          border-color: rgba(255, 255, 255, 0.3);
+          background: var(--color-white-15);
+          border-color: var(--color-white-30);
           transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+          box-shadow: 0 5px 15px var(--color-black-20);
         }
 
         .filter-btn.active {
           background: linear-gradient(135deg, var(--color-aurora-1), var(--color-aurora-3));
-          border-color: transparent;
-          color: white;
-          box-shadow: 0 0 20px rgba(var(--color-aurora-1-rgb), 0.4);
+          border-color: var(--color-transparent);
+          color: var(--color-white);
+          box-shadow: 0 0 20px var(--color-glow-category-filter);
         }
       `}</style>
     </div>

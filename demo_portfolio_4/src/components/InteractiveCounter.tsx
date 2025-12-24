@@ -7,17 +7,21 @@ export default function InteractiveCounter() {
     <div
       style={{
         padding: "2rem",
-        background: "rgba(255, 255, 255, 0.03)",
+        background: "var(--color-white-03)",
         borderRadius: "12px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
+        border: "1px solid var(--color-white-05)",
         textAlign: "center",
       }}
     >
-      <h3 style={{ margin: "0 0 1rem 0", color: "#e4e4e7" }}>
+      <h3 style={{ margin: "0 0 1rem 0", color: "var(--color-text-contrast)" }}>
         Interactive Island
       </h3>
       <p
-        style={{ fontSize: "0.9rem", color: "#a1a1aa", marginBottom: "1.5rem" }}
+        style={{
+          fontSize: "0.9rem",
+          color: "var(--color-text-dim)",
+          marginBottom: "1.5rem",
+        }}
       >
         Bu bileşen <strong>Preact</strong> ile çalışıyor ve sayfaya "hydrate"
         edildi. Diğer her şey statik HTML!
@@ -35,9 +39,9 @@ export default function InteractiveCounter() {
           onClick={() => setCount(count - 1)}
           style={{
             padding: "0.5rem 1rem",
-            background: "#27272a",
+            background: "var(--color-ui-dark)",
             border: "none",
-            color: "white",
+            color: "var(--color-white)",
             borderRadius: "6px",
             cursor: "pointer",
           }}
@@ -63,7 +67,7 @@ export default function InteractiveCounter() {
             padding: "0.5rem 1rem",
             background: "var(--color-aurora-2)",
             border: "none",
-            color: "white",
+            color: "var(--color-white)",
             borderRadius: "6px",
             cursor: "pointer",
           }}

@@ -1,19 +1,8 @@
 /* Ethereal/Glass Themes */
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap");
+@import "./colors.css";
 
 :root {
-  --color-bg: #0f172a;
-  --color-text: #f8fafc;
-  --color-text-muted: #94a3b8;
-
-  /* Aurora Colors */
-  --color-aurora-1: #e62720;
-  --color-aurora-2: #ff8f1f;
-  --color-aurora-3: #ff4a2f;
-  --color-aurora-1-rgb: 230, 39, 32;
-  --color-aurora-2-rgb: 255, 143, 31;
-  --color-aurora-3-rgb: 255, 74, 47;
-
   --font-sans: "Outfit", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
@@ -21,17 +10,13 @@
   --radius-md: 20px;
   --radius-lg: 32px;
   --radius-full: 9999px;
-
-  --glass-surface: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-highlight: rgba(255, 255, 255, 0.15);
 }
 
 * {
   box-sizing: border-box;
   /* Standard Scrollbar Properties (Firefox) */
   scrollbar-width: thin;
-  scrollbar-color: var(--color-aurora-2) transparent;
+  scrollbar-color: var(--color-scrollbar-thumb-start) var(--color-scrollbar-track);
 }
 
 /* Custom Scrollbar (Chrome, Safari, Edge) */
@@ -41,27 +26,27 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--color-scrollbar-track);
   backdrop-filter: blur(10px);
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(
     to bottom,
-    var(--color-aurora-2),
-    var(--color-aurora-3)
+    var(--color-scrollbar-thumb-start),
+    var(--color-scrollbar-thumb-end)
   );
   border-radius: var(--radius-full);
-  border: 2px solid transparent;
+  border: 2px solid var(--color-scrollbar-thumb-border);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     to bottom,
-    var(--color-aurora-2),
-    var(--color-aurora-3)
+    var(--color-scrollbar-thumb-hover-start),
+    var(--color-scrollbar-thumb-hover-end)
   );
-  box-shadow: 0 0 8px rgba(var(--color-aurora-2-rgb), 0.5);
+  box-shadow: 0 0 8px var(--color-scrollbar-thumb-shadow);
 }
 
 body {
@@ -92,46 +77,46 @@ h1 {
   /* Standardized Orange-Pink Gradient */
   background: linear-gradient(
     to right,
-    var(--color-aurora-2),
-    var(--color-aurora-3)
+    var(--color-heading-gradient-start),
+    var(--color-heading-gradient-end)
   );
   background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 2em rgba(var(--color-aurora-2-rgb), 0.3));
+  -webkit-text-fill-color: var(--color-transparent);
+  filter: drop-shadow(0 0 2em var(--color-heading-glow));
 }
 
 /* Utility for other headers to match */
 .text-gradient-accent {
   background: linear-gradient(
     to right,
-    var(--color-aurora-2),
-    var(--color-aurora-3)
+    var(--color-text-gradient-accent-start),
+    var(--color-text-gradient-accent-end)
   );
   background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: var(--color-transparent);
 }
 
 /* Glass Card Mixin */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--glass-surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-top: 1px solid var(--glass-highlight);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px 0 var(--color-black-30);
 }
 
 .text-gradient {
   background: linear-gradient(
     to right,
-    var(--color-aurora-2),
-    var(--color-aurora-3)
+    var(--color-text-gradient-start),
+    var(--color-text-gradient-end)
   );
   background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: var(--color-transparent);
   font-weight: 700;
 }
 
@@ -164,19 +149,19 @@ a {
   display: inline-flex;
   align-items: center;
   padding: 0.75rem 2rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-white-10);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-white-20);
   border-radius: var(--radius-full);
-  color: white;
+  color: var(--color-white);
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-white-20);
   transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px var(--color-white-20);
 }
 
 /* Staggered Entrance Animation - Restored */

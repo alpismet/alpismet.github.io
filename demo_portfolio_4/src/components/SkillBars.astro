@@ -64,7 +64,7 @@ const { skills } = Astro.props;
 
   .skill-bar-track {
     height: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-white-05);
     border-radius: 100px;
     overflow: hidden;
     position: relative;
@@ -80,7 +80,7 @@ const { skills } = Astro.props;
     border-radius: 100px;
     width: 0; /* Start at 0 for animation */
     transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 10px rgba(var(--color-aurora-2-rgb), 0.5);
+    box-shadow: 0 0 10px var(--color-glow-skill-bars);
   }
 
   .skill-item.visible .skill-bar-fill {

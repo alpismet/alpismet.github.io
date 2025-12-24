@@ -204,9 +204,9 @@ const { variant = "particles" } = Astro.props;
     height: 200%;
     background: linear-gradient(
       45deg,
-      transparent 40%,
+      var(--color-transparent) 40%,
       var(--color-aurora-2) 50%,
-      transparent 60%
+      var(--color-transparent) 60%
     );
     animation: wave-move 15s infinite linear;
   }
@@ -243,13 +243,13 @@ const { variant = "particles" } = Astro.props;
     height: 100%;
     background-image:
       linear-gradient(
-        rgba(var(--color-aurora-2-rgb), 0.05) 1px,
-        transparent 1px
+        var(--color-grid-line) 1px,
+        var(--color-transparent) 1px
       ),
       linear-gradient(
         90deg,
-        rgba(var(--color-aurora-2-rgb), 0.05) 1px,
-        transparent 1px
+        var(--color-grid-line) 1px,
+        var(--color-transparent) 1px
       );
     background-size: 50px 50px;
     animation: grid-pulse 4s infinite ease-in-out;
@@ -283,7 +283,11 @@ const { variant = "particles" } = Astro.props;
   .orb-1 {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, var(--color-aurora-2), transparent);
+    background: radial-gradient(
+      circle,
+      var(--color-aurora-2),
+      var(--color-transparent)
+    );
     top: 20%;
     left: 10%;
     animation-duration: 12s;
@@ -292,7 +296,11 @@ const { variant = "particles" } = Astro.props;
   .orb-2 {
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, var(--color-aurora-3), transparent);
+    background: radial-gradient(
+      circle,
+      var(--color-aurora-3),
+      var(--color-transparent)
+    );
     bottom: 20%;
     right: 10%;
     animation-duration: 15s;

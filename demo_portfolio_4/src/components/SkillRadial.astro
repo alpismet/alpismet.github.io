@@ -18,7 +18,7 @@ const { skills } = Astro.props;
               cy="50"
               r="40"
               fill="none"
-              stroke="rgba(255,255,255,0.05)"
+              stroke="var(--color-white-05)"
               stroke-width="8"
             />
             <circle
@@ -91,7 +91,7 @@ const { skills } = Astro.props;
   .radial-svg {
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 0 10px rgba(var(--color-aurora-2-rgb), 0.3));
+    filter: drop-shadow(0 0 10px var(--color-glow-skill-radial));
   }
 
   .radial-progress {
@@ -116,7 +116,7 @@ const { skills } = Astro.props;
       var(--color-aurora-3)
     );
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: var(--color-transparent);
   }
 
   .skill-label {

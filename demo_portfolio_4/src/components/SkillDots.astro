@@ -85,8 +85,8 @@ const getDotsForLevel = (level: number) => {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: var(--color-white-08);
+    border: 2px solid var(--color-white-15);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform: scale(0);
   }
@@ -102,7 +102,7 @@ const getDotsForLevel = (level: number) => {
       var(--color-aurora-3)
     );
     border-color: var(--color-aurora-2);
-    box-shadow: 0 0 8px rgba(var(--color-aurora-2-rgb), 0.6);
+    box-shadow: 0 0 8px var(--color-glow-skill-dots);
   }
 
   /* Stagger dot animations */

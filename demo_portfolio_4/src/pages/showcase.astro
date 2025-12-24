@@ -75,7 +75,7 @@ import Layout from "../layouts/Layout.astro";
   .card {
     padding: 2rem;
     background: var(--color-surface);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-white-05);
     border-radius: var(--radius-md);
   }
 
@@ -88,8 +88,8 @@ import Layout from "../layouts/Layout.astro";
   .metric {
     margin-top: 2rem;
     padding: 1rem;
-    background: rgba(0, 255, 0, 0.1);
-    border: 1px solid rgba(0, 255, 0, 0.2);
+    background: var(--color-accent-green-10);
+    border: 1px solid var(--color-accent-green-20);
     border-radius: var(--radius-sm);
     display: inline-flex;
     align-items: center;
@@ -99,6 +99,6 @@ import Layout from "../layouts/Layout.astro";
   .metric .value {
     font-size: 2rem;
     font-weight: 800;
-    color: #4ade80;
+    color: var(--color-success-text);
   }
 </style>

@@ -47,7 +47,7 @@ const { Content } = await post.render();
       var(--color-bg)
     );
     text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-white-05);
   }
 
   .back-link {
@@ -100,7 +100,7 @@ const { Content } = await post.render();
 
   .content :global(p) {
     margin-bottom: 1.5rem;
-    color: #d4d4d8;
+    color: var(--color-text-subtle);
   }
 
   .content :global(ul) {
