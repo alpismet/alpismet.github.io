@@ -10,12 +10,21 @@ const sortedProjects = allProjects.sort(
 );
 ---
 
-<Layout title="Projeler | İsmet ALP">
+<Layout title="Projects | İsmet ALP">
   <div class="header-section">
     <div class="container">
-      <h1>Projelerim</h1>
+      <h1>
+        <i18n lang="en" data-i18n="projects-title">My Projects</i18n>
+        <i18n lang="tr" hidden data-i18n="projects-title">Projelerim</i18n>
+      </h1>
       <p>
-        Oyun geliştirme, 3D sanat, yazılım ve tasarım alanındaki çalışmalarım.
+        <i18n lang="en" data-i18n="projects-lead">
+          A selection of my work in game development, 3D art, software, and
+          design.
+        </i18n>
+        <i18n lang="tr" hidden data-i18n="projects-lead">
+          Oyun geliştirme, 3D sanat, yazılım ve tasarım alanındaki çalışmalarım.
+        </i18n>
       </p>
     </div>
   </div>

@@ -47,40 +47,81 @@ const softSkills = [
 ];
 ---
 
-<Layout title="Hakkında | Gmd Popper">
+<Layout title="About | Gmd Popper">
   <div class="container" style="padding: 4rem 2rem;">
     <!-- Profile Section -->
     <div class="profile">
       <div class="text">
-        <h1>Hakkımda</h1>
+        <h1>
+          <i18n lang="en" data-i18n="about-title">About</i18n>
+          <i18n lang="tr" hidden data-i18n="about-title">Hakkımda</i18n>
+        </h1>
         <p class="lead">
-          Oyunlar, sadece eğlence değil; teknolojinin sanatla buluştuğu
-          noktadır.
+          <i18n lang="en" data-i18n="about-lead">
+            Games are more than entertainment; they are where technology meets
+            art.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="about-lead">
+            Oyunlar, sadece eğlence değil; teknolojinin sanatla buluştuğu
+            noktadır.
+          </i18n>
         </p>
         <p>
-          Ben Gmd Popper. 10 yıldan fazla süredir Unity, Unreal Engine ve son
-          zamanlarda WebGL teknolojileri ile deneyimler üretiyorum. Amacım,
-          tarayıcı içinde konsol kalitesinde oyunlar çalıştırabilmek.
+          <i18n lang="en" data-i18n="about-body-1">
+            I'm Gmd Popper. For over 10 years I've been building experiences
+            with Unity, Unreal Engine, and lately WebGL. My goal is to run
+            console-quality games in the browser.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="about-body-1">
+            Ben Gmd Popper. 10 yıldan fazla süredir Unity, Unreal Engine ve son
+            zamanlarda WebGL teknolojileri ile deneyimler üretiyorum. Amacım,
+            tarayıcı içinde konsol kalitesinde oyunlar çalıştırabilmek.
+          </i18n>
         </p>
         <p>
-          Bu portfolyo sitesi de bu vizyonun bir parçası. Astro kullanarak, web
-          performansının sınırlarını zorluyorum.
+          <i18n lang="en" data-i18n="about-body-2">
+            This portfolio site is part of that vision. With Astro, I push the
+            limits of web performance.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="about-body-2">
+            Bu portfolyo sitesi de bu vizyonun bir parçası. Astro kullanarak,
+            web performansının sınırlarını zorluyorum.
+          </i18n>
         </p>
       </div>
     </div>
 
     <!-- Skills Section -->
     <section class="skills-section">
-      <h2 class="main-title">Yetenekler ve Deneyim</h2>
+      <h2 class="main-title">
+        <i18n lang="en" data-i18n="about-skills-title">
+          Skills & Experience
+        </i18n>
+        <i18n lang="tr" hidden data-i18n="about-skills-title">
+          Yetenekler ve Deneyim
+        </i18n>
+      </h2>
 
       <!-- Technical Skills - Radial with Particles Background -->
       <div class="skill-category">
         <AnimatedBackground variant="particles" />
         <div class="category-content">
           <div class="category-header">
-            <h3 class="category-title">🎮 Temel Teknolojiler</h3>
+            <h3 class="category-title">
+              <i18n lang="en" data-i18n="about-core-title">
+                🎮 Core Technologies
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-core-title">
+                🎮 Temel Teknolojiler
+              </i18n>
+            </h3>
             <p class="category-desc">
-              Oyun geliştirme ve programlama dillerinde uzmanlık
+              <i18n lang="en" data-i18n="about-core-desc">
+                Expertise in game development and programming languages
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-core-desc">
+                Oyun geliştirme ve programlama dillerinde uzmanlık
+              </i18n>
             </p>
           </div>
           <SkillRadial skills={technicalSkills} />
@@ -92,9 +133,21 @@ const softSkills = [
         <AnimatedBackground variant="gradient" />
         <div class="category-content">
           <div class="category-header">
-            <h3 class="category-title">🎨 Yaratıcı Yetenekler</h3>
+            <h3 class="category-title">
+              <i18n lang="en" data-i18n="about-creative-title">
+                🎨 Creative Skills
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-creative-title">
+                🎨 Yaratıcı Yetenekler
+              </i18n>
+            </h3>
             <p class="category-desc">
-              Görsel tasarım, animasyon ve sanatsal beceriler
+              <i18n lang="en" data-i18n="about-creative-desc">
+                Visual design, animation, and artistic craft
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-creative-desc">
+                Görsel tasarım, animasyon ve sanatsal beceriler
+              </i18n>
             </p>
           </div>
           <SkillHexagon skills={creativeSkills} />
@@ -106,9 +159,21 @@ const softSkills = [
         <AnimatedBackground variant="grid" />
         <div class="category-content">
           <div class="category-header">
-            <h3 class="category-title">🌐 Web Teknolojileri</h3>
+            <h3 class="category-title">
+              <i18n lang="en" data-i18n="about-web-title">
+                🌐 Web Technologies
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-web-title">
+                🌐 Web Teknolojileri
+              </i18n>
+            </h3>
             <p class="category-desc">
-              Modern web geliştirme ve performans optimizasyonu
+              <i18n lang="en" data-i18n="about-web-desc">
+                Modern web development and performance optimization
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-web-desc">
+                Modern web geliştirme ve performans optimizasyonu
+              </i18n>
             </p>
           </div>
           <SkillBars skills={webSkills} />
@@ -120,9 +185,21 @@ const softSkills = [
         <AnimatedBackground variant="waves" />
         <div class="category-content">
           <div class="category-header">
-            <h3 class="category-title">💼 Profesyonel Beceriler</h3>
+            <h3 class="category-title">
+              <i18n lang="en" data-i18n="about-pro-title">
+                💼 Professional Skills
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-pro-title">
+                💼 Profesyonel Beceriler
+              </i18n>
+            </h3>
             <p class="category-desc">
-              Takım çalışması, yönetim ve geliştirme araçları
+              <i18n lang="en" data-i18n="about-pro-desc">
+                Teamwork, leadership, and development tooling
+              </i18n>
+              <i18n lang="tr" hidden data-i18n="about-pro-desc">
+                Takım çalışması, yönetim ve geliştirme araçları
+              </i18n>
             </p>
           </div>
           <SkillDots skills={softSkills} />

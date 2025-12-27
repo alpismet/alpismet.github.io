@@ -66,12 +66,12 @@
   --color-alert-success-10: rgba(34, 197, 94, 0.1);
 
   /* Aurora colors */
-  --color-aurora-1: #e62720;
-  --color-aurora-2: #ff8f1f;
-  --color-aurora-3: #ff4a2f;
-  --color-aurora-1-rgb: 230, 39, 32;
-  --color-aurora-2-rgb: 255, 143, 31;
-  --color-aurora-3-rgb: 255, 74, 47;
+  --color-aurora-1: var(--theme-alp-2-1);
+  --color-aurora-2: var(--theme-alp-2-2);
+  --color-aurora-3: var(--theme-alp-2-3);
+  --color-aurora-1-rgb: 217, 58, 34;
+  --color-aurora-2-rgb: 255, 74, 47;
+  --color-aurora-3-rgb: 255, 143, 31;
 
   --color-star-rgb: 255, 255, 255;
 
@@ -131,6 +131,17 @@
   --color-text-gradient-accent-end: var(--color-aurora-3);
 
   --color-logo-dot: var(--color-aurora-1);
+
+  --color-lang-switcher-title: var(--color-text-70);
+  --color-lang-switcher-bg: var(--color-bg-60);
+  --color-lang-switcher-border: var(--color-white-12);
+  --color-lang-option-border: var(--color-white-20);
+  --color-lang-option-text: var(--color-text);
+  --color-lang-option-hover-bg: var(--color-white-10);
+  --color-lang-option-active-text: var(--color-white);
+  --color-lang-option-active-start: var(--color-aurora-2);
+  --color-lang-option-active-end: var(--color-aurora-3);
+  --color-lang-option-shadow: var(--color-black-35);
 
   --color-scrollbar-track: var(--color-black-50);
   --color-scrollbar-thumb-start: var(--color-aurora-1);

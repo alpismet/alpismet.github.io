@@ -1,13 +1,16 @@
 import { useEffect, useState } from "preact/hooks";
 
 const categories = [
-  { id: "all", label: "Tümü" },
-  { id: "game-dev", label: "Oyun & App" },
-  { id: "3d-art", label: "3D & Animasyon" },
-  { id: "graphic-design", label: "Grafik Tasarım" },
-  { id: "physical-art", label: "Fiziksel Sanat" },
-  { id: "video-production", label: "Video Prodüksiyon" },
-  { id: "software", label: "Yazılım" },
+  { id: "all", label: { en: "All", tr: "Tümü" } },
+  { id: "game-dev", label: { en: "Game & App", tr: "Oyun & App" } },
+  { id: "3d-art", label: { en: "3D & Animation", tr: "3D & Animasyon" } },
+  { id: "graphic-design", label: { en: "Graphic Design", tr: "Grafik Tasarım" } },
+  { id: "physical-art", label: { en: "Physical Art", tr: "Fiziksel Sanat" } },
+  {
+    id: "video-production",
+    label: { en: "Video Production", tr: "Video Prodüksiyon" },
+  },
+  { id: "software", label: { en: "Software", tr: "Yazılım" } },
 ];
 
 export default function CategoryFilter() {
@@ -46,7 +49,12 @@ export default function CategoryFilter() {
           className={`filter-btn ${activeCategory === cat.id ? "active" : ""}`}
           onClick={() => setActiveCategory(cat.id)}
         >
-          {cat.label}
+          <i18n lang="en" data-i18n={`category-${cat.id}`}>
+            {cat.label.en}
+          </i18n>
+          <i18n lang="tr" hidden data-i18n={`category-${cat.id}`}>
+            {cat.label.tr}
+          </i18n>
         </button>
       ))}
       <style>{`

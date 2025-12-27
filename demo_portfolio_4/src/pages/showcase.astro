@@ -2,57 +2,142 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Showcase | Astro Teknolojileri">
+<Layout title="Showcase | Astro Technologies">
   <div class="container" style="padding: 4rem 2rem;">
-    <h1>Bu Site Nasıl Yapıldı?</h1>
+    <h1>
+      <i18n lang="en" data-i18n="showcase-title">
+        How Was This Site Built?
+      </i18n>
+      <i18n lang="tr" hidden data-i18n="showcase-title">
+        Bu Site Nasıl Yapıldı?
+      </i18n>
+    </h1>
     <p class="intro">
-      Astro'nun modern web geliştirme özelliklerinin canlı bir demosu.
+      <i18n lang="en" data-i18n="showcase-lead">
+        A live demo of Astro's modern web development features.
+      </i18n>
+      <i18n lang="tr" hidden data-i18n="showcase-lead">
+        Astro'nun modern web geliştirme özelliklerinin canlı bir demosu.
+      </i18n>
     </p>
 
     <div class="grid">
       <div class="card">
-        <h2>⚡️ Zero JS by Default</h2>
+        <h2>
+          <i18n lang="en" data-i18n="showcase-card-1-title">
+            ⚡️ Zero JS by Default
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-1-title">
+            ⚡️ Varsayılan Olarak Sıfır JS
+          </i18n>
+        </h2>
         <p>
-          Astro, varsayılan olarak JavaScript'i tarayıcıya göndermez. Sadece
-          HTML ve CSS. Bu, sayfa yükleme hızını inanılmaz derecede artırır.
+          <i18n lang="en" data-i18n="showcase-card-1-body">
+            Astro ships no JavaScript to the browser by default, just HTML and
+            CSS. This dramatically improves page load speed.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-1-body">
+            Astro, varsayılan olarak JavaScript'i tarayıcıya göndermez. Sadece
+            HTML ve CSS. Bu, sayfa yükleme hızını inanılmaz derecede artırır.
+          </i18n>
         </p>
         <div class="metric">
           <span class="value">100</span>
-          <span class="label">Lighthouse Score</span>
+          <span class="label">
+            <i18n lang="en" data-i18n="showcase-card-1-metric">
+              Lighthouse Score
+            </i18n>
+            <i18n lang="tr" hidden data-i18n="showcase-card-1-metric">
+              Lighthouse Skoru
+            </i18n>
+          </span>
         </div>
       </div>
 
       <div class="card">
-        <h2>🏝 Islands Architecture</h2>
+        <h2>
+          <i18n lang="en" data-i18n="showcase-card-2-title">
+            🏝 Islands Architecture
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-2-title">
+            🏝 Islands Mimarisi
+          </i18n>
+        </h2>
         <p>
-          Anasayfadaki sayaç bileşeni, <strong>Preact</strong> ile yazıldı ve
-          <code>client:visible</code> direktifi ile monte edildi. Diğer her şey statik
-          kaldı.
+          <i18n lang="en" data-i18n="showcase-card-2-body">
+            The counter component on the homepage is written with
+            <strong>Preact</strong> and mounted via the
+            <code>client:visible</code> directive. Everything else stays static.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-2-body">
+            Anasayfadaki sayaç bileşeni, <strong>Preact</strong> ile yazıldı ve
+            <code>client:visible</code> direktifi ile monte edildi. Diğer her şey
+            statik kaldı.
+          </i18n>
         </p>
       </div>
 
       <div class="card">
-        <h2>📄 Content Collections</h2>
+        <h2>
+          <i18n lang="en" data-i18n="showcase-card-3-title">
+            📄 Content Collections
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-3-title">
+            📄 İçerik Koleksiyonları
+          </i18n>
+        </h2>
         <p>
-          Projeler ve blog yazıları, Type-safe (TypeScript destekli)
-          koleksiyonlar olarak sistemde tutuluyor. Yanlış veri girişi derleme
-          zamanında engelleniyor.
+          <i18n lang="en" data-i18n="showcase-card-3-body">
+            Projects and blog posts live as type-safe (TypeScript-backed)
+            collections. Invalid data is caught at build time.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-3-body">
+            Projeler ve blog yazıları, Type-safe (TypeScript destekli)
+            koleksiyonlar olarak sistemde tutuluyor. Yanlış veri girişi derleme
+            zamanında engelleniyor.
+          </i18n>
         </p>
       </div>
 
       <div class="card">
-        <h2>🔄 View Transitions</h2>
+        <h2>
+          <i18n lang="en" data-i18n="showcase-card-4-title">
+            🔄 View Transitions
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-4-title">
+            🔄 Görünüm Geçişleri
+          </i18n>
+        </h2>
         <p>
-          Sayfalar arası geçişlerde tarayıcı yenilemesi olmuyor. Astro'nun SPA
-          benzeri deneyimi sayesinde geçişler yumuşak ve animasyonlu.
+          <i18n lang="en" data-i18n="showcase-card-4-body">
+            Navigation happens without full page reloads. Astro's SPA-like
+            experience keeps transitions smooth and animated.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-4-body">
+            Sayfalar arası geçişlerde tarayıcı yenilemesi olmuyor. Astro'nun SPA
+            benzeri deneyimi sayesinde geçişler yumuşak ve animasyonlu.
+          </i18n>
         </p>
       </div>
 
       <div class="card">
-        <h2>🎨 Scoped CSS & Global Styles</h2>
+        <h2>
+          <i18n lang="en" data-i18n="showcase-card-5-title">
+            🎨 Scoped CSS & Global Styles
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-5-title">
+            🎨 Scoped CSS & Global Stiller
+          </i18n>
+        </h2>
         <p>
-          Bileşen tabanlı stil sistemi sayesinde CSS çakışmaları tarih oldu.
-          Aynı zamanda global değişkenlerle tutarlı bir tema yönetimi sağlandı.
+          <i18n lang="en" data-i18n="showcase-card-5-body">
+            Component-scoped styling eliminates CSS conflicts, and global
+            variables keep theming consistent across the site.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="showcase-card-5-body">
+            Bileşen tabanlı stil sistemi sayesinde CSS çakışmaları tarih oldu.
+            Aynı zamanda global değişkenlerle tutarlı bir tema yönetimi sağlandı.
+          </i18n>
         </p>
       </div>
     </div>

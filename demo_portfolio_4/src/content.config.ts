@@ -1,10 +1,15 @@
 import { defineCollection, z } from "astro:content";
 
+const i18nString = z.object({
+  en: z.string(),
+  tr: z.string().optional(),
+});
+
 const projectsCollection = defineCollection({
   type: "content",
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
+    title: i18nString,
+    description: i18nString,
     publishDate: z.date(),
     tags: z.array(z.string()),
     image: z.string().optional(),
@@ -21,6 +26,7 @@ const projectsCollection = defineCollection({
       ])
       .default("game-dev"),
     featured: z.boolean().default(false),
+    nda: z.boolean().optional(),
     githubUrl: z.string().url().optional(),
     demoUrl: z.string().url().optional(),
   }),
@@ -29,8 +35,8 @@ const projectsCollection = defineCollection({
 const blogCollection = defineCollection({
   type: "content",
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
+    title: i18nString,
+    description: i18nString,
     publishDate: z.date(),
     author: z.string().default("İsmet ALP"),
     tags: z.array(z.string()),

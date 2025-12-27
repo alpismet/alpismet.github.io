@@ -19,6 +19,14 @@
   scrollbar-color: var(--color-scrollbar-thumb-start) var(--color-scrollbar-track);
 }
 
+i18n {
+  display: contents;
+}
+
+i18n[hidden] {
+  display: none !important;
+}
+
 /* Custom Scrollbar (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 8px;
@@ -177,8 +185,8 @@ a {
 }
 
 .project-card {
-  opacity: 0; /* Start hidden for scroll reveal */
-  transform: translateY(30px);
+  opacity: 1;
+  transform: translateY(0);
   transition:
     opacity 0.6s ease-out,
     transform 0.6s ease-out;

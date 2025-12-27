@@ -1,21 +1,23 @@
 ---
 import type { CollectionEntry } from "astro:content";
-// Image bileşeni için Astro'nun kendi optimizasyonunu kullanalım
-// Ancak şu an resim dosyalarımız yok, placeholder kullanacağız.
-// Gerçek projede: import { Image } from 'astro:assets';
+// Astro Image can be used later for local assets.
+// For now we render the remote URLs from the content collection.
 
 interface Props {
   project: CollectionEntry<"projects">;
 }
 
 const { project } = Astro.props;
+const dateEn = project.data.publishDate.toLocaleDateString("en-US");
+const dateTr = project.data.publishDate.toLocaleDateString("tr-TR");
+const projectSlug = project.slug ?? project.id;
 ---
 
 <article class="project-card">
   <div class="card-image-wrapper">
     <img
-      src={`/images/${["projects.png", "blog.png", "og-image.png", "getting-started.png"][Math.floor(Math.random() * 4)]}`}
-      alt={project.data.title}
+      src={project.data.image}
+      alt={project.data.title.en}
       class="card-image"
     />
     <div class="overlay">
@@ -24,15 +26,38 @@ const { project } = Astro.props;
   </div>
   <div class="card-content">
     <div class="card-meta">
-      <span class="date">{project.data.publishDate.toLocaleDateString()}</span>
+      <span class="date">
+        <i18n lang="en" data-i18n="project-card-date">{dateEn}</i18n>
+        <i18n lang="tr" hidden data-i18n="project-card-date">{dateTr}</i18n>
+      </span>
     </div>
     <h3>
       <!-- Main Link with Stretched Overlay -->
-      <a href={`/projects/${project.slug}`} class="main-link">
-        {project.data.title}
+      <a href={`/projects/${projectSlug}`} class="main-link">
+        <i18n lang="en" data-i18n="project-card-title">
+          {project.data.title.en}
+        </i18n>
+        {
+          project.data.title.tr && (
+            <i18n lang="tr" hidden data-i18n="project-card-title">
+              {project.data.title.tr}
+            </i18n>
+          )
+        }
       </a>
     </h3>
-    <p>{project.data.description}</p>
+    <p>
+      <i18n lang="en" data-i18n="project-card-desc">
+        {project.data.description.en}
+      </i18n>
+      {
+        project.data.description.tr && (
+          <i18n lang="tr" hidden data-i18n="project-card-desc">
+            {project.data.description.tr}
+          </i18n>
+        )
+      }
+    </p>
     <div class="tags">
       {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
     </div>

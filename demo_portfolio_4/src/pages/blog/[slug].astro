@@ -6,25 +6,44 @@ import Layout from "../../layouts/Layout.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.slug ?? post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+const dateEn = post.data.publishDate.toLocaleDateString("en-US");
+const dateTr = post.data.publishDate.toLocaleDateString("tr-TR");
 ---
 
-<Layout title={`${post.data.title} | Blog`}>
+<Layout title={`${post.data.title.en} | Jurnals`}>
   <article class="blog-post">
     <header class="post-header">
       <div class="container">
-        <a href="/blog" class="back-link">← Yazılara Dön</a>
-        <h1>{post.data.title}</h1>
+        <a href="/blog" class="back-link">
+          <i18n lang="en" data-i18n="blog-back">← Back to posts</i18n>
+          <i18n lang="tr" hidden data-i18n="blog-back">← Yazılara Dön</i18n>
+        </a>
+        <h1>
+          <i18n lang="en" data-i18n="blog-post-title">
+            {post.data.title.en}
+          </i18n>
+          {
+            post.data.title.tr && (
+              <i18n lang="tr" hidden data-i18n="blog-post-title">
+                {post.data.title.tr}
+              </i18n>
+            )
+          }
+        </h1>
         <div class="meta">
           <span class="author">{post.data.author}</span>
           <span class="separator">•</span>
-          <time>{post.data.publishDate.toLocaleDateString()}</time>
+          <time>
+            <i18n lang="en" data-i18n="blog-post-date">{dateEn}</i18n>
+            <i18n lang="tr" hidden data-i18n="blog-post-date">{dateTr}</i18n>
+          </time>
         </div>
         <div class="tags">
           {post.data.tags.map((tag) => <span class="tag">#{tag}</span>)}

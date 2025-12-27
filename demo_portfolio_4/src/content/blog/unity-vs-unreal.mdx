@@ -1,49 +1,136 @@
 ---
-title: "Unity vs Unreal: Hangi Motoru Seçmeli?"
-description: "İki dev oyun motorunun detaylı karşılaştırması ve kişisel deneyimlerim."
+title:
+  en: "Unity vs Unreal: Which Engine to Choose?"
+  tr: "Unity vs Unreal: Hangi Motoru Seçmeli?"
+description:
+  en: "A detailed comparison of two major game engines and my personal experience."
+  tr: "İki dev oyun motorunun detaylı karşılaştırması ve kişisel deneyimlerim."
 publishDate: 2024-12-10
 tags: ["Unity", "Unreal Engine", "Game Dev", "Opinion"]
 author: "İsmet ALP"
 ---
 import Comparison from '../../components/mdx/Comparison.astro';
 
-Oyun geliştirmeye yeni başlayanların en sık sorduğu soru: **Unity mi, Unreal mı?**
-Her iki motorun da güçlü ve zayıf yönleri var. İşte benim deneyimlerime dayanan bir analiz.
+<h1>
+  <i18n lang="en" data-i18n="unity-title">
+    Unity vs Unreal: Which Engine to Choose?
+  </i18n>
+  <i18n lang="tr" hidden data-i18n="unity-title">
+    Unity vs Unreal: Hangi Motoru Seçmeli?
+  </i18n>
+</h1>
 
-<Alert type="info" title="Bilgi">
-Bu karşılaştırma 2024 yılı itibariyle geçerli olan sürümleri (Unity 6 ve UE 5.4) baz almaktadır.
-</Alert>
+<p>
+  <i18n lang="en" data-i18n="unity-body-1">
+    The most common question for newcomers to game development: <strong>Unity or
+    Unreal?</strong> Both engines have strengths and weaknesses. Here's an
+    analysis based on my experience.
+  </i18n>
+  <i18n lang="tr" hidden data-i18n="unity-body-1">
+    Oyun geliştirmeye yeni başlayanların en sık sorduğu soru: <strong>Unity mi,
+    Unreal mı?</strong> Her iki motorun da güçlü ve zayıf yönleri var. İşte
+    benim deneyimlerime dayanan bir analiz.
+  </i18n>
+</p>
 
-## Karşılaştırma Tablosu
+<i18n lang="en" data-i18n="unity-alert-info" data-block>
+  <Alert type="info" title="Info">
+    This comparison is based on the 2024 releases (Unity 6 and UE 5.4).
+  </Alert>
+</i18n>
+<i18n lang="tr" hidden data-i18n="unity-alert-info" data-block>
+  <Alert type="info" title="Bilgi">
+    Bu karşılaştırma 2024 yılı itibariyle geçerli olan sürümleri (Unity 6 ve UE
+    5.4) baz almaktadır.
+  </Alert>
+</i18n>
 
-<Comparison leftTitle="Unity" rightTitle="Unreal Engine">
-  <ul slot="left">
-    <li>C# (Daha kolay öğrenilir)</li>
-    <li>2D araçları çok daha gelişmiş</li>
-    <li>Mobil optimizasyonu harika</li>
-    <li>Asset Store çok zengin</li>
-  </ul>
-  
-  <ul slot="right">
-    <li>C++ ve Blueprints</li>
-    <li>Nanite & Lumen ile görsel şölen</li>
-    <li>Büyük açık dünyalar için ideal</li>
-    <li>Kaynak kodu tamamen açık</li>
-  </ul>
-</Comparison>
+<h2>
+  <i18n lang="en" data-i18n="unity-table-title">Comparison Table</i18n>
+  <i18n lang="tr" hidden data-i18n="unity-table-title">Karşılaştırma Tablosu</i18n>
+</h2>
 
-## Ne Zaman Hangisini Seçmeli?
+<i18n lang="en" data-i18n="unity-compare" data-block>
+  <Comparison leftTitle="Unity" rightTitle="Unreal Engine">
+    <ul slot="left">
+      <li>C# (easier to learn)</li>
+      <li>2D tools are much more advanced</li>
+      <li>Excellent mobile optimization</li>
+      <li>Very rich Asset Store</li>
+    </ul>
+    
+    <ul slot="right">
+      <li>C++ and Blueprints</li>
+      <li>Visual showcase with Nanite & Lumen</li>
+      <li>Ideal for large open worlds</li>
+      <li>Full access to source code</li>
+    </ul>
+  </Comparison>
+</i18n>
+<i18n lang="tr" hidden data-i18n="unity-compare" data-block>
+  <Comparison leftTitle="Unity" rightTitle="Unreal Engine">
+    <ul slot="left">
+      <li>C# (Daha kolay öğrenilir)</li>
+      <li>2D araçları çok daha gelişmiş</li>
+      <li>Mobil optimizasyonu harika</li>
+      <li>Asset Store çok zengin</li>
+    </ul>
+    
+    <ul slot="right">
+      <li>C++ ve Blueprints</li>
+      <li>Nanite & Lumen ile görsel şölen</li>
+      <li>Büyük açık dünyalar için ideal</li>
+      <li>Kaynak kodu tamamen açık</li>
+    </ul>
+  </Comparison>
+</i18n>
 
-<Alert type="success" title="Unity Seçin Eğer...">
-- 2D bir oyun yapıyorsanız (Platformer, Top-down shooter)
-- Mobil platformları hedefliyorsanız (iOS/Android)
-- C# biliyorsanız veya hızlıca kodlama öğrenmek istiyorsanız
-</Alert>
+<h2>
+  <i18n lang="en" data-i18n="unity-choose-title">
+    When to Choose Which?
+  </i18n>
+  <i18n lang="tr" hidden data-i18n="unity-choose-title">
+    Ne Zaman Hangisini Seçmeli?
+  </i18n>
+</h2>
 
-<Alert type="warning" title="Unreal Seçin Eğer...">
-- AAA kalitesinde grafikler hedefliyorsanız
-- FPS veya TPS türünde 3D aksiyon oyunu yapıyorsanız
-- Kod yazmadan (Blueprints) oyun mantığı kurmak istiyorsanız
-</Alert>
+<i18n lang="en" data-i18n="unity-alert-unity" data-block>
+  <Alert type="success" title="Choose Unity if...">
+    - You're making a 2D game (Platformer, Top-down shooter)
+    - You're targeting mobile platforms (iOS/Android)
+    - You know C# or want to learn coding quickly
+  </Alert>
+</i18n>
+<i18n lang="tr" hidden data-i18n="unity-alert-unity" data-block>
+  <Alert type="success" title="Unity Seçin Eğer...">
+    - 2D bir oyun yapıyorsanız (Platformer, Top-down shooter)
+    - Mobil platformları hedefliyorsanız (iOS/Android)
+    - C# biliyorsanız veya hızlıca kodlama öğrenmek istiyorsanız
+  </Alert>
+</i18n>
 
-Sonuç olarak, en iyi motor **sizin en rahat ürettiğinizdir**. Ben projeye göre her ikisini de kullanıyorum.
+<i18n lang="en" data-i18n="unity-alert-unreal" data-block>
+  <Alert type="warning" title="Choose Unreal if...">
+    - You're aiming for AAA-quality visuals
+    - You're building a 3D action game (FPS or TPS)
+    - You want to build game logic without code (Blueprints)
+  </Alert>
+</i18n>
+<i18n lang="tr" hidden data-i18n="unity-alert-unreal" data-block>
+  <Alert type="warning" title="Unreal Seçin Eğer...">
+    - AAA kalitesinde grafikler hedefliyorsanız
+    - FPS veya TPS türünde 3D aksiyon oyunu yapıyorsanız
+    - Kod yazmadan (Blueprints) oyun mantığı kurmak istiyorsanız
+  </Alert>
+</i18n>
+
+<p>
+  <i18n lang="en" data-i18n="unity-body-2">
+    Ultimately, the best engine is the one you feel most comfortable creating
+    with. I use both depending on the project.
+  </i18n>
+  <i18n lang="tr" hidden data-i18n="unity-body-2">
+    Sonuç olarak, en iyi motor <strong>sizin en rahat ürettiğinizdir</strong>.
+    Ben projeye göre her ikisini de kullanıyorum.
+  </i18n>
+</p>

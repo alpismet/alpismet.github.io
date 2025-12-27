@@ -7,6 +7,9 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://gmd-popper.portfolio", // Demo URL
   integrations: [preact(), mdx(), sitemap()],
+  legacy: {
+    collections: true,
+  },
   server: {
     port: 3000,
   },

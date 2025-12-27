@@ -8,7 +8,7 @@ import Layout from "../../layouts/Layout.astro";
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
   return projects.map((project) => ({
-    params: { slug: project.slug },
+    params: { slug: project.slug ?? project.id },
     props: { project },
   }));
 }
@@ -16,15 +16,44 @@ export async function getStaticPaths() {
 // 2. For your template, you can access the prop from the project
 const { project } = Astro.props;
 const { Content } = await project.render();
+const dateEn = project.data.publishDate.toLocaleDateString("en-US");
+const dateTr = project.data.publishDate.toLocaleDateString("tr-TR");
+const categoryLabels = {
+  "game-dev": { en: "Game Development", tr: "Oyun Geliştirme" },
+  "3d-art": { en: "3D Art", tr: "3D Sanat" },
+  "graphic-design": { en: "Graphic Design", tr: "Grafik Tasarım" },
+  "physical-art": { en: "Physical Art", tr: "Fiziksel Sanat" },
+  software: { en: "Software", tr: "Yazılım" },
+  "video-production": { en: "Video Production", tr: "Video Prodüksiyon" },
+};
+const categoryLabel =
+  project.data.category && categoryLabels[project.data.category];
 ---
 
-<Layout title={`${project.data.title} | Gmd Popper`}>
+<Layout title={`${project.data.title.en} | Gmd Popper`}>
   <div class="project-header">
     <div class="container">
-      <a href="/" class="back-link">← Ana Sayfaya Dön</a>
-      <h1>{project.data.title}</h1>
+      <a href="/" class="back-link">
+        <i18n lang="en" data-i18n="project-back">← Back to home</i18n>
+        <i18n lang="tr" hidden data-i18n="project-back">← Ana Sayfaya Dön</i18n>
+      </a>
+      <h1>
+        <i18n lang="en" data-i18n="project-title">
+          {project.data.title.en}
+        </i18n>
+        {
+          project.data.title.tr && (
+            <i18n lang="tr" hidden data-i18n="project-title">
+              {project.data.title.tr}
+            </i18n>
+          )
+        }
+      </h1>
       <div class="meta">
-        <time>{project.data.publishDate.toLocaleDateString()}</time>
+        <time>
+          <i18n lang="en" data-i18n="project-date">{dateEn}</i18n>
+          <i18n lang="tr" hidden data-i18n="project-date">{dateTr}</i18n>
+        </time>
         <div class="tags">
           {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
         </div>
@@ -32,9 +61,9 @@ const { Content } = await project.render();
       {
         project.data.image && (
           <div class="hero-image">
-            <img
-              src={`/images/${["projects.png", "blog.png", "og-image.png", "getting-started.png"][Math.floor(Math.random() * 4)]}`}
-              alt={project.data.title}
+              <img
+                src={project.data.image}
+              alt={project.data.title.en}
             />
           </div>
         )
@@ -45,7 +74,10 @@ const { Content } = await project.render();
   {
     project.data.videoUrl && (
       <div class="container video-section">
-        <h3>Proje Videosu</h3>
+        <h3>
+          <i18n lang="en" data-i18n="project-video-title">Project Video</i18n>
+          <i18n lang="tr" hidden data-i18n="project-video-title">Proje Videosu</i18n>
+        </h3>
         <VideoPlayer videoUrl={project.data.videoUrl} />
       </div>
     )
@@ -54,7 +86,14 @@ const { Content } = await project.render();
   {
     project.data.gallery && (
       <div class="container gallery-section">
-        <h3>Proje Galerisi</h3>
+        <h3>
+          <i18n lang="en" data-i18n="project-gallery-title">
+            Project Gallery
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="project-gallery-title">
+            Proje Galerisi
+          </i18n>
+        </h3>
         <MasonryGallery images={project.data.gallery} />
       </div>
     )
@@ -67,26 +106,65 @@ const { Content } = await project.render();
 
     <aside class="sidebar">
       <div class="sticky-box">
-        <h3>Proje Detayları</h3>
+        <h3>
+          <i18n lang="en" data-i18n="project-details-title">
+            Project Details
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="project-details-title">
+            Proje Detayları
+          </i18n>
+        </h3>
         <ul class="details-list">
           {
-            project.data.category && (
+            categoryLabel && (
               <li>
-                <strong>Kategori:</strong>
-                <span class="category-badge">{project.data.category}</span>
+                <strong>
+                  <i18n lang="en" data-i18n="project-category-label">
+                    Category:
+                  </i18n>
+                  <i18n lang="tr" hidden data-i18n="project-category-label">
+                    Kategori:
+                  </i18n>
+                </strong>
+                <span class="category-badge">
+                  <i18n lang="en" data-i18n="project-category-value">
+                    {categoryLabel.en}
+                  </i18n>
+                  <i18n lang="tr" hidden data-i18n="project-category-value">
+                    {categoryLabel.tr}
+                  </i18n>
+                </span>
               </li>
             )
           }
           <li>
-            <strong>Tarih:</strong>
-            <span>{project.data.publishDate.toLocaleDateString()}</span>
+            <strong>
+              <i18n lang="en" data-i18n="project-date-label">Date:</i18n>
+              <i18n lang="tr" hidden data-i18n="project-date-label">Tarih:</i18n>
+            </strong>
+            <span>
+              <i18n lang="en" data-i18n="project-date-detail">{dateEn}</i18n>
+              <i18n lang="tr" hidden data-i18n="project-date-detail">{dateTr}</i18n>
+            </span>
           </li>
           {
             project.data.githubUrl && (
               <li>
-                <strong>Kaynak Kod:</strong>
+                <strong>
+                  <i18n lang="en" data-i18n="project-source-label">
+                    Source Code:
+                  </i18n>
+                  <i18n lang="tr" hidden data-i18n="project-source-label">
+                    Kaynak Kod:
+                  </i18n>
+                </strong>
                 <a href={project.data.githubUrl} target="_blank">
-                  GitHub'da İncele
+                  <i18n lang="en" data-i18n="project-source-link">
+                    View on GitHub
+                  </i18n>
+                  <i18n lang="tr" hidden data-i18n="project-source-link">
+                    GitHub'da İncele
+                  </i18n>
                 </a>
               </li>
             )
@@ -94,9 +172,21 @@ const { Content } = await project.render();
           {
             project.data.demoUrl && (
               <li>
-                <strong>Canlı Demo:</strong>
+                <strong>
+                  <i18n lang="en" data-i18n="project-demo-label">
+                    Live Demo:
+                  </i18n>
+                  <i18n lang="tr" hidden data-i18n="project-demo-label">
+                    Canlı Demo:
+                  </i18n>
+                </strong>
                 <a href={project.data.demoUrl} target="_blank">
-                  Oyna / İndir
+                  <i18n lang="en" data-i18n="project-demo-link">
+                    Play / Download
+                  </i18n>
+                  <i18n lang="tr" hidden data-i18n="project-demo-link">
+                    Oyna / İndir
+                  </i18n>
                 </a>
               </li>
             )

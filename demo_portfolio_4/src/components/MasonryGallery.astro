@@ -8,12 +8,9 @@ const { images } = Astro.props;
 
 <div class="masonry-grid">
   {
-    images.map((_, index) => (
+    images.map((src, index) => (
       <div class={`masonry-item item-${index % 5}`}>
-        <img
-          src={`/images/${["projects.png", "blog.png", "og-image.png", "getting-started.png", "recreating-current-pages.png", "project-structure.png"][index % 6]}`}
-          alt="Gallery item"
-        />
+        <img src={src} alt="Gallery item" loading="lazy" />
       </div>
     ))
   }

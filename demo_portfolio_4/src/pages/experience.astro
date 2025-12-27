@@ -1,0 +1,921 @@
+---
+import { fade } from "astro:transitions";
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const resumeUrl = "/resume/ismet-alp-resume.pdf";
+
+const projects = await getCollection("projects");
+const projectMap = new Map(
+  projects.map((project) => [project.slug ?? project.id, project])
+);
+
+const fallbackImages = [
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=900&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?q=80&w=900&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=900&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?q=80&w=900&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=900&auto=format&fit=crop",
+];
+
+const getProjectImage = (project, item, index) => {
+  if (item.image) return item.image;
+  if (project?.data?.image) return project.data.image;
+  return fallbackImages[index % fallbackImages.length];
+};
+
+const sizeMap = {
+  "1/3": 4,
+  "1/2": 6,
+  "2/3": 8,
+};
+
+const normalizeSize = (value) => sizeMap[value] ?? sizeMap["1/2"];
+
+const buildRows = (cards) => {
+  const rows = [];
+  let current = [];
+  let total = 0;
+
+  cards.forEach((card) => {
+    if (total + card.span > 12 && current.length) {
+      rows.push(current);
+      current = [];
+      total = 0;
+    }
+    current.push(card);
+    total += card.span;
+  });
+
+  if (current.length) rows.push(current);
+  return rows;
+};
+
+const layoutRow = (row, direction = "ltr") => {
+  const flow = direction === "rtl" ? "rtl" : "ltr";
+  if (row.length === 1) {
+    const card = row[0];
+    let start = 1;
+    if (card.side === "center") {
+      start = Math.floor((12 - card.span) / 2) + 1;
+    } else if (card.side === "right") {
+      start = 13 - card.span;
+    } else if (card.side === "left") {
+      start = 1;
+    } else if (flow === "rtl") {
+      start = 13 - card.span;
+    }
+    return [{ ...card, start }];
+  }
+
+  if (flow === "rtl") {
+    let cursor = 13;
+    return row.map((card) => {
+      const start = cursor - card.span;
+      const placed = { ...card, start };
+      cursor = start;
+      return placed;
+    });
+  }
+
+  let cursor = 1;
+  return row.map((card) => {
+    const placed = { ...card, start: cursor };
+    cursor += card.span;
+    return placed;
+  });
+};
+
+const experienceTimeline = [
+  {
+    id: "nebula",
+    company: "NEBULA GAME STUDIOS",
+    period: { en: "2021 — Present", tr: "2021 — Günümüz" },
+    role: {
+      en: "Lead Unity Engineer & Tech Architect",
+      tr: "Lead Unity Engineer & Tech Architect",
+    },
+    align: "left",
+    projects: [
+      { slug: "project-1-rpg", nda: true, featured: true, size: "2/3" },
+      { slug: "project-2-vr", size: "1/3" },
+      { slug: "project-3-puzzle", size: "1/2" },
+    ],
+  },
+  {
+    id: "quantum",
+    company: "QUANTUM LABS XR",
+    period: { en: "2018 — 2021", tr: "2018 — 2021" },
+    role: {
+      en: "Senior Unity Developer (XR)",
+      tr: "Senior Unity Developer (XR)",
+    },
+    align: "right",
+    projects: [
+      { slug: "desktop-app", featured: true, size: "2/3" },
+      { slug: "browser-extension", featured: true, nda: true, size: "1/3" },
+      { slug: "arch-viz", featured: true, size: "1/2" },
+      { slug: "project-3-puzzle", featured: false, size: "1/2" },
+      { slug: "project-2-vr", featured: true, nda: true, size: "1/3" },
+      { slug: "project-1-rpg", featured: true, size: "2/3" },
+    ],
+  },
+  {
+    id: "vertex",
+    company: "VERTEX WORKS",
+    period: { en: "2016 — 2018", tr: "2016 — 2018" },
+    role: { en: "Unity Game Developer", tr: "Unity Game Developer" },
+    align: "left",
+    projects: [
+      { slug: "tv-commercial", featured: true, size: "2/3" },
+      { slug: "billboard-design", size: "1/3" },
+      { slug: "clay-sculpture", size: "1/2" },
+    ],
+  },
+];
+
+const experienceData = experienceTimeline.map((company) => {
+  const entries = company.projects
+    .map((item) => {
+      const normalized = typeof item === "string" ? { slug: item } : item;
+      const project = projectMap.get(normalized.slug);
+      if (!project) {
+        console.warn(`[experience] Unknown project slug: ${normalized.slug}`);
+        return null;
+      }
+      return { item: normalized, project };
+    })
+    .filter(Boolean);
+
+  const cards = entries.map((entry, index) => {
+    const { item, project } = entry;
+    const size = item.size ?? "1/2";
+    const publishDate = project.data.publishDate;
+    const dateEn = publishDate ? publishDate.toLocaleDateString("en-US") : "";
+    const dateTr = publishDate ? publishDate.toLocaleDateString("tr-TR") : "";
+    return {
+      slug: item.slug,
+      side: item.side ?? "flow",
+      featured: item.featured ?? index === 0,
+      nda: item.nda ?? project.data.nda ?? false,
+      image: getProjectImage(project, item, index),
+      title: project.data.title,
+      description: project.data.description,
+      date: { en: dateEn, tr: dateTr },
+      tags: project.data.tags ?? [],
+      size,
+      span: normalizeSize(size),
+    };
+  });
+
+  const direction = company.align === "right" ? "rtl" : "ltr";
+  const rows = buildRows(cards).map((rowCards) => {
+    const laidOut = layoutRow(rowCards, direction);
+    return {
+      cards: laidOut,
+      hasFeatured: laidOut.some((card) => card.featured),
+    };
+  });
+
+  return { ...company, rows, direction };
+});
+---
+
+<Layout title="Experience | İsmet ALP">
+  <section class="experience-hero">
+    <div class="container">
+      <div class="experience-header">
+        <div class="experience-title">
+          <span class="experience-eyebrow">
+            <i18n lang="en" data-i18n="experience-eyebrow">Resume</i18n>
+            <i18n lang="tr" hidden data-i18n="experience-eyebrow">
+              Özgeçmiş
+            </i18n>
+          </span>
+          <h1>
+            <i18n lang="en" data-i18n="experience-title">Experience</i18n>
+            <i18n lang="tr" hidden data-i18n="experience-title">Deneyim</i18n>
+          </h1>
+          <p>
+            <i18n lang="en" data-i18n="experience-lead">
+              A timeline of studios and projects pulled directly from the main
+              projects catalog.
+            </i18n>
+            <i18n lang="tr" hidden data-i18n="experience-lead">
+              Ana proje kataloğundan gelen stüdyo ve proje zaman çizelgesi.
+            </i18n>
+          </p>
+        </div>
+        <div class="experience-actions">
+          <a class="btn experience-download" href={resumeUrl} download>
+            <i18n lang="en" data-i18n="experience-download">
+              Download Resume
+            </i18n>
+            <i18n lang="tr" hidden data-i18n="experience-download">
+              Özgeçmişi indir
+            </i18n>
+          </a>
+          <span class="experience-file">PDF</span>
+        </div>
+      </div>
+      <div class="experience-note glass-panel">
+        <p>
+          <i18n lang="en" data-i18n="experience-nda">
+            * NDA projects only include role summaries and high-level context.
+            Visuals are representative images produced to describe the work.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="experience-nda">
+            * işareti olan işler NDA kapsamındadır. Bu nedenle sadece yaptığım
+            işin tanımı ve proje kapsamına dair temel özetler paylaşılır.
+            Görseller, projeyi temsilen üretilmiş temsili görsellerdir.
+          </i18n>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="experience-timeline">
+    <div class="container">
+      <div class="timeline-shell" data-timeline>
+        <div class="timeline-axis" aria-hidden="true"></div>
+
+        {
+          experienceData.map((company) => (
+            <section class="company-block" data-company={company.id}>
+              <header class="company-header" data-align={company.align}>
+                {company.align === "right" ? (
+                  <>
+                    <div class="company-ghost" />
+                    <div class="company-node" data-reveal />
+                    <div class="company-meta" data-reveal>
+                      <span class="company-period">
+                        <i18n lang="en">{company.period.en}</i18n>
+                        <i18n lang="tr" hidden>
+                          {company.period.tr}
+                        </i18n>
+                      </span>
+                      <h2>{company.company}</h2>
+                      <p>
+                        <i18n lang="en">{company.role.en}</i18n>
+                        <i18n lang="tr" hidden>
+                          {company.role.tr}
+                        </i18n>
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div class="company-meta" data-reveal>
+                      <span class="company-period">
+                        <i18n lang="en">{company.period.en}</i18n>
+                        <i18n lang="tr" hidden>
+                          {company.period.tr}
+                        </i18n>
+                      </span>
+                      <h2>{company.company}</h2>
+                      <p>
+                        <i18n lang="en">{company.role.en}</i18n>
+                        <i18n lang="tr" hidden>
+                          {company.role.tr}
+                        </i18n>
+                      </p>
+                    </div>
+                    <div class="company-node" data-reveal />
+                    <div class="company-ghost" />
+                  </>
+                )}
+              </header>
+
+              <div class="company-grid">
+                {company.rows.map((row, rowIndex) => (
+                  <div
+                    class="company-row"
+                    data-row={rowIndex}
+                    data-has-featured={row.hasFeatured ? "true" : "false"}
+                  >
+                    {row.cards.map((card) => (
+                      <div
+                        class="exp-card-wrap"
+                        data-reveal
+                        style={`--card-span:${card.span}; --card-start:${card.start};`}
+                      >
+                        <article
+                          class={`exp-card${card.featured ? " exp-card--featured" : ""}`}
+                        >
+                          <div class="card-image-wrapper">
+                            <img
+                              src={card.image}
+                              alt={card.title.en}
+                              class="card-image"
+                              loading="lazy"
+                            />
+                            <div class="overlay" aria-hidden="true" />
+                            {card.nda && (
+                              <span class="exp-badge">
+                                <i18n lang="en">NDA</i18n>
+                                <i18n lang="tr" hidden>
+                                  NDA
+                                </i18n>
+                              </span>
+                            )}
+                          </div>
+                          <div class="card-content">
+                            <div class="card-meta">
+                              <!--- adawd<span class="date">
+                                <i18n lang="en">{card.date.en}</i18n>
+                                <i18n lang="tr" hidden>
+                                  {card.date.tr}
+                                </i18n>
+                              </span> -->
+                            </div>
+                            <h3>
+                              <a
+                                href={`/projects/${card.slug}`}
+                                class="main-link"
+                              >
+                                <i18n lang="en">{card.title.en}</i18n>
+                                {card.title.tr && (
+                                  <i18n lang="tr" hidden>
+                                    {card.title.tr}
+                                  </i18n>
+                                )}
+                              </a>
+                            </h3>
+                            <p>
+                              <i18n lang="en">{card.description.en}</i18n>
+                              {card.description.tr && (
+                                <i18n lang="tr" hidden>
+                                  {card.description.tr}
+                                </i18n>
+                              )}
+                            </p>
+                            {card.tags.length > 0 && (
+                              <div class="tags">
+                                {card.tags.map((tag) => (
+                                  <span class="tag">{tag}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </article>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .experience-hero {
+    padding: 5rem 0 3rem;
+  }
+
+  .experience-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2.5rem;
+  }
+
+  .experience-eyebrow {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--color-text-70);
+    margin-bottom: 0.75rem;
+  }
+
+  .experience-title h1 {
+    font-size: 3.5rem;
+    margin: 0 0 1rem 0;
+  }
+
+  .experience-title p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    max-width: 680px;
+  }
+
+  .experience-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .experience-download {
+    font-size: 0.85rem;
+  }
+
+  .experience-file {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-text-70);
+  }
+
+  .experience-note {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .experience-note p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .experience-timeline {
+    padding: 8rem 0 12rem;
+    --exp-image-height: clamp(170px, 15vw, 210px);
+    --exp-image-height-featured: clamp(210px, 18vw, 260px);
+  }
+
+  .timeline-shell {
+    position: relative;
+    display: grid;
+    gap: 10rem;
+  }
+
+  .timeline-axis {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      var(--color-white-05),
+      var(--color-white-20),
+      var(--color-white-05)
+    );
+    transform: translateX(-50%);
+  }
+
+  .company-block {
+    display: grid;
+    gap: 4rem;
+  }
+
+  .company-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .company-meta {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .company-header[data-align="left"] .company-meta {
+    grid-column: 1 / 2;
+    text-align: right;
+  }
+
+  .company-header[data-align="right"] .company-meta {
+    grid-column: 3 / 4;
+    text-align: left;
+  }
+
+  .company-period {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--color-text-70);
+  }
+
+  .company-meta h2 {
+    margin: 0;
+    font-size: 1.9rem;
+  }
+
+  .company-meta p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .company-node {
+    grid-column: 2 / 3;
+    justify-self: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 1px solid var(--color-white-15);
+    background: radial-gradient(
+      circle at top,
+      var(--color-white-15),
+      var(--color-white-05)
+    );
+    box-shadow: 0 0 20px rgba(var(--color-aurora-2-rgb), 0.2);
+    position: relative;
+  }
+
+  .company-node::after {
+    content: "";
+    position: absolute;
+    inset: 18px;
+    border-radius: 50%;
+    background: var(--color-aurora-2);
+    box-shadow: 0 0 12px rgba(var(--color-aurora-2-rgb), 0.6);
+  }
+
+  .company-grid {
+    display: grid;
+    gap: 1.8rem;
+  }
+
+  .company-row {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1.6rem;
+    align-items: stretch;
+  }
+
+  .company-row[data-has-featured="true"] {
+    --row-image-height: var(--exp-image-height-featured);
+  }
+
+  .company-row > .exp-card-wrap {
+    grid-row: 1;
+  }
+
+  .exp-card-wrap {
+    --card-span: 6;
+    --card-start: 1;
+    grid-column: var(--card-start) / span var(--card-span);
+    min-width: 0;
+    display: flex;
+  }
+
+  .exp-card {
+    background: var(--color-white-03);
+    background: linear-gradient(
+      145deg,
+      var(--color-white-05) 0%,
+      var(--color-white-01) 100%
+    );
+    border: 1px solid var(--color-white-10);
+    border-top: 1px solid var(--color-white-15);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    color: inherit;
+    flex: 1;
+  }
+
+  .exp-card:hover {
+    transform: translateY(-5px);
+    background: var(--color-white-08);
+    box-shadow: 0 20px 40px -10px var(--color-glow-project-card);
+    border-color: var(--color-aurora-1);
+  }
+
+  .exp-card:focus-within {
+    outline: none;
+  }
+
+  .exp-card--featured {
+    --exp-image-height: var(--exp-image-height-featured);
+  }
+
+  .main-link::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  .card-image-wrapper {
+    position: relative;
+    --image-inset: 1rem;
+    height: var(--row-image-height, var(--exp-image-height));
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    margin: var(--image-inset);
+    margin-bottom: 0;
+  }
+
+  .exp-card--featured .card-image-wrapper {
+    margin: 0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+
+  .company-row[data-has-featured="true"]
+    .exp-card:not(.exp-card--featured)
+    .card-image-wrapper {
+    height: calc(
+      var(--row-image-height, var(--exp-image-height)) - var(--image-inset)
+    );
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .exp-card:hover .card-image {
+    transform: scale(1.1);
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      var(--color-aurora-1),
+      var(--color-transparent)
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .exp-card:hover .overlay {
+    opacity: 0.4;
+  }
+
+  .exp-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: rgba(12, 12, 8, 0.7);
+    color: var(--color-aurora-2);
+    border: 1px solid rgba(var(--color-aurora-2-rgb), 0.35);
+  }
+
+  .card-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-aurora-2);
+    font-weight: 600;
+  }
+
+  .card-content h3 {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-serif);
+    transition: all 0.3s;
+  }
+
+  .card-content h3 a {
+    text-decoration: none;
+    background: linear-gradient(
+      to right,
+      var(--color-white),
+      var(--color-text-strong)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: var(--color-transparent);
+    transition: all 0.3s;
+  }
+
+  .exp-card:hover .card-content h3 a {
+    background: linear-gradient(
+      to right,
+      var(--color-text-gradient-start),
+      var(--color-text-gradient-end)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: var(--color-transparent);
+  }
+
+  .card-content p {
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--color-white-05);
+    border: 1px solid var(--color-white-10);
+    border-radius: 100px;
+    color: var(--color-text-strong);
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .exp-card:hover .tag {
+    background: var(--color-aurora-1);
+    border-color: var(--color-aurora-1);
+    color: var(--color-white);
+  }
+
+  [data-reveal] {
+    --reveal: 0;
+    opacity: var(--reveal);
+    transform: translateY(calc((1 - var(--reveal)) * 26px));
+    transition: none;
+  }
+
+  @media (max-width: 980px) {
+    .timeline-axis {
+      left: 16px;
+      transform: none;
+    }
+
+    .company-header {
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 1.2rem;
+    }
+
+    .company-header[data-align="left"] .company-meta,
+    .company-header[data-align="right"] .company-meta {
+      grid-column: 2 / 3;
+      text-align: left;
+    }
+
+    .company-node {
+      grid-column: 1 / 2;
+      width: 38px;
+      height: 38px;
+    }
+
+    .company-node::after {
+      inset: 12px;
+    }
+
+    .company-ghost {
+      display: none;
+    }
+
+    .company-grid {
+      gap: 1.4rem;
+    }
+
+    .company-row {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+
+    .exp-card-wrap {
+      grid-column: 1 / -1 !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      --reveal: 1;
+      transform: none;
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  const initExperienceTimeline = () => {
+    const timeline = document.querySelector("[data-timeline]");
+    if (!timeline || timeline.dataset.bound === "true") return;
+
+    const targets = Array.from(timeline.querySelectorAll("[data-reveal]"));
+    if (!targets.length) return;
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReduced) {
+      targets.forEach((item) => item.style.setProperty("--reveal", "1"));
+      return;
+    }
+
+    let rafId = 0;
+    let introDone = false;
+
+    const getMetrics = () => {
+      const viewport = window.innerHeight || 0;
+      const start = viewport * 0.95;
+      const end = viewport * 0.7;
+      const range = start - end || 1;
+      return { start, range, viewport };
+    };
+
+    const update = () => {
+      rafId = 0;
+      if (!introDone) return;
+      const { start, range } = getMetrics();
+
+      targets.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+        const progress = (start - rect.top) / range;
+        const clamped = Math.min(1, Math.max(0, progress));
+        item.style.setProperty("--reveal", clamped.toFixed(3));
+      });
+    };
+
+    const onScroll = () => {
+      if (!introDone || rafId) return;
+      rafId = window.requestAnimationFrame(update);
+    };
+
+    const playIntro = () => {
+      const { start, range } = getMetrics();
+      const visibleTargets = targets
+        .map((item) => ({ item, rect: item.getBoundingClientRect() }))
+        .filter(({ rect }) => rect.bottom > 0 && rect.top < start)
+        .sort((a, b) => a.rect.top - b.rect.top);
+
+      if (!visibleTargets.length) {
+        introDone = true;
+        update();
+        return;
+      }
+
+      const baseDelay = 70;
+      const duration = 600;
+      visibleTargets.forEach(({ item, rect }, index) => {
+        const progress = (start - rect.top) / range;
+        const clamped = Math.min(1, Math.max(0, progress));
+        item.style.setProperty("--reveal", "0");
+        item.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        item.style.transitionDelay = `${index * baseDelay}ms`;
+        window.requestAnimationFrame(() => {
+          item.style.setProperty("--reveal", clamped.toFixed(3));
+        });
+      });
+
+      const totalTime =
+        (visibleTargets.length ? visibleTargets.length - 1 : 0) * baseDelay +
+        duration +
+        60;
+      window.setTimeout(() => {
+        visibleTargets.forEach(({ item }) => {
+          item.style.removeProperty("transition");
+          item.style.removeProperty("transition-delay");
+        });
+        introDone = true;
+        update();
+      }, totalTime);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    window.requestAnimationFrame(playIntro);
+
+    timeline.dataset.bound = "true";
+
+    const cleanup = () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      document.removeEventListener("astro:before-swap", cleanup);
+    };
+
+    document.addEventListener("astro:before-swap", cleanup);
+  };
+
+  document.addEventListener("astro:page-load", initExperienceTimeline);
+  document.addEventListener("astro:after-swap", initExperienceTimeline);
+</script>

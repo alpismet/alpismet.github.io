@@ -16,8 +16,22 @@ const otherProjects = allProjects.filter((p) => !p.data.featured);
   <section id="features" class="section">
     <div class="container">
       <div class="section-header">
-        <h2>Öne Çıkan Projeler</h2>
-        <p>En son çalışmalarım ve deneysel demolarım.</p>
+        <h2>
+          <i18n lang="en" data-i18n="home-featured-title">
+            Featured Projects
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="home-featured-title">
+            Öne Çıkan Projeler
+          </i18n>
+        </h2>
+        <p>
+          <i18n lang="en" data-i18n="home-featured-lead">
+            The latest work and experimental demos from my studio.
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="home-featured-lead">
+            En son çalışmalarım ve deneysel demolarım.
+          </i18n>
+        </p>
       </div>
       <div class="project-grid">
         {featuredProjects.map((project) => <ProjectCard project={project} />)}
@@ -29,21 +43,46 @@ const otherProjects = allProjects.filter((p) => !p.data.featured);
     <div class="container">
       <div class="split-layout">
         <div class="info">
-          <h2>Astro Islands Architecture</h2>
+          <h2>
+            <i18n lang="en" data-i18n="home-islands-title">
+              Astro Islands Architecture
+            </i18n>
+            <i18n lang="tr" hidden data-i18n="home-islands-title">
+              Astro Islands Mimarisi
+            </i18n>
+          </h2>
           <p>
-            Astro, varsayılan olarak <strong>sıfır JavaScript</strong> gönderir.
-            Ancak interaktifliğe ihtiyaç duyduğunuzda, "Islands" mimarisiyle sadece
-            o bileşeni hydrate edebilirsiniz.
+            <i18n lang="en" data-i18n="home-islands-body-1">
+              Astro ships <strong>zero JavaScript</strong> by default. When you
+              need interactivity, the "Islands" architecture lets you hydrate
+              only the component that needs it.
+            </i18n>
+            <i18n lang="tr" hidden data-i18n="home-islands-body-1">
+              Astro, varsayılan olarak <strong>sıfır JavaScript</strong> gönderir.
+              Ancak interaktifliğe ihtiyaç duyduğunuzda, "Islands" mimarisiyle
+              sadece o bileşeni hydrate edebilirsiniz.
+            </i18n>
           </p>
           <p>
-            Yandaki sayaç örneği, <strong>Preact</strong> ile yazılmıştır ve sadece
-            kendisi için gerekli JS kodunu yükler. Sayfanın geri kalanı tamamen statiktir.
+            <i18n lang="en" data-i18n="home-islands-body-2">
+              The counter on the right is built with <strong>Preact</strong> and
+              loads only the JS it needs. The rest of the page stays completely
+              static.
+            </i18n>
+            <i18n lang="tr" hidden data-i18n="home-islands-body-2">
+              Yandaki sayaç örneği, <strong>Preact</strong> ile yazılmıştır ve
+              sadece kendisi için gerekli JS kodunu yükler. Sayfanın geri kalanı
+              tamamen statiktir.
+            </i18n>
           </p>
           <a
             href="https://docs.astro.build/en/concepts/islands/"
             target="_blank"
-            class="btn btn-secondary">Daha Fazla Bilgi</a
+            class="btn btn-secondary"
           >
+            <i18n lang="en" data-i18n="home-islands-cta">Learn more</i18n>
+            <i18n lang="tr" hidden data-i18n="home-islands-cta">Daha Fazla Bilgi</i18n>
+          </a>
         </div>
         <div class="demo">
           <!-- client:visible directive tells Astro to load JS only when component is visible -->
@@ -56,7 +95,10 @@ const otherProjects = allProjects.filter((p) => !p.data.featured);
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>Diğer Çalışmalar</h2>
+        <h2>
+          <i18n lang="en" data-i18n="home-other-title">Other Work</i18n>
+          <i18n lang="tr" hidden data-i18n="home-other-title">Diğer Çalışmalar</i18n>
+        </h2>
       </div>
       <div class="project-grid">
         {otherProjects.map((project) => <ProjectCard project={project} />)}

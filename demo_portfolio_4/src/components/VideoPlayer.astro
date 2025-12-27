@@ -35,10 +35,18 @@ const isYoutube = embedUrl.includes("youtube.com/embed/");
     ) : (
       <div class="placeholder">
         <p>
-          Video formatı desteklenmiyor veya yerel dosya:{" "}
-          <a href={videoUrl} target="_blank">
-            {videoUrl}
-          </a>
+          <i18n lang="en" data-i18n="video-fallback">
+            Video format not supported, or local file:{" "}
+            <a href={videoUrl} target="_blank">
+              {videoUrl}
+            </a>
+          </i18n>
+          <i18n lang="tr" hidden data-i18n="video-fallback">
+            Video formatı desteklenmiyor veya yerel dosya:{" "}
+            <a href={videoUrl} target="_blank">
+              {videoUrl}
+            </a>
+          </i18n>
         </p>
       </div>
     )

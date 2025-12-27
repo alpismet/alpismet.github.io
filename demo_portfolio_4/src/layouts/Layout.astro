@@ -14,7 +14,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="tr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -33,13 +33,56 @@ const {
       <header class="site-header" transition:persist>
         <div class="container header-inner">
           <a href="/" class="logo">İSMET<span class="dot">.</span>ALP</a>
-          <nav>
-            <a href="/projects">Projects</a>
-            <a href="/blog">Blog</a>
-            <a href="/about">About</a>
-          </nav>
+          <div class="header-actions">
+            <nav>
+              <a href="/experience">
+                <i18n lang="en" data-i18n="nav-experience">Experience</i18n>
+                <i18n lang="tr" hidden data-i18n="nav-experience">Deneyim</i18n>
+              </a>
+              <a href="/projects">
+                <i18n lang="en" data-i18n="nav-projects">Projects</i18n>
+                <i18n lang="tr" hidden data-i18n="nav-projects">Projeler</i18n>
+              </a>
+              <a href="/blog">
+                <i18n lang="en" data-i18n="nav-blog">Jurnals</i18n>
+                <i18n lang="tr" hidden data-i18n="nav-blog">Yazılar</i18n>
+              </a>
+              <a href="/about">
+                <i18n lang="en" data-i18n="nav-about">About</i18n>
+                <i18n lang="tr" hidden data-i18n="nav-about">Hakkımda</i18n>
+              </a>
+            </nav>
+          </div>
         </div>
       </header>
+
+      <div class="lang-switcher" data-lang-switcher transition:persist>
+        <button
+          class="lang-switcher__toggle"
+          type="button"
+          data-lang-toggle
+          aria-haspopup="listbox"
+          aria-expanded="false"
+        >
+          <span class="sr-only">
+            <i18n lang="en" data-i18n="lang-label">Language</i18n>
+            <i18n lang="tr" hidden data-i18n="lang-label">Dil</i18n>
+          </span>
+          <span class="lang-switcher__current" data-lang-current>EN</span>
+        </button>
+        <div
+          class="lang-switcher__menu"
+          role="listbox"
+          aria-label="Language selector"
+        >
+          <button class="lang-option" type="button" data-lang="en">
+            EN
+          </button>
+          <button class="lang-option" type="button" data-lang="tr">
+            TR
+          </button>
+        </div>
+      </div>
 
       <main>
         <slot />
@@ -48,21 +91,28 @@ const {
       <footer class="site-footer">
         <div class="container">
           <p>
-            &copy; {new Date().getFullYear()} İsmet ALP. Powered by <a
-              href="https://astro.build"
-              target="_blank">Astro</a
-            >.
+            &copy; {new Date().getFullYear()} İsmet ALP. 
+            <i18n lang="en" data-i18n="footer-powered">
+              Powered by <a href="https://astro.build" target="_blank">Astro</a
+              >.
+            </i18n>
+            <i18n lang="tr" hidden data-i18n="footer-powered">
+              Astro ile güçlendirildi.
+            </i18n>
           </p>
         </div>
       </footer>
     </div>
 
-    <div class="theme-switcher" data-theme-switcher transition:persist>
-      <div class="theme-switcher__title">Renk Temasi</div>
+    <div class="theme-switcher" data-theme-switcher transition:persist hidden>
+      <div class="theme-switcher__title">
+        <i18n lang="en" data-i18n="theme-title">Color Theme</i18n>
+        <i18n lang="tr" hidden data-i18n="theme-title">Renk Teması</i18n>
+      </div>
       <div
         class="theme-switcher__panel"
         role="listbox"
-        aria-label="Renk temalari"
+        aria-label="Color themes"
       >
         <button
           class="theme-swatch"
@@ -195,10 +245,11 @@ const {
           <span class="theme-swatch__label">Alp TR</span>
         </button>
       </div>
+    </div>
 
-      <script>
-        // Star field animation
-        // Module-level variables
+    <script>
+      // Star field animation
+      // Module-level variables
       let canvas: HTMLCanvasElement | null = null;
       let ctx: CanvasRenderingContext2D | null = null;
       let bgDiv: HTMLElement | null = null;
@@ -206,7 +257,7 @@ const {
       let width = window.innerWidth;
       let height = 0;
       let particles: Star[] = [];
-        let mouseX = 0,
+      let mouseX = 0,
           mouseY = 0;
         let targetX = 0,
           targetY = 0;
@@ -272,12 +323,12 @@ const {
             const dx = this.x + (config.parallax ? targetX * this.z : 0);
             const dy = this.y + (config.parallax ? targetY * this.z : 0);
 
-          if (ctx) {
-            ctx.beginPath();
-            ctx.fillStyle = `rgba(${starColor}, ${alpha})`;
-            ctx.arc(dx, dy, this.size, 0, Math.PI * 2);
-            ctx.fill();
-          }
+            if (ctx) {
+              ctx.beginPath();
+              ctx.fillStyle = `rgba(${starColor}, ${alpha})`;
+              ctx.arc(dx, dy, this.size, 0, Math.PI * 2);
+              ctx.fill();
+            }
           }
         }
 
@@ -366,11 +417,11 @@ const {
         function initStars() {
           canvas = document.getElementById("spaceCanvas") as HTMLCanvasElement;
           if (!canvas) return;
-        ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        bgDiv = document.querySelector(".aurora-bg") as HTMLElement;
-        if (!bgDiv) return;
-        updateStarColor();
+          ctx = canvas.getContext("2d");
+          if (!ctx) return;
+          bgDiv = document.querySelector(".aurora-bg") as HTMLElement;
+          if (!bgDiv) return;
+          updateStarColor();
 
           // Initialize star pool
           if (starPool.length === 0) {
@@ -413,8 +464,7 @@ const {
 
         // Initial call
         initStars();
-      </script>
-    </div>
+    </script>
   </body>
 </html>
 
@@ -460,6 +510,8 @@ const {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
     padding: 1rem 2rem;
     background: var(--color-white-05);
     backdrop-filter: blur(20px);
@@ -478,6 +530,12 @@ const {
 
   .dot {
     color: var(--color-logo-dot);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   nav {
@@ -588,10 +646,21 @@ const {
     right: 1.5rem;
     bottom: 1.5rem;
     z-index: 200;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 0.5rem;
     max-width: 260px;
+    font-family: var(--font-sans);
+  }
+
+  .lang-switcher {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 220;
+    display: inline-flex;
+    align-items: center;
+    padding-bottom: 0.35rem;
     font-family: var(--font-sans);
   }
 
@@ -613,6 +682,96 @@ const {
     border: 1px solid var(--color-white-12);
     box-shadow: 0 10px 30px var(--color-black-35);
     backdrop-filter: blur(16px);
+  }
+
+  .lang-switcher__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .lang-switcher__toggle {
+    opacity: 0.6;
+  }
+
+  .lang-switcher__toggle:hover,
+  .lang-switcher:focus-within .lang-switcher__toggle {
+    opacity: 1;
+    color: var(--color-lang-option-active-start);
+  }
+
+  .lang-switcher__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: auto;
+    min-width: 0;
+    width: max-content;
+    display: grid;
+    gap: 0.4rem;
+    justify-items: start;
+    padding: 0;
+    border-radius: 14px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s ease;
+  }
+
+  .lang-switcher:hover .lang-switcher__menu,
+  .lang-switcher:focus-within .lang-switcher__menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .lang-option {
+    width: auto;
+    padding: 0.25rem 0;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-lang-option-text);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-align: left;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .lang-option:hover {
+    transform: translateY(-1px);
+    color: var(--color-lang-option-active-start);
+  }
+
+  .lang-option[data-active="true"] {
+    display: none;
   }
 
   .theme-swatch {
@@ -673,6 +832,11 @@ const {
   }
 
   @media (max-width: 720px) {
+    .lang-switcher {
+      top: 1rem;
+      right: 1rem;
+    }
+
     .theme-switcher {
       left: 1rem;
       right: 1rem;
@@ -689,6 +853,26 @@ const {
     .theme-swatch {
       height: 38px;
       font-size: 0.55rem;
+    }
+
+    .header-inner {
+      padding: 1rem 1.25rem;
+    }
+
+    .header-actions {
+      width: 100%;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    nav {
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .lang-switcher__menu {
+      right: 0;
     }
   }
 </style>
@@ -711,30 +895,48 @@ const {
     });
 
     intersectingEntries.forEach((entry, index) => {
-      const target = entry.target as HTMLElement;
+      const target = entry.target;
       // Apply dynamic delay per item in this batch
       // 150ms stagger per item creates the wave
-      target.style.transitionDelay = `${index * 150}ms`;
+      if (target instanceof HTMLElement) {
+        target.style.transitionDelay = `${index * 150}ms`;
+      }
 
-      target.classList.add("visible");
-      observer.unobserve(target);
+      if (target instanceof HTMLElement) {
+        target.classList.add("visible");
+        observer.unobserve(target);
+      }
     });
   }, observerOptions);
 
-  // Setup observer on page load and after view transitions
-  document.addEventListener("astro:page-load", () => {
-    // Reset any manual styles if reloading
+  const revealProjectCards = () => {
     const hiddenElements = document.querySelectorAll(".project-card");
+    if (!("IntersectionObserver" in window)) {
+      hiddenElements.forEach((el) => {
+        if (el instanceof HTMLElement) el.classList.add("visible");
+      });
+      return;
+    }
+
+    observer.disconnect();
     hiddenElements.forEach((el) => {
+      if (!(el instanceof HTMLElement)) return;
       el.classList.remove("visible");
-      (el as HTMLElement).style.transitionDelay = "0ms";
+      el.style.transitionDelay = "0ms";
       observer.observe(el);
     });
-  });
+  };
+
+  // Setup observer on page load and after view transitions
+  document.addEventListener("DOMContentLoaded", revealProjectCards);
+  document.addEventListener("astro:page-load", revealProjectCards);
+  document.addEventListener("astro:after-swap", revealProjectCards);
+  revealProjectCards();
 </script>
 
 <script>
   const themeStorageKey = "demo-portfolio-4-theme";
+  const defaultThemeId = "Alp 2";
 
   const normalizeHex = (value) => {
     const trimmed = value.replace("#", "").trim();
@@ -861,6 +1063,11 @@ const {
       return;
     }
 
+    if (themeMap.has(defaultThemeId)) {
+      applyThemeById(defaultThemeId);
+      return;
+    }
+
     const currentAurora1 = getComputedStyle(document.documentElement)
       .getPropertyValue("--color-aurora-1")
       .trim()
@@ -878,4 +1085,134 @@ const {
 
   document.addEventListener("astro:page-load", initThemeSwitcher);
   document.addEventListener("astro:after-swap", initThemeSwitcher);
+</script>
+
+<script>
+  const langStorageKey = "demo-portfolio-4-lang";
+  const defaultLang = "en";
+  let activeLang = defaultLang;
+
+  const normalizeLang = (value) => (value || "").trim().toLowerCase();
+  const getLangAttr = (node) => normalizeLang(node.getAttribute("lang"));
+
+  const applyLanguage = (lang) => {
+    const normalized = normalizeLang(lang) || defaultLang;
+    document.documentElement.lang = normalized;
+    document.documentElement.dataset.lang = normalized;
+    activeLang = normalized;
+
+    const groups = new Map();
+    document.querySelectorAll("i18n[lang]").forEach((node) => {
+      const key = node.dataset.i18n || "__default__";
+      const parent = node.parentElement;
+      if (!parent) return;
+
+      let parentGroups = groups.get(parent);
+      if (!parentGroups) {
+        parentGroups = new Map();
+        groups.set(parent, parentGroups);
+      }
+
+      const items = parentGroups.get(key) || [];
+      items.push(node);
+      parentGroups.set(key, items);
+    });
+
+    groups.forEach((parentGroups) => {
+      parentGroups.forEach((nodes) => {
+        nodes.forEach((node) => {
+          if (node instanceof HTMLElement) node.hidden = true;
+        });
+
+        const match = nodes.find(
+          (node) => getLangAttr(node) === normalized
+        );
+        const fallback = nodes.find(
+          (node) => getLangAttr(node) === defaultLang
+        );
+        const next = match || fallback || nodes[0];
+        if (next instanceof HTMLElement) next.hidden = false;
+      });
+    });
+  };
+
+  const setActiveLanguage = (buttons, lang, currentLabel) => {
+    buttons.forEach((button) => {
+      const isActive = normalizeLang(button.dataset.lang) === lang;
+      button.dataset.active = isActive ? "true" : "false";
+      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+
+    if (currentLabel) {
+      currentLabel.textContent = lang.toUpperCase();
+    }
+  };
+
+  const observeI18n = () => {
+    if (observeI18n.initialized || !document.body) return;
+    const observer = new MutationObserver((mutations) => {
+      const hasI18n = mutations.some((mutation) =>
+        Array.from(mutation.addedNodes).some((node) => {
+          if (!(node instanceof HTMLElement)) return false;
+          return (
+            node.matches("i18n[lang]") || node.querySelector("i18n[lang]")
+          );
+        })
+      );
+      if (hasI18n) applyLanguage(activeLang);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    observeI18n.initialized = true;
+  };
+  observeI18n.initialized = false;
+
+  const initLanguageSwitcher = () => {
+    const switcher = document.querySelector("[data-lang-switcher]");
+    if (!switcher) {
+      applyLanguage(defaultLang);
+      return;
+    }
+
+    const buttons = Array.from(switcher.querySelectorAll(".lang-option"));
+    if (!buttons.length) return;
+    const currentLabel = switcher.querySelector("[data-lang-current]");
+
+    const availableLangs = new Set(
+      buttons.map((button) => normalizeLang(button.dataset.lang))
+    );
+
+    const applyLang = (lang) => {
+      const nextLang = availableLangs.has(lang) ? lang : defaultLang;
+      applyLanguage(nextLang);
+      setActiveLanguage(buttons, nextLang, currentLabel);
+      try {
+        localStorage.setItem(langStorageKey, nextLang);
+      } catch (error) {
+        console.warn("Language storage unavailable", error);
+      }
+    };
+
+    if (switcher.dataset.initialized !== "true") {
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const lang = normalizeLang(button.dataset.lang);
+          if (lang) applyLang(lang);
+        });
+      });
+      switcher.dataset.initialized = "true";
+    }
+
+    let savedLang = null;
+    try {
+      savedLang = normalizeLang(localStorage.getItem(langStorageKey));
+    } catch (error) {
+      console.warn("Language storage unavailable", error);
+    }
+
+    applyLang(savedLang || defaultLang);
+    observeI18n();
+  };
+
+  document.addEventListener("astro:page-load", initLanguageSwitcher);
+  document.addEventListener("astro:after-swap", initLanguageSwitcher);
 </script>

@@ -14,7 +14,12 @@ export default function InteractiveCounter() {
       }}
     >
       <h3 style={{ margin: "0 0 1rem 0", color: "var(--color-text-contrast)" }}>
-        Interactive Island
+        <i18n lang="en" data-i18n="counter-title">
+          Interactive Island
+        </i18n>
+        <i18n lang="tr" hidden data-i18n="counter-title">
+          Etkileşimli Ada
+        </i18n>
       </h3>
       <p
         style={{
@@ -23,8 +28,14 @@ export default function InteractiveCounter() {
           marginBottom: "1.5rem",
         }}
       >
-        Bu bileşen <strong>Preact</strong> ile çalışıyor ve sayfaya "hydrate"
-        edildi. Diğer her şey statik HTML!
+        <i18n lang="en" data-i18n="counter-body">
+          This component runs with <strong>Preact</strong> and is hydrated on
+          the page. Everything else is static HTML!
+        </i18n>
+        <i18n lang="tr" hidden data-i18n="counter-body">
+          Bu bileşen <strong>Preact</strong> ile çalışıyor ve sayfaya "hydrate"
+          edildi. Diğer her şey statik HTML!
+        </i18n>
       </p>
 
       <div
