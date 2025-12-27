@@ -75,12 +75,8 @@ const {
           role="listbox"
           aria-label="Language selector"
         >
-          <button class="lang-option" type="button" data-lang="en">
-            EN
-          </button>
-          <button class="lang-option" type="button" data-lang="tr">
-            TR
-          </button>
+          <button class="lang-option" type="button" data-lang="en"> EN </button>
+          <button class="lang-option" type="button" data-lang="tr"> TR </button>
         </div>
       </div>
 
@@ -91,7 +87,7 @@ const {
       <footer class="site-footer">
         <div class="container">
           <p>
-            &copy; {new Date().getFullYear()} İsmet ALP. 
+            &copy; {new Date().getFullYear()} İsmet ALP.
             <i18n lang="en" data-i18n="footer-powered">
               Powered by <a href="https://astro.build" target="_blank">Astro</a
               >.
@@ -258,25 +254,25 @@ const {
       let height = 0;
       let particles: Star[] = [];
       let mouseX = 0,
-          mouseY = 0;
-        let targetX = 0,
-          targetY = 0;
-        let animationFrameId = 0;
-        let resizeObserver: ResizeObserver | null = null;
-        let listenersBound = false;
-        let poolHeight = 10000;
-        let lastMeasure = 0;
-        const measureInterval = 250; // ms
+        mouseY = 0;
+      let targetX = 0,
+        targetY = 0;
+      let animationFrameId = 0;
+      let resizeObserver: ResizeObserver | null = null;
+      let listenersBound = false;
+      let poolHeight = 10000;
+      let lastMeasure = 0;
+      const measureInterval = 250; // ms
 
-        const config = {
-          starPoolSize: 2000,
-          starHorizon: 0.8,
-          starFadeStrength: 3.0,
-          parallax: true,
-        };
+      const config = {
+        starPoolSize: 2000,
+        starHorizon: 0.8,
+        starFadeStrength: 3.0,
+        parallax: true,
+      };
 
-        // Pre-generated star pool
-        const starPool: Star[] = [];
+      // Pre-generated star pool
+      const starPool: Star[] = [];
 
       const random = (min: number, max: number) =>
         Math.random() * (max - min) + min;
@@ -290,180 +286,180 @@ const {
         }
       };
 
-        const getContentHeight = () => {
-          const wrapper = document.querySelector(".site-wrapper");
-          if (!wrapper) return window.innerHeight;
-          return Math.max(
-            window.innerHeight,
-            wrapper.getBoundingClientRect().height
-          );
-        };
+      const getContentHeight = () => {
+        const wrapper = document.querySelector(".site-wrapper");
+        if (!wrapper) return window.innerHeight;
+        return Math.max(
+          window.innerHeight,
+          wrapper.getBoundingClientRect().height
+        );
+      };
 
-        class Star {
-          x = 0;
-          y = 0;
-          size = 0;
-          z = 0;
-          baseAlpha = 0;
-          twinklePhase = 0;
+      class Star {
+        x = 0;
+        y = 0;
+        size = 0;
+        z = 0;
+        baseAlpha = 0;
+        twinklePhase = 0;
 
-          draw() {
-            this.twinklePhase += 0.05;
-            let alpha = this.baseAlpha + Math.sin(this.twinklePhase) * 0.15;
+        draw() {
+          this.twinklePhase += 0.05;
+          let alpha = this.baseAlpha + Math.sin(this.twinklePhase) * 0.15;
 
-            const progress = this.y / height;
-            if (progress > config.starHorizon) {
-              const depth =
-                (progress - config.starHorizon) / (1 - config.starHorizon);
-              alpha -= depth * config.starFadeStrength;
-            }
-
-            if (alpha <= 0.02) return;
-
-            const dx = this.x + (config.parallax ? targetX * this.z : 0);
-            const dy = this.y + (config.parallax ? targetY * this.z : 0);
-
-            if (ctx) {
-              ctx.beginPath();
-              ctx.fillStyle = `rgba(${starColor}, ${alpha})`;
-              ctx.arc(dx, dy, this.size, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          }
-        }
-
-        function initStarPool(customHeight?: number) {
-          starPool.length = 0;
-          poolHeight =
-            customHeight ?? Math.max(height || window.innerHeight, 10000);
-
-          for (let i = 0; i < config.starPoolSize; i++) {
-            const star = new Star();
-            star.x = Math.random() * width;
-            star.y = Math.random() * poolHeight;
-            star.size = Math.random() < 0.95 ? random(0.5, 1.5) : random(2, 3);
-            star.z = random(0.1, 0.4);
-            star.baseAlpha = random(0.3, 0.9);
-            star.twinklePhase = random(0, Math.PI * 2);
-            starPool.push(star);
-          }
-        }
-
-        function resize() {
-          if (!canvas || !ctx) return;
-
-          const newWidth = window.innerWidth;
-          const newHeight = getContentHeight();
-
-          if (!newHeight) return;
-
-          width = newWidth;
-          height = newHeight;
-          canvas.width = width;
-          canvas.height = height;
-          if (bgDiv) bgDiv.style.height = height + "px";
-
-          const desiredPoolHeight = Math.max(height, 10000);
-          if (starPool.length === 0 || desiredPoolHeight > poolHeight) {
-            initStarPool(desiredPoolHeight);
+          const progress = this.y / height;
+          if (progress > config.starHorizon) {
+            const depth =
+              (progress - config.starHorizon) / (1 - config.starHorizon);
+            alpha -= depth * config.starFadeStrength;
           }
 
-          // Filter stars within current page height
-          particles = starPool.filter((star) => star.y <= height);
-        }
+          if (alpha <= 0.02) return;
 
-        function animate(_timestamp: number) {
-          if (!ctx) return;
-          ctx.clearRect(0, 0, width, height);
+          const dx = this.x + (config.parallax ? targetX * this.z : 0);
+          const dy = this.y + (config.parallax ? targetY * this.z : 0);
 
-          if (_timestamp - lastMeasure > measureInterval) {
-            lastMeasure = _timestamp;
-            resize();
+          if (ctx) {
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(${starColor}, ${alpha})`;
+            ctx.arc(dx, dy, this.size, 0, Math.PI * 2);
+            ctx.fill();
           }
+        }
+      }
 
-          targetX += (mouseX - targetX) * 0.05;
-          targetY += (mouseY - targetY) * 0.05;
+      function initStarPool(customHeight?: number) {
+        starPool.length = 0;
+        poolHeight =
+          customHeight ?? Math.max(height || window.innerHeight, 10000);
 
-          particles.forEach((p) => p.draw());
+        for (let i = 0; i < config.starPoolSize; i++) {
+          const star = new Star();
+          star.x = Math.random() * width;
+          star.y = Math.random() * poolHeight;
+          star.size = Math.random() < 0.95 ? random(0.5, 1.5) : random(2, 3);
+          star.z = random(0.1, 0.4);
+          star.baseAlpha = random(0.3, 0.9);
+          star.twinklePhase = random(0, Math.PI * 2);
+          starPool.push(star);
+        }
+      }
 
-          animationFrameId = requestAnimationFrame(animate);
+      function resize() {
+        if (!canvas || !ctx) return;
+
+        const newWidth = window.innerWidth;
+        const newHeight = getContentHeight();
+
+        if (!newHeight) return;
+
+        width = newWidth;
+        height = newHeight;
+        canvas.width = width;
+        canvas.height = height;
+        if (bgDiv) bgDiv.style.height = height + "px";
+
+        const desiredPoolHeight = Math.max(height, 10000);
+        if (starPool.length === 0 || desiredPoolHeight > poolHeight) {
+          initStarPool(desiredPoolHeight);
         }
 
-        const handleMouseMove = (e: MouseEvent) => {
-          if (!config.parallax) return;
-          const cx = window.innerWidth / 2;
-          const cy = window.innerHeight / 2;
-          mouseX = (e.clientX - cx) * 0.05;
-          mouseY = (e.clientY - cy) * 0.05;
-        };
+        // Filter stars within current page height
+        particles = starPool.filter((star) => star.y <= height);
+      }
 
-        function observeContentHeight() {
-          if (!("ResizeObserver" in window)) return;
-          if (resizeObserver) resizeObserver.disconnect();
-          resizeObserver = new ResizeObserver(() => resize());
-          const mainEl = document.querySelector("main");
-          if (mainEl) resizeObserver.observe(mainEl);
-          if (document.body) resizeObserver.observe(document.body);
-          if (document.documentElement)
-            resizeObserver.observe(document.documentElement);
-        }
+      function animate(_timestamp: number) {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
 
-        function scheduleStabilizeResizes() {
+        if (_timestamp - lastMeasure > measureInterval) {
+          lastMeasure = _timestamp;
           resize();
-          requestAnimationFrame(() => resize());
-          setTimeout(() => resize(), 150);
         }
 
-        function initStars() {
-          canvas = document.getElementById("spaceCanvas") as HTMLCanvasElement;
-          if (!canvas) return;
-          ctx = canvas.getContext("2d");
-          if (!ctx) return;
-          bgDiv = document.querySelector(".aurora-bg") as HTMLElement;
-          if (!bgDiv) return;
-          updateStarColor();
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
 
-          // Initialize star pool
-          if (starPool.length === 0) {
-            initStarPool();
-          }
+        particles.forEach((p) => p.draw());
 
-          // Set up event listeners once
-          if (!listenersBound) {
-            window.addEventListener("resize", resize);
-            window.addEventListener("mousemove", handleMouseMove);
-            window.addEventListener("load", scheduleStabilizeResizes);
-            document.addEventListener("click", (e) => {
-              const target = (e.target as HTMLElement | null)?.closest("a");
-              if (!target) return;
-              if (!(target as HTMLElement).matches("header nav a")) return;
-              setTimeout(() => scheduleStabilizeResizes(), 80);
-            });
-            listenersBound = true;
-          }
+        animationFrameId = requestAnimationFrame(animate);
+      }
 
-          observeContentHeight();
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!config.parallax) return;
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        mouseX = (e.clientX - cx) * 0.05;
+        mouseY = (e.clientY - cy) * 0.05;
+      };
 
-          // Start
-          scheduleStabilizeResizes();
-          if (animationFrameId) cancelAnimationFrame(animationFrameId);
-          animationFrameId = requestAnimationFrame(animate);
+      function observeContentHeight() {
+        if (!("ResizeObserver" in window)) return;
+        if (resizeObserver) resizeObserver.disconnect();
+        resizeObserver = new ResizeObserver(() => resize());
+        const mainEl = document.querySelector("main");
+        if (mainEl) resizeObserver.observe(mainEl);
+        if (document.body) resizeObserver.observe(document.body);
+        if (document.documentElement)
+          resizeObserver.observe(document.documentElement);
+      }
+
+      function scheduleStabilizeResizes() {
+        resize();
+        requestAnimationFrame(() => resize());
+        setTimeout(() => resize(), 150);
+      }
+
+      function initStars() {
+        canvas = document.getElementById("spaceCanvas") as HTMLCanvasElement;
+        if (!canvas) return;
+        ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        bgDiv = document.querySelector(".aurora-bg") as HTMLElement;
+        if (!bgDiv) return;
+        updateStarColor();
+
+        // Initialize star pool
+        if (starPool.length === 0) {
+          initStarPool();
         }
 
-        // Update on page load and transitions
-        document.addEventListener("astro:page-load", () => {
-          initStars();
-        });
-        document.addEventListener("astro:after-swap", () => {
-          // On page transition, recalculate height and reattach observer
-          requestAnimationFrame(() => {
-            observeContentHeight();
-            scheduleStabilizeResizes();
+        // Set up event listeners once
+        if (!listenersBound) {
+          window.addEventListener("resize", resize);
+          window.addEventListener("mousemove", handleMouseMove);
+          window.addEventListener("load", scheduleStabilizeResizes);
+          document.addEventListener("click", (e) => {
+            const target = (e.target as HTMLElement | null)?.closest("a");
+            if (!target) return;
+            if (!(target as HTMLElement).matches("header nav a")) return;
+            setTimeout(() => scheduleStabilizeResizes(), 80);
           });
-        });
+          listenersBound = true;
+        }
 
-        // Initial call
+        observeContentHeight();
+
+        // Start
+        scheduleStabilizeResizes();
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(animate);
+      }
+
+      // Update on page load and transitions
+      document.addEventListener("astro:page-load", () => {
         initStars();
+      });
+      document.addEventListener("astro:after-swap", () => {
+        // On page transition, recalculate height and reattach observer
+        requestAnimationFrame(() => {
+          observeContentHeight();
+          scheduleStabilizeResizes();
+        });
+      });
+
+      // Initial call
+      initStars();
     </script>
   </body>
 </html>
@@ -1124,9 +1120,7 @@ const {
           if (node instanceof HTMLElement) node.hidden = true;
         });
 
-        const match = nodes.find(
-          (node) => getLangAttr(node) === normalized
-        );
+        const match = nodes.find((node) => getLangAttr(node) === normalized);
         const fallback = nodes.find(
           (node) => getLangAttr(node) === defaultLang
         );
@@ -1154,9 +1148,7 @@ const {
       const hasI18n = mutations.some((mutation) =>
         Array.from(mutation.addedNodes).some((node) => {
           if (!(node instanceof HTMLElement)) return false;
-          return (
-            node.matches("i18n[lang]") || node.querySelector("i18n[lang]")
-          );
+          return node.matches("i18n[lang]") || node.querySelector("i18n[lang]");
         })
       );
       if (hasI18n) applyLanguage(activeLang);
