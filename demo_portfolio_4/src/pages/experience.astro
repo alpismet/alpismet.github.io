@@ -4,6 +4,10 @@ import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
 const resumeUrl = "/resume/ismet-alp-resume.pdf";
+const ndaTooltip = {
+  en: 'Projects on this page marked with <span class="nda-highlight">NDA</span> are subject to confidentiality obligations. Therefore only general information is shared, and no project-internal content or original outputs are shown. All visuals are representative images created for informational purposes or publicly shared by the relevant institutions; these visuals do not reflect project-internal work or original outputs.',
+  tr: 'Bu sayfada yer alan ve <span class="nda-highlight">NDA</span> etiketiyle belirtilen çalışmalar gizlilik yükümlülükleri kapsamındadır. Bu nedenle projelere ilişkin yalnızca genel nitelikte bilgiler paylaşılmakta, proje içi içeriklere veya özgün çıktılara yer verilmemektedir. Gösterilen tüm görseller bilgilendirme amacıyla temsili olarak üretilmiş olup veya ilgili kurumların tanıtım faaliyetleri kapsamında kamuya açık olarak paylaştıkları görsellerdir; bu görseller proje içi çalışmaları veya özgün çıktıları yansıtmamaktadır.',
+};
 
 const projects = await getCollection("projects");
 const projectMap = new Map(
@@ -186,48 +190,73 @@ const experienceData = experienceTimeline.map((company) => {
     <div class="container">
       <div class="experience-header">
         <div class="experience-title">
-          <span class="experience-eyebrow">
-            <i18n lang="en" data-i18n="experience-eyebrow">Resume</i18n>
-            <i18n lang="tr" hidden data-i18n="experience-eyebrow">
-              Özgeçmiş
-            </i18n>
-          </span>
-          <h1>
-            <i18n lang="en" data-i18n="experience-title">Experience</i18n>
-            <i18n lang="tr" hidden data-i18n="experience-title">Deneyim</i18n>
-          </h1>
+          <div class="experience-title-row">
+            <h1>
+              <i18n lang="en" data-i18n="experience-title">Experience</i18n>
+              <i18n lang="tr" hidden data-i18n="experience-title">
+                Deneyim
+              </i18n>
+            </h1>
+            <div class="experience-actions">
+              <a class="btn experience-download" href={resumeUrl} download>
+                <i18n lang="en" data-i18n="experience-download">
+                  Download Resume
+                </i18n>
+                <i18n lang="tr" hidden data-i18n="experience-download">
+                  Özgeçmişi indir
+                </i18n>
+              </a>
+            </div>
+          </div>
           <p>
             <i18n lang="en" data-i18n="experience-lead">
               A timeline of studios and projects pulled directly from the main
-              projects catalog.
+              catalog, ordered by my roles over time. Each card links to the
+              full project page with details and visuals.
             </i18n>
             <i18n lang="tr" hidden data-i18n="experience-lead">
-              Ana proje kataloğundan gelen stüdyo ve proje zaman çizelgesi.
+              Ana proje kataloğundan gelen stüdyo ve proje zaman çizelgesi;
+              rollerim ve katkılarım zaman içinde sıralanır. Kartların her biri
+              tam proje sayfasına gider ve detayları gösterir.
             </i18n>
           </p>
         </div>
-        <div class="experience-actions">
-          <a class="btn experience-download" href={resumeUrl} download>
-            <i18n lang="en" data-i18n="experience-download">
-              Download Resume
-            </i18n>
-            <i18n lang="tr" hidden data-i18n="experience-download">
-              Özgeçmişi indir
-            </i18n>
-          </a>
-          <span class="experience-file">PDF</span>
-        </div>
       </div>
-      <div class="experience-note glass-panel">
+      <div class="experience-note">
         <p>
           <i18n lang="en" data-i18n="experience-nda">
-            * NDA projects only include role summaries and high-level context.
-            Visuals are representative images produced to describe the work.
+            Projects on this page marked with&nbsp;
+            <span class="nda-inline nda-tooltip">
+              NDA
+              <span class="nda-tooltip-content" role="tooltip">
+                <i18n lang="en" set:html={ndaTooltip.en}></i18n>
+                <i18n lang="tr" hidden set:html={ndaTooltip.tr}></i18n>
+              </span>
+            </span>
+            are subject to confidentiality
+            obligations. Therefore only general information is shared, and no
+            project-internal content or original outputs are shown. All visuals
+            are representative images created for informational purposes or
+            publicly shared by the relevant institutions; these visuals do not
+            reflect project-internal work or original outputs.
           </i18n>
           <i18n lang="tr" hidden data-i18n="experience-nda">
-            * işareti olan işler NDA kapsamındadır. Bu nedenle sadece yaptığım
-            işin tanımı ve proje kapsamına dair temel özetler paylaşılır.
-            Görseller, projeyi temsilen üretilmiş temsili görsellerdir.
+            Bu sayfada yer alan ve&nbsp;
+            <span class="nda-inline nda-tooltip">
+              NDA
+              <span class="nda-tooltip-content" role="tooltip">
+                <i18n lang="en" set:html={ndaTooltip.en}></i18n>
+                <i18n lang="tr" hidden set:html={ndaTooltip.tr}></i18n>
+              </span>
+            </span>
+            etiketiyle belirtilen çalışmalar
+            gizlilik yükümlülükleri kapsamındadır. Bu nedenle projelere ilişkin
+            yalnızca genel nitelikte bilgiler paylaşılmakta, proje içi
+            içeriklere veya özgün çıktılara yer verilmemektedir. Gösterilen tüm
+            görseller bilgilendirme amacıyla temsili olarak üretilmiş olup veya
+            ilgili kurumların tanıtım faaliyetleri kapsamında kamuya açık olarak
+            paylaştıkları görsellerdir; bu görseller proje içi çalışmaları veya
+            özgün çıktıları yansıtmamaktadır.
           </i18n>
         </p>
       </div>
@@ -310,14 +339,6 @@ const experienceData = experienceTimeline.map((company) => {
                               loading="lazy"
                             />
                             <div class="overlay" aria-hidden="true" />
-                            {card.nda && (
-                              <span class="exp-badge">
-                                <i18n lang="en">NDA</i18n>
-                                <i18n lang="tr" hidden>
-                                  NDA
-                                </i18n>
-                              </span>
-                            )}
                           </div>
                           <div class="card-content">
                             <div class="card-meta">
@@ -338,6 +359,22 @@ const experienceData = experienceTimeline.map((company) => {
                                   <i18n lang="tr" hidden>
                                     {card.title.tr}
                                   </i18n>
+                                )}
+                                {card.nda && (
+                                  <span class="nda-sup nda-tooltip" aria-label="NDA">
+                                    NDA
+                                    <span class="nda-tooltip-content" role="tooltip">
+                                      <i18n
+                                        lang="en"
+                                        set:html={ndaTooltip.en}
+                                      ></i18n>
+                                      <i18n
+                                        lang="tr"
+                                        hidden
+                                        set:html={ndaTooltip.tr}
+                                      ></i18n>
+                                    </span>
+                                  </span>
                                 )}
                               </a>
                             </h3>
@@ -373,15 +410,32 @@ const experienceData = experienceTimeline.map((company) => {
 
 <style>
   .experience-hero {
-    padding: 5rem 0 3rem;
+    padding: 4.5rem 0 3.5rem;
   }
 
   .experience-header {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-end;
-    gap: 2.5rem;
+    align-items: flex-start;
+    gap: 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .experience-title {
+    display: grid;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .experience-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    width: 100%;
   }
 
   .experience-eyebrow {
@@ -394,21 +448,23 @@ const experienceData = experienceTimeline.map((company) => {
   }
 
   .experience-title h1 {
-    font-size: 3.5rem;
-    margin: 0 0 1rem 0;
+    font-size: 4.5rem;
+    margin: 0;
   }
 
   .experience-title p {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    line-height: 1.7;
     color: var(--color-text-muted);
-    max-width: 680px;
+    max-width: 800px;
   }
 
   .experience-actions {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .experience-download {
@@ -416,22 +472,87 @@ const experienceData = experienceTimeline.map((company) => {
   }
 
   .experience-file {
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--color-text-70);
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-white-10);
+    background: var(--color-white-03);
   }
 
   .experience-note {
-    margin-top: 2.5rem;
-    padding: 1.5rem;
-    border-radius: var(--radius-md);
+    margin-top: 3.25rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .experience-note p {
     margin: 0;
-    color: var(--color-text-muted);
-    font-size: 0.95rem;
+    color: rgba(248, 250, 252, 0.45);
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  .nda-inline {
+    font-size: 0.72em;
+    letter-spacing: 0.12em;
+    vertical-align: super;
+    color: var(--color-aurora-1);
+    text-transform: uppercase;
+  }
+
+  .nda-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    cursor: help;
+    z-index: 5;
+  }
+
+  .nda-tooltip-content {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    width: min(360px, 70vw);
+    padding: 0.85rem 1rem;
+    border-radius: 0.85rem;
+    background: rgba(12, 16, 28, 0.72);
+    border: 1px solid var(--color-white-10);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(14px);
+    color: var(--color-white);
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.6;
+    text-transform: none;
+    letter-spacing: normal;
+    text-align: left;
+    z-index: 30;
+  }
+
+  .nda-tooltip:hover .nda-tooltip-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .nda-tooltip-content :global(i18n) {
+    color: inherit;
+    font: inherit;
+  }
+
+  .nda-highlight {
+    color: var(--color-aurora-1);
+    font-weight: 600;
   }
 
   .experience-timeline {
@@ -452,13 +573,21 @@ const experienceData = experienceTimeline.map((company) => {
     bottom: 0;
     left: 50%;
     width: 1px;
+    background: none;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  :global(.timeline-axis__segment) {
+    position: absolute;
+    left: 0;
+    width: 1px;
     background: linear-gradient(
       to bottom,
       var(--color-white-05),
       var(--color-white-20),
       var(--color-white-05)
     );
-    transform: translateX(-50%);
   }
 
   .company-block {
@@ -567,7 +696,7 @@ const experienceData = experienceTimeline.map((company) => {
     border: 1px solid var(--color-white-10);
     border-top: 1px solid var(--color-white-15);
     border-radius: var(--radius-md);
-    overflow: hidden;
+    overflow: visible;
     transition:
       transform 0.3s ease,
       box-shadow 0.3s ease;
@@ -655,19 +784,17 @@ const experienceData = experienceTimeline.map((company) => {
     opacity: 0.4;
   }
 
-  .exp-badge {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    z-index: 2;
-    padding: 0.35rem 0.7rem;
-    border-radius: 999px;
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
+  .nda-sup {
+    display: inline-block;
+    font-size: 0.55em;
+    letter-spacing: 0.1em;
+    margin-left: 0.35rem;
+    vertical-align: super;
+    color: var(--color-aurora-1);
+    background: none;
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: var(--color-aurora-1);
     text-transform: uppercase;
-    background: rgba(12, 12, 8, 0.7);
-    color: var(--color-aurora-2);
-    border: 1px solid rgba(var(--color-aurora-2-rgb), 0.35);
   }
 
   .card-content {
@@ -734,7 +861,7 @@ const experienceData = experienceTimeline.map((company) => {
     flex-wrap: wrap;
     gap: 0.5rem;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
 
   .tag {
@@ -821,6 +948,7 @@ const experienceData = experienceTimeline.map((company) => {
     if (!timeline || timeline.dataset.bound === "true") return;
 
     const targets = Array.from(timeline.querySelectorAll("[data-reveal]"));
+    const axis = timeline.querySelector(".timeline-axis");
     if (!targets.length) return;
 
     const prefersReduced = window.matchMedia(
@@ -854,6 +982,7 @@ const experienceData = experienceTimeline.map((company) => {
         const clamped = Math.min(1, Math.max(0, progress));
         item.style.setProperty("--reveal", clamped.toFixed(3));
       });
+      scheduleAxisUpdate();
     };
 
     const onScroll = () => {
@@ -901,15 +1030,107 @@ const experienceData = experienceTimeline.map((company) => {
       }, totalTime);
     };
 
+    let axisRaf = 0;
+
+    const updateAxisSegments = () => {
+      if (!axis) return;
+      const axisRect = axis.getBoundingClientRect();
+      if (!axisRect.height) return;
+
+      const axisX = axisRect.left + axisRect.width / 2;
+      const axisTop = axisRect.top;
+      const axisHeight = axisRect.height;
+      const blocks = [];
+
+      timeline.querySelectorAll(".exp-card-wrap").forEach((wrap) => {
+        const rect = wrap.getBoundingClientRect();
+        if (rect.left <= axisX && rect.right >= axisX) {
+          const revealValue = parseFloat(
+            getComputedStyle(wrap).getPropertyValue("--reveal")
+          );
+          const reveal = Number.isNaN(revealValue) ? 0 : revealValue;
+          const offset = (1 - reveal) * 26;
+          const start = Math.max(0, rect.top - offset - axisTop);
+          const end = Math.min(axisHeight, rect.bottom - offset - axisTop);
+          if (end > start) {
+            blocks.push([start, end]);
+          }
+        }
+      });
+
+      blocks.sort((a, b) => a[0] - b[0]);
+      const merged = [];
+      blocks.forEach(([start, end]) => {
+        const last = merged[merged.length - 1];
+        if (!last || start > last[1]) {
+          merged.push([start, end]);
+        } else {
+          last[1] = Math.max(last[1], end);
+        }
+      });
+
+      axis.innerHTML = "";
+      let cursor = 0;
+      const segments = [];
+
+      if (!merged.length) {
+        segments.push([0, axisHeight]);
+      } else {
+        merged.forEach(([start, end]) => {
+          if (start > cursor) {
+            segments.push([cursor, start]);
+          }
+          cursor = Math.max(cursor, end);
+        });
+        if (cursor < axisHeight) {
+          segments.push([cursor, axisHeight]);
+        }
+      }
+
+      segments.forEach(([start, end]) => {
+        const height = end - start;
+        if (height <= 0) return;
+        const segment = document.createElement("div");
+        segment.className = "timeline-axis__segment";
+        segment.style.top = `${start}px`;
+        segment.style.height = `${height}px`;
+        axis.appendChild(segment);
+      });
+    };
+
+    const scheduleAxisUpdate = () => {
+      if (axisRaf) return;
+      axisRaf = window.requestAnimationFrame(() => {
+        axisRaf = 0;
+        updateAxisSegments();
+      });
+    };
+
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(() => scheduleAxisUpdate())
+        : null;
+    if (resizeObserver) {
+      resizeObserver.observe(timeline);
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", scheduleAxisUpdate);
+    window.addEventListener("load", scheduleAxisUpdate, { once: true });
     window.requestAnimationFrame(playIntro);
+    scheduleAxisUpdate();
 
     timeline.dataset.bound = "true";
 
     const cleanup = () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", scheduleAxisUpdate);
+      window.removeEventListener("load", scheduleAxisUpdate);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
       document.removeEventListener("astro:before-swap", cleanup);
     };
 
