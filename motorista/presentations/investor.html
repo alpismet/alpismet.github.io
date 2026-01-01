@@ -1,0 +1,2395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MOTORISTA | Investor Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #00ff87;
+        --accent: #60efff;
+        --warm: #ff9f43;
+        --bg: #05060b;
+        --panel: rgba(10, 14, 22, 0.78);
+        --panel-border: rgba(96, 239, 255, 0.16);
+        --text: #f8fafc;
+        --muted: #9aa4b2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        margin: 0;
+        overflow: hidden;
+        user-select: none;
+      }
+
+      body.is-idle .nav-btn,
+      body.is-idle .lang-switch {
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+      }
+
+      .ambient {
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 15% 15%,
+            rgba(0, 255, 135, 0.12),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 10%,
+            rgba(96, 239, 255, 0.18),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 70% 80%,
+            rgba(255, 159, 67, 0.14),
+            transparent 45%
+          );
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      #deck {
+        position: relative;
+        width: 100vw;
+        will-change: transform;
+      }
+
+      .slide {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 4.5rem;
+        --bg-image: none;
+      }
+
+      .slide--hero {
+        --bg-image: url("../img/e9cffb3165b9643168263d4e3d9b9fd1.jpeg");
+      }
+
+      .slide--closing {
+        --bg-image: url("../img/8e4d6a9032e271bedebea7bf9a9d3036.jpeg");
+      }
+
+      .slide-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(0, 255, 135, 0.08) 0%,
+            transparent 65%
+          ),
+          linear-gradient(120deg, rgba(7, 9, 14, 0.92), rgba(7, 9, 14, 0.7)),
+          var(--bg-image);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 0;
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1220px;
+      }
+
+      .hero-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 2.5rem;
+        align-items: center;
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .hero-roi-card {
+        margin-top: 2rem;
+        padding: 2rem;
+        border-radius: 30px;
+        border: 1px solid rgba(0, 255, 135, 0.35);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(0, 255, 135, 0.18),
+            rgba(8, 12, 20, 0.88)
+          ),
+          rgba(10, 14, 22, 0.9);
+        box-shadow: 0 30px 70px rgba(0, 255, 135, 0.15);
+      }
+
+      .hero-metrics .hero-roi-card {
+        margin-top: 0;
+      }
+
+      .hero-roi-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        color: var(--accent);
+      }
+
+      .hero-roi-value {
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 800;
+        color: var(--primary);
+        line-height: 1;
+        margin-top: 0.6rem;
+      }
+
+      .hero-roi-note {
+        margin-top: 0.8rem;
+        color: #d1d5db;
+        font-size: 1rem;
+      }
+
+      .hero-roi-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: 1.4rem;
+      }
+
+      .hero-roi-meta span {
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #e2e8f0;
+      }
+
+      .hero-metrics {
+        display: grid;
+        gap: 1.4rem;
+      }
+
+      .glass {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        backdrop-filter: blur(16px);
+        border-radius: 28px;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.35rem 1rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-size: 0.75rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .title-xl {
+        font-size: clamp(2.8rem, 6vw, 6rem);
+        font-weight: 800;
+        line-height: 1.05;
+      }
+
+      .title-lg {
+        font-size: clamp(2.2rem, 4.5vw, 4.2rem);
+        font-weight: 800;
+      }
+
+      .subtitle {
+        font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .stat-value {
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 800;
+      }
+
+      .stat-label {
+        font-size: 1rem;
+        color: var(--muted);
+      }
+
+      .stat-card {
+        padding: 1.6rem;
+      }
+
+      [data-animate] {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      .count-up {
+        font-variant-numeric: tabular-nums;
+        font-feature-settings:
+          "tnum" 1,
+          "lnum" 1;
+        white-space: nowrap;
+        vertical-align: baseline;
+      }
+
+      .bar-track {
+        height: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: inherit;
+      }
+
+      .bar-fill.warm {
+        background: linear-gradient(90deg, var(--warm), #ffcb6b);
+      }
+
+      .accent {
+        color: var(--primary);
+      }
+
+      .accent-warm {
+        color: var(--warm);
+      }
+
+      .cycle-loop {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        width: min(86vw, 760px);
+        margin-top: 2.5rem;
+      }
+
+      .cycle-loop::before {
+        content: "";
+        position: absolute;
+        inset: 12%;
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        opacity: 0.7;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .cycle-step,
+      .cycle-output {
+        position: relative;
+        z-index: 1;
+      }
+
+      .cycle-output {
+        border-color: rgba(0, 255, 135, 0.35);
+        background: rgba(0, 255, 135, 0.08);
+      }
+
+      @media (min-width: 900px) {
+        .cycle-loop {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-rows: repeat(3, minmax(0, 1fr));
+          align-items: center;
+          justify-items: center;
+          aspect-ratio: 1 / 1;
+        }
+
+        .cycle-step {
+          width: min(230px, 100%);
+        }
+
+        .cycle-step.step-1 {
+          grid-column: 2;
+          grid-row: 1;
+        }
+
+        .cycle-step.step-2 {
+          grid-column: 3;
+          grid-row: 2;
+        }
+
+        .cycle-step.step-3 {
+          grid-column: 2;
+          grid-row: 3;
+        }
+
+        .cycle-step.step-4 {
+          grid-column: 1;
+          grid-row: 2;
+        }
+
+        .cycle-output {
+          grid-column: 2;
+          grid-row: 2;
+          width: min(260px, 100%);
+        }
+      }
+
+      .nav-btn {
+        position: fixed;
+        bottom: 36px;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        transition: all 0.3s;
+        font-size: 1.4rem;
+      }
+
+      .nav-btn svg {
+        width: 22px;
+        height: 22px;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-btn:hover {
+        background: var(--primary);
+        color: #000;
+        border-color: var(--primary);
+        box-shadow: 0 0 24px rgba(0, 255, 135, 0.4);
+      }
+
+      .nav-first {
+        left: 40px;
+      }
+
+      .nav-prev {
+        left: 120px;
+      }
+
+      .nav-next {
+        right: 120px;
+      }
+
+      .nav-last {
+        right: 40px;
+      }
+
+      .progress-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.06);
+        z-index: 1000;
+      }
+
+      .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transition: width 0.4s ease;
+      }
+
+      .slide-indicator {
+        position: fixed;
+        top: 16px;
+        right: 24px;
+        font-size: 0.85rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.6);
+        z-index: 1000;
+      }
+      .lang-switch {
+        position: fixed;
+        top: 16px;
+        left: 24px;
+        display: inline-flex;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 999px;
+        background: rgba(8, 12, 20, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(12px);
+        z-index: 1000;
+        transition: all 0.2s ease;
+      }
+
+      .lang-btn {
+        background: transparent;
+        border: 0;
+        color: rgba(226, 232, 240, 0.75);
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .lang-btn.is-active {
+        background: var(--primary);
+        color: #04110a;
+        font-weight: 700;
+        box-shadow: 0 0 14px rgba(0, 255, 135, 0.3);
+      }
+
+      @media (max-width: 900px) {
+        .slide {
+          padding: 3rem 2rem;
+        }
+
+        .hero-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .lang-switch {
+          top: 16px;
+          left: 16px;
+        }
+
+        .slide-indicator {
+          top: 16px;
+          right: 16px;
+        }
+
+        .nav-first {
+          left: 16px;
+        }
+
+        .nav-prev {
+          left: 88px;
+        }
+
+        .nav-next {
+          right: 88px;
+        }
+
+        .nav-last {
+          right: 16px;
+        }
+
+        .cycle-loop::before {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ambient"></div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="slide-indicator" id="slideIndicator">01 / 12</div>
+    <div class="lang-switch" role="group" aria-label="Language switch">
+      <button class="lang-btn is-active" type="button" data-lang="en">
+        EN
+      </button>
+      <button class="lang-btn" type="button" data-lang="tr">TR</button>
+    </div>
+
+    <button
+      class="nav-btn nav-first"
+      type="button"
+      onclick="goFirst()"
+      aria-label="First slide"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 18l-6-6 6-6"></path>
+        <path d="M12 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+    <button class="nav-btn nav-prev" type="button" onclick="goSlide(-1)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+    <button class="nav-btn nav-next" type="button" onclick="goSlide(1)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 6l6 6-6 6"></path>
+      </svg>
+    </button>
+    <button
+      class="nav-btn nav-last"
+      type="button"
+      onclick="goLast()"
+      aria-label="Last slide"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 6l6 6-6 6"></path>
+        <path d="M12 6l6 6-6 6"></path>
+      </svg>
+    </button>
+
+    <div id="deck">
+      <!-- Slide 1: Intro details -->
+      <section class="slide slide--hero" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="hero-layout">
+            <div class="hero-copy">
+              <div class="pill" data-animate data-i18n="hero_pill">
+                MOTORISTA | INVESTOR PRESENTATION
+              </div>
+              <h2 class="title-lg mt-6" data-animate data-i18n="hero_title">
+                Weekly cashflow from app-based ride-hailing platform fleets
+              </h2>
+              <p class="subtitle mt-6" data-animate data-i18n="hero_subtitle">
+                MOTORISTA buys, operates, and insures electric vehicles.
+                Investors share daily ride-hailing revenue without managing
+                drivers or assets.
+              </p>
+            </div>
+            <div class="hero-metrics">
+              <div class="hero-roi-card glass" data-animate>
+                <div class="hero-roi-label" data-i18n="hero_roi_label">
+                  PROJECTED NET ANNUAL ROI
+                </div>
+                <div
+                  class="hero-roi-value"
+                  data-count="40"
+                  data-format="percent"
+                >
+                  40%
+                </div>
+                <p class="hero-roi-note" data-i18n="hero_roi_note">
+                  Net return is driven by daily ride-hailing revenue.
+                </p>
+                <div class="hero-roi-meta">
+                  <span data-i18n="hero_roi_meta_1">WEEKLY DISTRIBUTIONS</span>
+                  <span data-i18n="hero_roi_meta_2">ASSET-BACKED EV FLEET</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Problem -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="pill" data-animate data-i18n="problem_pill">
+              Problem
+            </div>
+            <h2 class="title-lg mt-6" data-animate data-i18n="problem_title">
+              Low-income investors are priced out of real yield.
+            </h2>
+            <p class="subtitle mt-6" data-animate data-i18n="problem_subtitle">
+              Savings return only 1.8% to 3%, while inflation keeps eating away
+              at purchasing power. Access to stable cashflow remains out of
+              reach for most people.
+            </p>
+            <div class="glass p-8 mt-8" data-animate>
+              <p class="text-xl leading-relaxed" data-i18n="problem_callout">
+                The result is trapped capital and limited mobility for the
+                people who need it most.
+              </p>
+            </div>
+          </div>
+          <div class="glass p-8" data-animate>
+            <h3 class="text-2xl font-bold mb-6" data-i18n="problem_chart_title">
+              Yield vs. inflation pressure
+            </h3>
+            <div class="space-y-6">
+              <div>
+                <div class="flex justify-between text-sm mb-2">
+                  <span data-i18n="problem_chart_bank">Bank yield range</span>
+                  <span class="accent" data-count="3" data-format="percent"
+                    >3%</span
+                  >
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" data-bar="6"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-2">
+                  <span data-i18n="problem_chart_inflation"
+                    >Inflation drag</span
+                  >
+                  <span class="accent-warm" data-i18n="problem_chart_persist"
+                    >Persistent</span
+                  >
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill warm" data-bar="70"></div>
+                </div>
+              </div>
+              <p class="text-sm text-gray-400" data-i18n="problem_chart_note">
+                Traditional accounts cannot keep up with living costs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Solution -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="pill" data-animate data-i18n="solution_pill">
+            Solution
+          </div>
+          <h2 class="title-lg mt-6" data-animate data-i18n="solution_title">
+            Fractional ownership with full operational management.
+          </h2>
+          <div class="grid md:grid-cols-2 gap-10 mt-10">
+            <div class="space-y-6">
+              <div class="glass p-8" data-animate>
+                <h3
+                  class="text-2xl font-bold mb-3"
+                  data-i18n="solution_entry_title"
+                >
+                  Entry from
+                </h3>
+                <p class="text-2xl font-bold accent">
+                  <span data-count="100" data-prefix="EUR ">EUR 100</span>
+                </p>
+                <p
+                  class="text-lg text-gray-300 mt-2"
+                  data-i18n="solution_entry_body"
+                >
+                  Investors buy fractions of high-demand EVs with a low
+                  threshold.
+                </p>
+              </div>
+              <div class="glass p-8 border border-emerald-400/30" data-animate>
+                <h3
+                  class="text-2xl font-bold mb-3"
+                  data-i18n="solution_yield_title"
+                >
+                  Annual net yield
+                </h3>
+                <p class="text-2xl font-bold accent">
+                  <span data-count="40" data-format="percent">40%</span>
+                </p>
+                <p class="text-lg text-gray-300 mt-2">
+                  <span data-i18n="solution_yield_prefix">A</span>
+                  <span class="accent" data-count="100" data-prefix="EUR ">
+                    EUR 100
+                  </span>
+                  <span data-i18n="solution_yield_mid">
+                    investment earns roughly
+                  </span>
+                  <span class="accent" data-count="40" data-prefix="EUR ">
+                    EUR 40
+                  </span>
+                  <span data-i18n="solution_yield_suffix">per year.</span>
+                </p>
+              </div>
+              <div class="glass p-8" data-animate>
+                <h3
+                  class="text-2xl font-bold mb-3"
+                  data-i18n="solution_ops_title"
+                >
+                  Operations handled
+                </h3>
+                <p class="text-lg text-gray-300" data-i18n="solution_ops_body">
+                  MOTORISTA buys, leases, and operates the fleet.
+                </p>
+              </div>
+            </div>
+            <div class="glass p-8" data-animate>
+              <h3
+                class="text-2xl font-bold mb-6"
+                data-i18n="solution_return_title"
+              >
+                Return stack
+              </h3>
+              <div class="space-y-6">
+                <div>
+                  <div class="flex justify-between text-sm mb-2">
+                    <span data-i18n="solution_return_gross">Gross profit</span>
+                    <span class="accent" data-count="52" data-format="percent"
+                      >52%</span
+                    >
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" data-bar="52"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-2">
+                    <span data-i18n="solution_return_insurance">
+                      Insurance cost
+                    </span>
+                    <span
+                      class="accent-warm"
+                      data-i18n="solution_return_insurance_note"
+                      >1% monthly</span
+                    >
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill warm" data-bar="12"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-2">
+                    <span data-i18n="solution_return_net">Net to investor</span>
+                    <span class="accent" data-count="40" data-format="percent"
+                      >40%</span
+                    >
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" data-bar="40"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Cashflow opportunity -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="pill" data-animate data-i18n="cash_pill">
+            Cashflow opportunity
+          </div>
+          <h2 class="title-lg mt-6" data-animate data-i18n="cash_title">
+            Liquidity keeps growth self-sustaining.
+          </h2>
+          <div class="grid md:grid-cols-3 gap-8 mt-10">
+            <div class="glass p-8" data-animate>
+              <h3 class="text-2xl font-bold mb-3" data-i18n="cash_card1_title">
+                Low withdrawal threshold
+              </h3>
+              <p class="text-lg text-gray-300">
+                <span data-i18n="cash_card1_prefix">Withdrawals start at</span>
+                <span class="accent" data-count="50" data-prefix="EUR ">
+                  EUR 50
+                </span>
+                <span data-i18n="cash_card1_mid">per</span>
+                <span class="accent" data-count="100" data-prefix="EUR ">
+                  EUR 100
+                </span>
+                <span data-i18n="cash_card1_suffix">invested.</span>
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <h3 class="text-2xl font-bold mb-3" data-i18n="cash_card2_title">
+                B2C marketing focus
+              </h3>
+              <p class="text-lg text-gray-300" data-i18n="cash_card2_body">
+                Target steady-income demand across low-income segments.
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <h3 class="text-2xl font-bold mb-3" data-i18n="cash_card3_title">
+                Liquid marketplace
+              </h3>
+              <p class="text-lg text-gray-300" data-i18n="cash_card3_body">
+                Rapidly expand the car portfolio and meet Uber driver demand.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Sustainable growth -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="pill" data-animate data-i18n="growth_pill">
+            Sustainable growth
+          </div>
+          <h2 class="title-lg mt-6" data-animate data-i18n="growth_title">
+            Buy smart, resell, and compound returns.
+          </h2>
+          <div class="grid md:grid-cols-3 gap-8 mt-10">
+            <div class="glass p-8" data-animate>
+              <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                <span data-i18n="growth_card_acquire">Acquire</span>
+              </p>
+              <h3 class="text-2xl font-bold">
+                EUR
+                <span class="accent" data-count="15" data-suffix="k">15k</span>
+                -
+                <span class="accent" data-count="20" data-suffix="k">20k</span>
+              </h3>
+              <p
+                class="text-lg text-gray-300 mt-3"
+                data-i18n="growth_card_acquire_body"
+              >
+                Source Teslas from European auctions.
+              </p>
+            </div>
+            <div class="glass p-8 border border-cyan-400/30" data-animate>
+              <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                <span data-i18n="growth_card_resell">Resell</span>
+              </p>
+              <h3 class="text-2xl font-bold">
+                EUR
+                <span class="accent" data-count="25" data-suffix="k">25k</span>
+                -
+                <span class="accent" data-count="30" data-suffix="k">30k</span>
+              </h3>
+              <p
+                class="text-lg text-gray-300 mt-3"
+                data-i18n="growth_card_resell_body"
+              >
+                Offer to local investors with operating agreements.
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                <span data-i18n="growth_card_operate">Operate</span>
+              </p>
+              <h3
+                class="text-2xl font-bold"
+                data-i18n="growth_card_operate_title"
+              >
+                Ongoing
+              </h3>
+              <p
+                class="text-lg text-gray-300 mt-3"
+                data-i18n="growth_card_operate_body"
+              >
+                Investors can sell virtual car shares any time.
+              </p>
+            </div>
+          </div>
+          <div class="glass p-8 mt-8" data-animate>
+            <p class="text-2xl font-bold">
+              <span data-i18n="growth_net_prefix"
+                >Net annual earnings potential:</span
+              >
+              <span class="accent" data-count="28" data-format="percent"
+                >28%</span
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Stakeholders -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="pill" data-animate data-i18n="stake_pill">
+            Stakeholders
+          </div>
+          <h2 class="title-lg mt-6" data-animate data-i18n="stake_title">
+            Everyone wins when the fleet performs.
+          </h2>
+          <div class="grid md:grid-cols-3 gap-8 mt-10">
+            <div class="glass p-8" data-animate>
+              <h3
+                class="text-2xl font-bold mb-3"
+                data-i18n="stake_card_operator_title"
+              >
+                Car operators
+              </h3>
+              <p
+                class="text-lg text-gray-300"
+                data-i18n="stake_card_operator_body"
+              >
+                Reliable long-term drivers for consistent cashflow.
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <h3
+                class="text-2xl font-bold mb-3"
+                data-i18n="stake_card_driver_title"
+              >
+                Uber drivers
+              </h3>
+              <p
+                class="text-lg text-gray-300"
+                data-i18n="stake_card_driver_body"
+              >
+                Lower costs and higher margins with EV leasing.
+              </p>
+            </div>
+            <div class="glass p-8 border border-emerald-400/30" data-animate>
+              <h3
+                class="text-2xl font-bold mb-3"
+                data-i18n="stake_card_investor_title"
+              >
+                Investors
+              </h3>
+              <p class="text-lg text-gray-300">
+                <span data-i18n="stake_investors_line1_prefix">Earn up to</span>
+                <span class="accent" data-count="250" data-prefix="EUR ">
+                  EUR 250
+                </span>
+                <span data-i18n="stake_investors_line1_suffix"
+                  >per week per car.</span
+                >
+              </p>
+              <p class="text-lg text-gray-300 mt-4">
+                <span data-i18n="stake_investors_line2_prefix">Based on a</span>
+                <span
+                  class="accent"
+                  data-count="25"
+                  data-prefix="EUR "
+                  data-suffix="k"
+                >
+                  EUR 25k
+                </span>
+                <span data-i18n="stake_investors_line2_suffix"
+                  >investment before insurance.</span
+                >
+              </p>
+              <p class="text-lg text-gray-300 mt-4">
+                <span data-i18n="stake_investors_after_prefix">
+                  After insurance this lands around
+                </span>
+                <span class="accent" data-count="40" data-format="percent"
+                  >40%</span
+                >
+                <span data-i18n="stake_investors_after_suffix">annually.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Market opportunity -->
+      <section class="slide" data-slide data-chart="market">
+        <div class="slide-bg"></div>
+        <div class="content grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="pill" data-animate data-i18n="market_pill">
+              Market opportunity
+            </div>
+            <h2 class="title-lg mt-6" data-animate data-i18n="market_title">
+              Ride-hailing is a multi-hundred-billion dollar market.
+            </h2>
+            <p class="subtitle mt-6" data-animate>
+              <span data-i18n="market_p1">The market grows from</span>
+              <span
+                class="accent"
+                data-count="153.3"
+                data-decimals="1"
+                data-prefix="USD "
+                data-suffix="B"
+              >
+                USD 153.3B
+              </span>
+              <span data-i18n="market_p2">in 2023 to</span>
+              <span
+                class="accent"
+                data-count="178.9"
+                data-decimals="1"
+                data-prefix="USD "
+                data-suffix="B"
+              >
+                USD 178.9B
+              </span>
+              <span data-i18n="market_p3">in 2024 and</span>
+              <span
+                class="accent"
+                data-count="196.8"
+                data-decimals="1"
+                data-prefix="USD "
+                data-suffix="B"
+              >
+                USD 196.8B
+              </span>
+              <span data-i18n="market_p4"
+                >in 2025. Projections place 2030 at</span
+              >
+              <span
+                class="accent"
+                data-count="248.3"
+                data-decimals="1"
+                data-prefix="USD "
+                data-suffix="B"
+              >
+                USD 248.3B
+              </span>
+              <span data-i18n="market_p5">to</span>
+              <span
+                class="accent"
+                data-count="342.1"
+                data-decimals="1"
+                data-prefix="USD "
+                data-suffix="B"
+              >
+                USD 342.1B
+              </span>
+              <span data-i18n="market_p6">and 2033 at</span>
+              <span
+                class="accent"
+                data-count="381.3"
+                data-decimals="1"
+                data-prefix="USD "
+                data-suffix="B"
+              >
+                USD 381.3B
+              </span>
+              <span data-i18n="market_p7">to</span>
+              <span
+                class="accent"
+                data-count="420.8"
+                data-decimals="1"
+                data-prefix="USD "
+                data-suffix="B"
+              >
+                USD 420.8B
+              </span>
+              <span data-i18n="market_p8">.</span>
+            </p>
+            <p
+              class="text-lg text-gray-400 mt-6"
+              data-animate
+              data-i18n="market_note"
+            >
+              EV adoption and urban density keep the ride-hailing market
+              expanding.
+            </p>
+          </div>
+          <div class="glass p-8" data-animate>
+            <canvas id="marketChart" height="260"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Current trajectory -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="pill" data-animate data-i18n="trajectory_pill">
+            Current trajectory
+          </div>
+          <h2 class="title-lg mt-6" data-animate>
+            <span data-i18n="trajectory_title_prefix">30 cars live and</span>
+            <span
+              class="accent"
+              data-count="600"
+              data-prefix="EUR "
+              data-suffix="k"
+            >
+              EUR 600k
+            </span>
+            <span data-i18n="trajectory_title_suffix">in assets.</span>
+          </h2>
+          <div class="grid md:grid-cols-3 gap-8 mt-10">
+            <div class="glass p-8" data-animate>
+              <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                <span data-i18n="trajectory_company_title">Company owned</span>
+              </p>
+              <h3 class="text-3xl font-bold">10 cars</h3>
+              <p class="text-lg text-gray-300 mt-3">
+                <span data-i18n="trajectory_company_prefix">
+                  Gross per month per car:
+                </span>
+                <span class="accent" data-count="1400" data-prefix="EUR ">
+                  EUR 1,400
+                </span>
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                <span data-i18n="trajectory_investor_title"
+                  >Investor owned</span
+                >
+              </p>
+              <h3 class="text-3xl font-bold">20 cars</h3>
+              <p class="text-lg text-gray-300 mt-3">
+                <span data-i18n="trajectory_investor_prefix">
+                  Gross per month per car:
+                </span>
+                <span class="accent" data-count="400" data-prefix="EUR ">
+                  EUR 400
+                </span>
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                <span data-i18n="trajectory_asset_title">Asset valuation</span>
+              </p>
+              <h3 class="text-3xl font-bold">
+                <span
+                  class="accent"
+                  data-count="600"
+                  data-prefix="EUR "
+                  data-suffix="k"
+                >
+                  EUR 600k
+                </span>
+              </h3>
+              <p class="text-lg text-gray-300 mt-3">
+                <span data-i18n="trajectory_asset_prefix"
+                  >Based on a frugal</span
+                >
+                <span
+                  class="accent"
+                  data-count="20"
+                  data-prefix="EUR "
+                  data-suffix="k"
+                >
+                  EUR 20k
+                </span>
+                <span data-i18n="trajectory_asset_suffix">
+                  per car valuation, excluding company value.
+                </span>
+              </p>
+            </div>
+          </div>
+          <p
+            class="text-lg text-gray-400 mt-8"
+            data-animate
+            data-i18n="trajectory_note"
+          >
+            We are in a healthy operating position with 30 cars active.
+          </p>
+        </div>
+      </section>
+
+      <!-- Slide 9: 1-year growth -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="pill" data-animate data-i18n="growth1_pill">
+              1-year growth
+            </div>
+            <h2 class="title-lg mt-6" data-animate data-i18n="growth1_title">
+              Scale marketing to reach 100 investor-owned cars.
+            </h2>
+            <p class="subtitle mt-6" data-animate data-i18n="growth1_subtitle">
+              We grow sustainably with investors. Company-owned cars remain at
+              zero during this phase while the investor fleet scales.
+            </p>
+          </div>
+          <div class="space-y-6">
+            <div class="glass p-8" data-animate>
+              <h3 class="text-2xl font-bold" data-i18n="growth1_target_title">
+                Target fleet
+              </h3>
+              <p class="text-5xl font-bold accent" data-count="100">100</p>
+              <p class="text-lg text-gray-300" data-i18n="growth1_target_note">
+                Investor-owned cars
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <h3 class="text-2xl font-bold" data-i18n="growth1_monthly_title">
+                Monthly per car
+              </h3>
+              <p
+                class="text-4xl font-bold accent"
+                data-count="400"
+                data-prefix="EUR "
+              >
+                EUR 400
+              </p>
+              <p class="text-lg text-gray-300" data-i18n="growth1_monthly_note">
+                Gross earnings per car
+              </p>
+            </div>
+            <div class="glass p-8" data-animate>
+              <h3 class="text-2xl font-bold" data-i18n="growth1_end_title">
+                End of 2026 target
+              </h3>
+              <p
+                class="text-4xl font-bold accent"
+                data-count="10000"
+                data-prefix="EUR "
+              >
+                EUR 10,000
+              </p>
+              <p class="text-lg text-gray-300" data-i18n="growth1_end_note">
+                Weekly gross from 100 investor cars
+              </p>
+            </div>
+            <p
+              class="text-sm text-gray-400 mt-2"
+              data-animate
+              data-i18n="growth1_footer"
+            >
+              Passive earnings and fractional ownership cashflow fuel continued
+              expansion.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Case study -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="pill" data-animate data-i18n="case_pill">Case study</div>
+          <h2 class="title-lg mt-6" data-animate data-i18n="case_title">
+            Lifecycle for a single Tesla.
+          </h2>
+          <div class="cycle-loop mx-auto">
+            <div class="glass p-6 cycle-step step-1" data-animate>
+              <p
+                class="text-xs uppercase tracking-widest text-gray-400"
+                data-i18n="case_step1_label"
+              >
+                Step 1
+              </p>
+              <h3 class="text-xl font-bold mt-2" data-i18n="case_step1_title">
+                Buy at auction
+              </h3>
+              <p
+                class="text-2xl font-bold accent mt-4"
+                data-count="15"
+                data-prefix="EUR "
+                data-suffix="k"
+              >
+                EUR 15k
+              </p>
+              <p class="text-sm text-gray-400 mt-3" data-i18n="case_step1_note">
+                European auction house
+              </p>
+            </div>
+            <div class="glass p-6 cycle-step step-2" data-animate>
+              <p
+                class="text-xs uppercase tracking-widest text-gray-400"
+                data-i18n="case_step2_label"
+              >
+                Step 2
+              </p>
+              <h3 class="text-xl font-bold mt-2" data-i18n="case_step2_title">
+                Register and lease
+              </h3>
+              <p
+                class="text-2xl font-bold accent mt-4"
+                data-count="350"
+                data-prefix="EUR "
+              >
+                EUR 350
+              </p>
+              <p class="text-sm text-gray-400 mt-2" data-i18n="case_step2_note">
+                Per week
+              </p>
+            </div>
+            <div class="glass p-6 cycle-step step-3" data-animate>
+              <p
+                class="text-xs uppercase tracking-widest text-gray-400"
+                data-i18n="case_step3_label"
+              >
+                Step 3
+              </p>
+              <h3 class="text-xl font-bold mt-2" data-i18n="case_step3_title">
+                Resell to investors
+              </h3>
+              <p
+                class="text-2xl font-bold accent mt-4"
+                data-count="25"
+                data-prefix="EUR "
+                data-suffix="k"
+              >
+                EUR 25k
+              </p>
+              <p class="text-sm text-gray-400 mt-3" data-i18n="case_step3_note">
+                Fractional ownership
+              </p>
+            </div>
+            <div class="glass p-6 cycle-step step-4" data-animate>
+              <p
+                class="text-xs uppercase tracking-widest text-gray-400"
+                data-i18n="case_step4_label"
+              >
+                Step 4
+              </p>
+              <h3 class="text-xl font-bold mt-2" data-i18n="case_step4_title">
+                Operate and earn
+              </h3>
+              <p class="text-lg text-gray-300 mt-4">
+                <span data-i18n="case_step4_line1_prefix"
+                  >Lease agreement at</span
+                >
+                <span class="accent" data-count="250" data-prefix="EUR ">
+                  EUR 250
+                </span>
+                <span data-i18n="case_step4_line1_suffix">per week</span>
+              </p>
+              <p class="text-lg text-gray-300 mt-2">
+                <span data-i18n="case_step4_line2_prefix">Earn</span>
+                <span class="accent" data-count="100" data-prefix="EUR ">
+                  EUR 100
+                </span>
+                <span data-i18n="case_step4_line2_suffix">
+                  per week for operations
+                </span>
+              </p>
+            </div>
+            <div class="glass p-6 cycle-output text-center" data-animate>
+              <p
+                class="text-xs uppercase tracking-widest text-gray-400"
+                data-i18n="case_output_label"
+              >
+                Cycle output
+              </p>
+              <p class="text-xl font-bold mt-3">
+                <span data-i18n="case_output_prefix"
+                  >Gross profit upfront:</span
+                >
+                <span class="accent" data-count="10000" data-prefix="EUR ">
+                  EUR 10,000
+                </span>
+              </p>
+              <p class="text-lg text-gray-300 mt-2">
+                <span data-i18n="case_output_month_prefix">+</span>
+                <span class="accent" data-count="400" data-prefix="EUR "
+                  >EUR 400</span
+                >
+                <span data-i18n="case_output_month_suffix">per month</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 11: Team -->
+      <section class="slide" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content">
+          <div class="pill" data-animate data-i18n="team_pill">
+            10+ years product development
+          </div>
+          <h2 class="title-lg mt-6" data-animate data-i18n="team_title">
+            Product and engineering leadership
+          </h2>
+          <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="glass p-8 text-center" data-animate>
+              <h3 class="text-2xl font-bold">Yigit</h3>
+              <p
+                class="text-sm uppercase tracking-widest text-gray-400 mt-2"
+                data-i18n="team_role_sales"
+              >
+                Founder - Sales
+              </p>
+              <p class="text-lg text-gray-300 mt-4" data-i18n="team_desc_sales">
+                12 years of sales experience.
+              </p>
+            </div>
+            <div class="glass p-8 text-center" data-animate>
+              <h3 class="text-2xl font-bold">Sed</h3>
+              <p
+                class="text-sm uppercase tracking-widest text-gray-400 mt-2"
+                data-i18n="team_role_tech"
+              >
+                Founder - Technology
+              </p>
+              <p class="text-lg text-gray-300 mt-4" data-i18n="team_desc_tech">
+                17 years of engineering and startup experience with 1 exit under
+                his belt.
+              </p>
+            </div>
+            <div class="glass p-8 text-center" data-animate>
+              <h3 class="text-2xl font-bold">Ercan</h3>
+              <p
+                class="text-sm uppercase tracking-widest text-gray-400 mt-2"
+                data-i18n="team_role_ops"
+              >
+                Operations
+              </p>
+              <p class="text-lg text-gray-300 mt-4" data-i18n="team_desc_ops">
+                10 years of operational retail experience.
+              </p>
+            </div>
+            <div class="glass p-8 text-center" data-animate>
+              <h3 class="text-2xl font-bold">Alp</h3>
+              <p
+                class="text-sm uppercase tracking-widest text-gray-400 mt-2"
+                data-i18n="team_role_lead"
+              >
+                ENGINEERING - PRODUCT
+              </p>
+              <p class="text-lg text-gray-300 mt-4" data-i18n="team_desc_lead">
+                10+ years of product and experience development.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 12: Closing -->
+      <section class="slide slide--closing" data-slide>
+        <div class="slide-bg"></div>
+        <div class="content text-center">
+          <div class="pill" data-animate data-i18n="closing_pill">
+            Investment ask
+          </div>
+          <h2 class="title-lg mt-6" data-animate data-i18n="closing_title">
+            Scale to 100 investor-owned cars by 2026.
+          </h2>
+          <p class="subtitle mt-6" data-animate>
+            <span data-i18n="closing_prefix"
+              >To expand marketing and activate</span
+            >
+            <span class="accent" data-count="100">100</span>
+            <span data-i18n="closing_mid1"
+              >investor-owned cars, generating</span
+            >
+            <span class="accent" data-count="10000" data-prefix="EUR ">
+              10,000 EUR
+            </span>
+            <span data-i18n="closing_mid2">per week, we are seeking</span>
+            <span class="accent" data-count="300000" data-prefix="EUR ">
+              300,000 EUR
+            </span>
+            <span data-i18n="closing_suffix">in funding.</span>
+          </p>
+          <a
+            href="mailto:contact@motorista.club"
+            class="inline-flex mt-10 px-12 py-5 rounded-full bg-emerald-400 text-black text-xl font-extrabold shadow-xl shadow-emerald-400/30"
+            data-animate
+            data-i18n="closing_cta"
+          >
+            Contact MOTORISTA
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll("[data-slide]"));
+      const deck = document.getElementById("deck");
+      const progressBar = document.getElementById("progressBar");
+      const slideIndicator = document.getElementById("slideIndicator");
+      const totalSlides = slides.length;
+      let currentSlide = 0;
+      let isAnimating = false;
+      let marketChart = null;
+      let idleTimer = null;
+      let currentLang = "en";
+
+      const translations = {
+        en: {
+          case_output_label: "Cycle output",
+          case_output_month_prefix: "+",
+          case_output_month_suffix: "per month",
+          case_output_prefix: "Upfront gross profit:",
+          case_pill: "Case study",
+          case_step1_label: "Step 1",
+          case_step1_note: "European auction house",
+          case_step1_title: "Acquire at auction",
+          case_step2_label: "Step 2",
+          case_step2_note: "Per week",
+          case_step2_title: "Register and lease",
+          case_step3_label: "Step 3",
+          case_step3_note: "Fractional ownership",
+          case_step3_title: "Resell to investors",
+          case_step4_label: "Step 4",
+          case_step4_line1_prefix: "Lease agreement at",
+          case_step4_line1_suffix: "per week",
+          case_step4_line2_prefix: "Earn",
+          case_step4_line2_suffix: "per week for operations",
+          case_step4_title: "Operate and earn",
+          case_title: "Lifecycle of a single Tesla",
+          cash_card1_mid: "for every",
+          cash_card1_prefix: "Withdrawals start at",
+          cash_card1_suffix: "invested.",
+          cash_card1_title: "Low withdrawal threshold",
+          cash_card2_body:
+            "Target steady-income demand across low-income segments.",
+          cash_card2_title: "B2C marketing focus",
+          cash_card3_body:
+            "Rapidly expand the car portfolio to meet Uber driver demand.",
+          cash_card3_title: "Liquid marketplace",
+          cash_pill: "Cashflow opportunity",
+          cash_title: "Liquidity keeps growth self-sustaining",
+          closing_cta: "Contact MOTORISTA",
+          closing_mid1: "investor-owned cars, generating",
+          closing_mid2: "per week, we are seeking",
+          closing_pill: "Investment ask",
+          closing_prefix: "To expand marketing and activate",
+          closing_suffix: "in funding.",
+          closing_title: "Scale to 100 investor-owned cars by 2026",
+          growth1_capital_note:
+            "Focused on expanding marketing and operational reach.",
+          growth1_capital_title: "Capital required",
+          growth1_end_note: "Weekly gross from 100 investor cars",
+          growth1_end_title: "End of 2026 target",
+          growth1_footer:
+            "Passive earnings and fractional cashflow fuel the next stage of growth.",
+          growth1_monthly_note: "Gross earnings per car",
+          growth1_monthly_title: "Monthly per car",
+          growth1_pill: "One-year growth",
+          growth1_subtitle:
+            "We scale with investor demand. Company-owned cars stay at zero in this phase while the investor fleet grows.",
+          growth1_target_note: "Investor-owned cars",
+          growth1_target_title: "Target fleet",
+          growth1_title: "Scale marketing to reach 100 investor-owned cars",
+          growth_card_acquire: "Acquire",
+          growth_card_acquire_body: "Source Teslas from European auctions.",
+          growth_card_operate: "Operate",
+          growth_card_operate_body:
+            "Investors can sell virtual car shares anytime.",
+          growth_card_operate_title: "Ongoing",
+          growth_card_resell: "Resell",
+          growth_card_resell_body:
+            "Offer to local investors with operating agreements.",
+          growth_net_prefix: "Net annual earnings potential:",
+          growth_pill: "Sustainable growth",
+          growth_title: "Buy smart, resell, and compound returns",
+          gtm_card1_note: "Local visibility hub",
+          gtm_card1_title: "Martim Moniz",
+          gtm_card2_note: "High-frequency distribution",
+          gtm_card2_title: "Leaflets",
+          gtm_card3_note: "Direct investor outreach",
+          gtm_card3_title: "Business cards",
+          gtm_card4_note: "Mobile brand awareness",
+          gtm_card4_title: "Stickers on cars",
+          gtm_pill: "Go-to-market strategy",
+          gtm_title: "Ground presence + targeted outreach",
+          hero_metric_asset_prefix: "Asset value at",
+          hero_metric_asset_suffix: "per car",
+          hero_metric_cars_label: "Cars operating today",
+          hero_metric_min_label: "Minimum entry investment",
+          hero_pill: "MOTORISTA | INVESTOR PRESENTATION",
+          hero_roi_label: "PROJECTED NET ANNUAL ROI",
+          hero_roi_meta_1: "WEEKLY DISTRIBUTIONS",
+          hero_roi_meta_2: "ASSET-BACKED EV FLEET",
+          hero_roi_note: "Net return is driven by daily ride-hailing revenue.",
+          hero_subtitle:
+            "MOTORISTA buys, operates, and insures electric vehicles. Investors share daily ride-hailing revenue without managing drivers or assets.",
+          hero_title:
+            "Weekly cashflow from app-based ride-hailing platform fleets",
+          market_note:
+            "EV adoption and urban density keep the ride-hailing market expanding.",
+          market_p1: "The market grows from",
+          market_p2: "in 2023 to",
+          market_p3: "in 2024 and",
+          market_p4: "in 2025. Projections place 2030 at",
+          market_p5: "to",
+          market_p6: "and 2033 at",
+          market_p7: "to",
+          market_p8: ".",
+          market_pill: "Market opportunity",
+          market_title: "Ride-hailing is a multi-hundred-billion dollar market",
+          problem_callout:
+            "The result: Trapped capital and limited mobility for those who need it most.",
+          problem_chart_bank: "Bank yield range",
+          problem_chart_inflation: "Inflation drag",
+          problem_chart_note:
+            "Traditional accounts cannot keep up with living costs.",
+          problem_chart_persist: "Persistent",
+          problem_chart_title: "Yield vs. inflation",
+          problem_pill: "Problem",
+          problem_subtitle:
+            "Savings return only 1.8% to 3% while inflation erodes purchasing power. Stable cashflow remains out of reach for most people.",
+          problem_title: "Low-income investors are locked out of real yield",
+          solution_entry_body:
+            "Investors buy fractions of high-demand EVs with a low entry point.",
+          solution_entry_title: "Entry starts at",
+          solution_ops_body: "MOTORISTA buys, leases, and operates the fleet.",
+          solution_ops_title: "Operations handled",
+          solution_pill: "Solution",
+          solution_return_gross: "Gross profit",
+          solution_return_insurance: "Insurance cost",
+          solution_return_insurance_note: "1% monthly",
+          solution_return_net: "Net to investor",
+          solution_return_title: "Return stack",
+          solution_title: "Fractional EV ownership, fully operated",
+          solution_yield_mid: "investment yields around",
+          solution_yield_prefix: "A",
+          solution_yield_suffix: "per year.",
+          solution_yield_title: "Annual net yield",
+          stake_card_driver_body:
+            "Lower costs and higher margins with EV leasing.",
+          stake_card_driver_title: "Uber drivers",
+          stake_card_investor_title: "Investors",
+          stake_card_operator_body:
+            "Reliable long-term drivers for consistent cashflow.",
+          stake_card_operator_title: "Car operators",
+          stake_investors_after_prefix: "After insurance, this lands around",
+          stake_investors_after_suffix: "annually.",
+          stake_investors_line1_prefix: "Earn up to",
+          stake_investors_line1_suffix: "per week, per car.",
+          stake_investors_line2_prefix: "Based on a",
+          stake_investors_line2_suffix: "investment before insurance.",
+          stake_pill: "Stakeholders",
+          stake_title: "Everyone wins when the fleet performs",
+          team_experience: "10+ years product and experience development.",
+          team_desc_ops: "10 years of operational retail experience.",
+          team_desc_sales: "12 years of sales experience.",
+          team_desc_tech:
+            "17 years of engineering and startup experience with 1 exit under his belt.",
+          team_pill: "Team",
+          team_role_ops: "Operations",
+          team_role_sales: "Founder - Sales",
+          team_role_tech: "Founder - Technology",
+          team_title: "Operators with the mileage to scale",
+          team_desc_lead: "10+ years of product and experience development.",
+          team_role_lead: "ENGINEERING - PRODUCT",
+          trajectory_asset_prefix: "Based on a conservative",
+          trajectory_asset_suffix:
+            "per car valuation, excluding company value.",
+          trajectory_asset_title: "Asset valuation",
+          trajectory_company_prefix: "Gross per month per car:",
+          trajectory_company_title: "Company owned",
+          trajectory_investor_prefix: "Gross per month per car:",
+          trajectory_investor_title: "Investor owned",
+          trajectory_note:
+            "We are operating from a healthy base with 30 active cars.",
+          trajectory_pill: "Current trajectory",
+          trajectory_title_prefix: "30 cars live, totaling",
+          trajectory_title_suffix: "in assets",
+        },
+        tr: {
+          case_output_label: "Döngü çıktısı",
+          case_output_month_prefix: "artı",
+          case_output_month_suffix: "aylık",
+          case_output_prefix: "Peşin brüt kâr:",
+          case_pill: "Vaka çalışması",
+          case_step1_label: "Adım 1",
+          case_step1_note: "Avrupa açık artırma evi",
+          case_step1_title: "Açık artırmadan satın al",
+          case_step2_label: "Adım 2",
+          case_step2_note: "Haftalık",
+          case_step2_title: "Tescil ve kiralama",
+          case_step3_label: "Adım 3",
+          case_step3_note: "Parçalı sahiplik",
+          case_step3_title: "Yatırımcıya yeniden sat",
+          case_step4_label: "Adım 4",
+          case_step4_line1_prefix: "Kira sözleşmesi",
+          case_step4_line1_suffix: "haftalık.",
+          case_step4_line2_prefix: "Operasyon için haftada",
+          case_step4_line2_suffix: "kazanılır.",
+          case_step4_title: "İşlet ve kazan",
+          case_title: "Tek bir Tesla'nın yaşam döngüsü",
+          cash_card1_mid: "tutarıyla başlar; her",
+          cash_card1_prefix: "Çekimler en az",
+          cash_card1_suffix: "yatırım için mümkündür.",
+          cash_card1_title: "Düşük çekim eşiği",
+          cash_card2_body:
+            "Düşük gelir segmentlerinde istikrarlı gelir talebini hedefler.",
+          cash_card2_title: "B2C pazarlama odağı",
+          cash_card3_body:
+            "Araç portföyünü hızla büyütür, Uber sürücüsü talebini karşılar.",
+          cash_card3_title: "Likidite pazarı",
+          cash_pill: "Nakit akışı fırsatı",
+          cash_title:
+            "Likidite büyümeyi kendi kendine sürdüren bir döngüye çevirir",
+          closing_cta: "MOTORISTA ile iletişime geçin",
+          closing_mid1: "aracı devreye alarak, haftada",
+          closing_mid2: "gelir üretmek için",
+          closing_pill: "Yatırım talebi",
+          closing_prefix: "Pazarlamayı büyütmek ve yatırımcı sahipliğindeki",
+          closing_suffix: "arıyoruz.",
+          closing_title:
+            "2026'ya kadar 100 yatırımcıya ait araca ölçekleniyoruz",
+          growth1_capital_note:
+            "Pazarlama ve operasyonel erişimi büyütmeye ayrılır.",
+          growth1_capital_title: "Gerekli sermaye",
+          growth1_end_note: "100 yatırımcı aracı için haftalık brüt",
+          growth1_end_title: "2026 sonu hedefi",
+          growth1_footer:
+            "Pasif kazanç ve parçalı sahiplik nakit akışı büyümeyi bir sonraki aşamaya taşır.",
+          growth1_monthly_note: "Araç başına brüt kazanç",
+          growth1_monthly_title: "Araç başına aylık",
+          growth1_pill: "1 yıllık büyüme",
+          growth1_subtitle:
+            "Yatırımcı talebiyle sürdürülebilir büyürüz. Bu fazda şirket araçları sıfırda kalırken yatırımcı filosu büyür.",
+          growth1_target_note: "Yatırımcıya ait araçlar",
+          growth1_target_title: "Hedef filo",
+          growth1_title:
+            "Pazarlamayı ölçekleyip 100 yatırımcı aracına ulaşıyoruz",
+          growth_card_acquire: "Satın al",
+          growth_card_acquire_body:
+            "Tesla'ları Avrupa açık artırmalarından tedarik eder.",
+          growth_card_operate: "İşlet",
+          growth_card_operate_body:
+            "Yatırımcılar sanal araç paylarını istedikleri zaman satabilir.",
+          growth_card_operate_title: "Süreklilik",
+          growth_card_resell: "Yeniden sat",
+          growth_card_resell_body:
+            "İşletme sözleşmeleriyle yerel yatırımcılara sunulur.",
+          growth_net_prefix: "Net yıllık kazanç potansiyeli:",
+          growth_pill: "Sürdürülebilir büyüme",
+          growth_title: "Akıllı al, yeniden sat, getiriyi bileşikle",
+          gtm_card1_note: "Yerel görünürlük merkezi",
+          gtm_card1_title: "Martim Moniz",
+          gtm_card2_note: "Yüksek frekanslı dağıtım",
+          gtm_card2_title: "Broşürler",
+          gtm_card3_note: "Doğrudan yatırımcı erişimi",
+          gtm_card3_title: "Kartvizitler",
+          gtm_card4_note: "Mobil marka bilinirliği",
+          gtm_card4_title: "Araç üzeri etiketler",
+          gtm_pill: "Pazara giriş stratejisi",
+          gtm_title: "Saha varlığı ve hedefli erişim",
+          hero_metric_asset_prefix: "Varlık değeri, araç başına",
+          hero_metric_asset_suffix: "",
+          hero_metric_cars_label: "Bugün çalışan araç sayısı",
+          hero_metric_min_label: "Minimum giriş yatırımı",
+          hero_pill: "MOTORISTA | YATIRIMCI SUNUMU",
+          hero_roi_label: "ÖNGÖRÜLEN NET YILLIK GETİRİ",
+          hero_roi_meta_1: "HAFTALIK DAĞITIMLAR",
+          hero_roi_meta_2: "VARLIK TEMİNATLI EV FİLOSU",
+          hero_roi_note:
+            "Net getiri, günlük ride hailing gelirlerinden oluşur.",
+          hero_subtitle:
+            "MOTORISTA elektrikli araçları satın alır, işletir ve sigortalar. Yatırımcılar sürücü ve varlık yönetimiyle uğraşmadan, günlük sürüş gelirlerinden pay alır.",
+          hero_title:
+            "Uygulama üzerinden araç çağırma platformlarının araç filolarından haftalık nakit akışı",
+          market_note:
+            "EV dönüşümü ve şehir yoğunluğu ride-hailing talebini büyütüyor.",
+          market_p1: "Pazar 2023'te",
+          market_p2: "seviyesinden 2024'te",
+          market_p3: "seviyesine ve 2025'te",
+          market_p4: "seviyesine çıkıyor. 2030 projeksiyonu",
+          market_p5: "ile",
+          market_p6: "arasında, 2033 projeksiyonu",
+          market_p7: "ile",
+          market_p8: "arasında.",
+          market_pill: "Pazar fırsatı",
+          market_title: "Ride-hailing yüz milyarlarca dolarlık bir pazar",
+          problem_callout: "Sonuç: Para çalışmıyor, alım gücü azalıyor.",
+          problem_chart_bank: "Banka getirisi aralığı",
+          problem_chart_inflation: "Enflasyon baskısı",
+          problem_chart_note:
+            "Geleneksel araçlar yaşam maliyetlerine yetişemiyor.",
+          problem_chart_persist: "Kalıcı",
+          problem_chart_title: "Getiri ve enflasyon",
+          problem_pill: "SORUN",
+          problem_subtitle:
+            "Banka ve benzeri düşük riskli araçların getirisi genelde yüzde 1,8 ile yüzde 3 aralığında kalıyor. Enflasyon yükseldikçe birikimin satın alma gücü eriyor.",
+          problem_title:
+            "Geleneksel düşük getirili yatırım araçları reel getiri sunamıyor",
+          solution_entry_body:
+            "Yatırımcılar düşük girişle yüksek talep gören EV'lerden pay alır.",
+          solution_entry_title: "Giriş yatırımı",
+          solution_ops_body: "MOTORISTA filoyu satın alır, kiralar ve işletir.",
+          solution_ops_title: "Operasyonlar yönetilir",
+          solution_pill: "Çözüm",
+          solution_return_gross: "Brüt kâr",
+          solution_return_insurance: "Sigorta maliyeti",
+          solution_return_insurance_note: "Aylık %1",
+          solution_return_net: "Yatırımcıya net",
+          solution_return_title: "Getiri dağılımı",
+          solution_title: "Parçalı EV sahipliği, tam operasyon yönetimiyle",
+          solution_yield_mid: "yatırım yılda yaklaşık",
+          solution_yield_prefix: "Bir",
+          solution_yield_suffix: "kazandırır.",
+          solution_yield_title: "Yıllık net getiri",
+          stake_card_driver_body:
+            "EV kiralama ile daha düşük maliyet ve daha yüksek marj.",
+          stake_card_driver_title: "Uber sürücüleri",
+          stake_card_investor_title: "Yatırımcılar",
+          stake_card_operator_body:
+            "Tutarlı nakit akışı için güvenilir uzun vadeli sürücüler.",
+          stake_card_operator_title: "Araç işletmecileri",
+          stake_investors_after_prefix: "Sigortadan sonra bu oran yaklaşık",
+          stake_investors_after_suffix: "yıllık getiri.",
+          stake_investors_line1_prefix: "Araç başına haftada en fazla",
+          stake_investors_line1_suffix: "kazanır.",
+          stake_investors_line2_prefix: "Sigorta öncesi",
+          stake_investors_line2_suffix: "yatırım baz alınır.",
+          stake_pill: "Paydaşlar",
+          stake_title: "Filo iyi çalıştığında herkes kazanır",
+          team_experience: "10+ yıl ürün ve deneyim geliştirme tecrübesi.",
+          team_desc_ops: "10 yıllık operasyonel perakende deneyimi.",
+          team_desc_sales: "12 yıllık satış deneyimi.",
+          team_desc_tech:
+            "17 yıllık mühendislik ve girişim tecrübesi; 1 başarılı çıkış.",
+          team_pill: "Ekip",
+          team_role_ops: "Operasyon",
+          team_role_sales: "Kurucu - Satış",
+          team_role_tech: "Kurucu - Teknoloji",
+          team_title: "Ölçeklemek için deneyimli bir ekip",
+          team_desc_lead: "10+ yıl ürün ve deneyim geliştirme tecrübesi.",
+          team_role_lead: "MÜHENDİSLİK - ÜRÜN",
+          trajectory_asset_prefix: "Muhafazakar",
+          trajectory_asset_suffix:
+            "araç başı değerleme üzerinden, şirket değeri hariç.",
+          trajectory_asset_title: "Varlık değeri",
+          trajectory_company_prefix: "Araç başına aylık brüt:",
+          trajectory_company_title: "Şirket mülkiyeti",
+          trajectory_investor_prefix: "Araç başına aylık brüt:",
+          trajectory_investor_title: "Yatırımcı mülkiyeti",
+          trajectory_note: "30 araçla sağlıklı bir işletme ölçeğine ulaştık.",
+          trajectory_pill: "Mevcut durum",
+          trajectory_title_prefix: "30 araç aktif, toplam",
+          trajectory_title_suffix: "varlık değeri",
+        },
+      };
+
+      const chartTranslations = {
+        en: {
+          labels: ["2023", "2024", "2025", "2030", "2033"],
+          datasetLabel: "Market size (USD B)",
+          valueLabels: [
+            "153.3B",
+            "178.9B",
+            "196.8B",
+            "248.3B / 342.1B",
+            "381.3B / 420.8B",
+          ],
+        },
+        tr: {
+          labels: ["2023", "2024", "2025", "2030", "2033"],
+          datasetLabel: "Pazar büyüklüğü (USD B)",
+          valueLabels: [
+            "153,3B",
+            "178,9B",
+            "196,8B",
+            "248,3B / 342,1B",
+            "381,3B / 420,8B",
+          ],
+        },
+      };
+
+      const prepareAnimationTargets = () => {
+        slides.forEach((slide) => {
+          slide.querySelectorAll(".content *").forEach((el) => {
+            if (el.closest(".slide-bg")) return;
+            if (!el.hasAttribute("data-animate")) {
+              el.setAttribute("data-animate", "true");
+            }
+          });
+        });
+      };
+
+      const formatNumber = (value, options = {}) => {
+        const {
+          decimals = 0,
+          prefix = "",
+          suffix = "",
+          format = "number",
+        } = options;
+        const locale = currentLang === "tr" ? "tr-TR" : "en-US";
+        const formatter = new Intl.NumberFormat(locale, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        });
+
+        if (format === "percent") {
+          return `${formatter.format(value)}%`;
+        }
+
+        return `${prefix}${formatter.format(value)}${suffix}`;
+      };
+
+      const preloadImage = (src) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(src);
+          img.onerror = () => resolve(null);
+          img.src = src;
+        });
+
+      const applyBackground = async (selector, sources) => {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        for (const source of sources) {
+          const ok = await preloadImage(source);
+          if (ok) {
+            el.style.setProperty("--bg-image", `url("${source}")`);
+            break;
+          }
+        }
+      };
+
+      const initBackgrounds = () => {
+        const heroSources = [
+          "../img/e9cffb3165b9643168263d4e3d9b9fd1.jpeg",
+          "/src/img/e9cffb3165b9643168263d4e3d9b9fd1.jpeg",
+          "/demo_portfolio_6/src/img/e9cffb3165b9643168263d4e3d9b9fd1.jpeg",
+          "./img/e9cffb3165b9643168263d4e3d9b9fd1.jpeg",
+          "/img/e9cffb3165b9643168263d4e3d9b9fd1.jpeg",
+        ];
+        const closingSources = [
+          "../img/8e4d6a9032e271bedebea7bf9a9d3036.jpeg",
+          "/src/img/8e4d6a9032e271bedebea7bf9a9d3036.jpeg",
+          "/demo_portfolio_6/src/img/8e4d6a9032e271bedebea7bf9a9d3036.jpeg",
+          "./img/8e4d6a9032e271bedebea7bf9a9d3036.jpeg",
+          "/img/8e4d6a9032e271bedebea7bf9a9d3036.jpeg",
+        ];
+        applyBackground(".slide--hero", heroSources);
+        applyBackground(".slide--closing", closingSources);
+      };
+
+      const getCountConfig = (el) => ({
+        target: parseFloat(el.dataset.count || "0"),
+        decimals: parseInt(el.dataset.decimals || "0", 10),
+        prefix: el.dataset.prefix || "",
+        suffix: el.dataset.suffix || "",
+        format: el.dataset.format || "number",
+      });
+
+      const setCountText = (el, value, config) => {
+        el.dataset.currentValue = value;
+        el.textContent = formatNumber(value, config);
+      };
+
+      const applyLanguage = (lang) => {
+        const nextLang = translations[lang] ? lang : "en";
+        const dict = translations[nextLang] || translations.en;
+        currentLang = nextLang;
+        document.documentElement.lang = nextLang;
+
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.dataset.i18n;
+          if (Object.prototype.hasOwnProperty.call(dict, key)) {
+            el.textContent = dict[key];
+          }
+        });
+
+        document.querySelectorAll(".lang-btn").forEach((btn) => {
+          const isActive = btn.dataset.lang === nextLang;
+          btn.classList.toggle("is-active", isActive);
+          btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+
+        localStorage.setItem("motoristaLang", nextLang);
+
+        document.querySelectorAll("[data-count]").forEach((el) => {
+          const config = getCountConfig(el);
+          const currentValue = parseFloat(el.dataset.currentValue || "0");
+          setCountText(el, currentValue, config);
+        });
+
+        if (marketChart) {
+          const chartLocale =
+            chartTranslations[nextLang] || chartTranslations.en;
+          marketChart.data.labels = chartLocale.labels.slice();
+          if (marketChart.data.datasets[0]) {
+            marketChart.data.datasets[0].label = chartLocale.datasetLabel;
+          }
+          if (marketChart.options.plugins?.marketLabelPlugin) {
+            marketChart.options.plugins.marketLabelPlugin.labels =
+              chartLocale.valueLabels || [];
+          }
+          marketChart.update();
+        }
+      };
+
+      const measureCountWidth = (el, text) => {
+        const probe = document.createElement("span");
+        const style = window.getComputedStyle(el);
+        probe.style.position = "absolute";
+        probe.style.visibility = "hidden";
+        probe.style.whiteSpace = "nowrap";
+        probe.style.font = style.font;
+        probe.style.letterSpacing = style.letterSpacing;
+        probe.style.textTransform = style.textTransform;
+        probe.style.fontVariantNumeric = style.fontVariantNumeric;
+        probe.style.fontFeatureSettings = style.fontFeatureSettings;
+        probe.textContent = text;
+        document.body.appendChild(probe);
+        const width = probe.getBoundingClientRect().width;
+        probe.remove();
+        return width;
+      };
+
+      const prepareCountElements = () => {
+        document.querySelectorAll("[data-count]").forEach((el) => {
+          el.classList.add("count-up");
+          const config = getCountConfig(el);
+          const finalText = formatNumber(config.target, config);
+          const display = window.getComputedStyle(el).display;
+          const isInline =
+            display === "inline" ||
+            display === "inline-block" ||
+            display === "inline-flex";
+          if (isInline) {
+            if (display === "inline") {
+              el.style.display = "inline-block";
+            }
+            const width = measureCountWidth(el, finalText);
+            if (width > 0) {
+              el.style.minWidth = `${Math.ceil(width)}px`;
+            }
+            el.style.textAlign = "right";
+          }
+          setCountText(el, 0, config);
+        });
+      };
+
+      const animateCountElement = (el, config = getCountConfig(el)) => {
+        const counter = { value: 0 };
+        gsap.to(counter, {
+          value: config.target,
+          duration: 1.2,
+          ease: "power2.out",
+          onUpdate: () => {
+            setCountText(el, counter.value, config);
+          },
+        });
+      };
+
+      const animateBarElement = (el) => {
+        const target = parseFloat(el.dataset.bar || "0");
+        gsap.fromTo(
+          el,
+          { width: "0%" },
+          { width: `${target}%`, duration: 1.1, ease: "power2.out" }
+        );
+      };
+
+      const animateSlide = (slide) => {
+        const items = Array.from(slide.querySelectorAll("[data-animate]"));
+        slide.querySelectorAll("[data-bar]").forEach((bar) => {
+          gsap.set(bar, { width: "0%" });
+        });
+        gsap.set(items, { opacity: 0, y: 26 });
+        const timeline = gsap.timeline();
+        items.forEach((item, index) => {
+          const hasCount = item.hasAttribute("data-count");
+          const hasBar = item.hasAttribute("data-bar");
+          const countConfig = hasCount ? getCountConfig(item) : null;
+          timeline.to(
+            item,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              onStart: () => {
+                if (hasCount && countConfig) {
+                  setCountText(item, 0, countConfig);
+                }
+              },
+              onComplete: () => {
+                if (hasCount && countConfig) {
+                  animateCountElement(item, countConfig);
+                }
+                if (hasBar) {
+                  animateBarElement(item);
+                }
+              },
+            },
+            index * 0.06
+          );
+        });
+
+        if (slide.dataset.chart === "market" && marketChart) {
+          marketChart.reset();
+          marketChart.update();
+        }
+      };
+
+      const updateProgress = () => {
+        const progress = ((currentSlide + 1) / totalSlides) * 100;
+        progressBar.style.width = `${progress}%`;
+        slideIndicator.textContent = `${String(currentSlide + 1).padStart(
+          2,
+          "0"
+        )} / ${totalSlides}`;
+      };
+
+      const clampSlideIndex = (index) =>
+        Math.max(0, Math.min(totalSlides - 1, index));
+
+      const getStoredSlide = () => {
+        const raw = localStorage.getItem("motoristaSlide");
+        const parsed = parseInt(raw || "0", 10);
+        return Number.isFinite(parsed) ? clampSlideIndex(parsed) : 0;
+      };
+
+      const saveSlide = (index) => {
+        localStorage.setItem("motoristaSlide", String(index));
+      };
+
+      const setActiveSlide = (index) => {
+        slides.forEach((slide, idx) => {
+          slide.classList.toggle("is-active", idx === index);
+        });
+        animateSlide(slides[index]);
+      };
+
+      const goToSlide = (index) => {
+        if (isAnimating) return;
+        const next = clampSlideIndex(index);
+        if (next === currentSlide) return;
+        isAnimating = true;
+        currentSlide = next;
+        saveSlide(currentSlide);
+        gsap.to(deck, {
+          y: -currentSlide * window.innerHeight,
+          duration: 0.9,
+          ease: "power3.inOut",
+          onComplete: () => {
+            isAnimating = false;
+          },
+        });
+        updateProgress();
+        setActiveSlide(currentSlide);
+      };
+
+      const goSlide = (direction) => {
+        goToSlide(currentSlide + direction);
+      };
+
+      const goFirst = () => {
+        goToSlide(0);
+      };
+
+      const goLast = () => {
+        goToSlide(totalSlides - 1);
+      };
+
+      const onKey = (event) => {
+        const target = event.target;
+        if (
+          target &&
+          (target.tagName === "INPUT" ||
+            target.tagName === "TEXTAREA" ||
+            target.isContentEditable)
+        ) {
+          return;
+        }
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+          goSlide(1);
+        }
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+          goSlide(-1);
+        }
+        if (
+          event.code === "Space" ||
+          event.key === " " ||
+          event.key === "Spacebar"
+        ) {
+          event.preventDefault();
+          goSlide(1);
+        }
+      };
+
+      let wheelLockUntil = 0;
+      let lastWheelDirection = 0;
+      let lastWheelTime = 0;
+      const wheelCooldown = 1200;
+      const reverseGuard = 1600;
+      let suppressClick = false;
+      const onWheel = (event) => {
+        const now = Date.now();
+        if (isAnimating || now < wheelLockUntil) return;
+        const direction = event.deltaY > 10 ? 1 : event.deltaY < -10 ? -1 : 0;
+        if (!direction) return;
+        if (
+          lastWheelDirection &&
+          direction !== lastWheelDirection &&
+          now - lastWheelTime < reverseGuard
+        ) {
+          return;
+        }
+        lastWheelDirection = direction;
+        lastWheelTime = now;
+        wheelLockUntil = now + wheelCooldown;
+        goSlide(direction);
+      };
+
+      const onClick = (event) => {
+        if (suppressClick) {
+          suppressClick = false;
+          return;
+        }
+        const selection = window.getSelection();
+        if (
+          selection &&
+          !selection.isCollapsed &&
+          selection.toString().trim()
+        ) {
+          return;
+        }
+        if (
+          event.target.closest(
+            "a, button, input, textarea, select, [data-no-advance]"
+          )
+        ) {
+          return;
+        }
+        goSlide(1);
+      };
+
+      const onMouseUp = () => {
+        const selection = window.getSelection();
+        suppressClick = !!(
+          selection &&
+          !selection.isCollapsed &&
+          selection.toString().trim()
+        );
+      };
+
+      const resetIdle = () => {
+        document.body.classList.remove("is-idle");
+        if (idleTimer) window.clearTimeout(idleTimer);
+        idleTimer = window.setTimeout(() => {
+          document.body.classList.add("is-idle");
+        }, 1600);
+      };
+
+      const marketLabelPlugin = {
+        id: "marketLabelPlugin",
+        afterDatasetsDraw(chart, args, pluginOptions) {
+          const { ctx, scales } = chart;
+          const labels = (pluginOptions && pluginOptions.labels) || [];
+          const rangeValues =
+            (pluginOptions && pluginOptions.rangeValues) || [];
+          const meta = chart.getDatasetMeta(0);
+          ctx.save();
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.fillStyle = "rgba(248,250,252,0.85)";
+          ctx.font = '600 11px "Plus Jakarta Sans", sans-serif';
+          meta.data.forEach((bar, index) => {
+            const label = labels[index];
+            if (label) {
+              const lines = String(label).split("\n");
+              const lineHeight = 12;
+              const startY = bar.y - 8 - (lines.length - 1) * lineHeight;
+              lines.forEach((line, lineIndex) => {
+                ctx.fillText(line, bar.x, startY + lineIndex * lineHeight);
+              });
+            }
+            const rangeValue = rangeValues[index];
+            if (typeof rangeValue === "number" && rangeValue > 0) {
+              const y = scales.y.getPixelForValue(rangeValue);
+              const halfWidth = (bar.width || 0) * 0.35;
+              ctx.strokeStyle = "rgba(255,255,255,0.7)";
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(bar.x - halfWidth, y);
+              ctx.lineTo(bar.x + halfWidth, y);
+              ctx.stroke();
+            }
+          });
+          ctx.restore();
+        },
+      };
+
+      const setupChart = () => {
+        const ctx = document.getElementById("marketChart");
+        if (!ctx) return;
+        const chartLocale =
+          chartTranslations[currentLang] || chartTranslations.en;
+        const marketValues = [153.3, 178.9, 196.8, 342.1, 420.8];
+        const projectionLows = [null, null, null, 248.3, 381.3];
+        const barColors = [
+          "rgba(148,163,184,0.35)",
+          "rgba(96,239,255,0.35)",
+          "rgba(96,239,255,0.55)",
+          "rgba(0,255,135,0.6)",
+          "rgba(0,255,135,0.85)",
+        ];
+        const barBorders = [
+          "rgba(148,163,184,0.6)",
+          "rgba(96,239,255,0.6)",
+          "rgba(96,239,255,0.8)",
+          "rgba(0,255,135,0.8)",
+          "rgba(0,255,135,1)",
+        ];
+        marketChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: chartLocale.labels,
+            datasets: [
+              {
+                label: chartLocale.datasetLabel,
+                data: marketValues,
+                backgroundColor: barColors,
+                borderColor: barBorders,
+                borderWidth: 1,
+                borderRadius: 10,
+                borderSkipped: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 900, easing: "easeOutQuart" },
+            plugins: {
+              legend: { display: false },
+              marketLabelPlugin: {
+                labels: chartLocale.valueLabels,
+                rangeValues: projectionLows,
+              },
+            },
+            layout: { padding: { top: 32, bottom: 8 } },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: "rgba(255,255,255,0.08)" },
+                ticks: { color: "rgba(255,255,255,0.6)" },
+              },
+              x: {
+                grid: { display: false },
+                ticks: {
+                  color: "rgba(255,255,255,0.6)",
+                  autoSkip: false,
+                  maxRotation: 0,
+                  minRotation: 0,
+                  font: { size: 10 },
+                },
+              },
+            },
+          },
+          plugins: [marketLabelPlugin],
+        });
+      };
+
+      window.addEventListener("keydown", onKey);
+      window.addEventListener("wheel", onWheel, { passive: true });
+      window.addEventListener("click", onClick);
+      window.addEventListener("mouseup", onMouseUp);
+      window.addEventListener("mousemove", resetIdle, { passive: true });
+      window.addEventListener("touchstart", resetIdle, { passive: true });
+      window.addEventListener("resize", () => {
+        gsap.set(deck, { y: -currentSlide * window.innerHeight });
+      });
+
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          applyLanguage(btn.dataset.lang);
+        });
+      });
+
+      const storedLang = localStorage.getItem("motoristaLang");
+      const defaultLang =
+        storedLang ||
+        ((navigator.language || "").toLowerCase().startsWith("tr")
+          ? "tr"
+          : "en");
+      applyLanguage(defaultLang);
+
+      initBackgrounds();
+      prepareAnimationTargets();
+      prepareCountElements();
+      setupChart();
+      currentSlide = getStoredSlide();
+      saveSlide(currentSlide);
+      gsap.set(deck, { y: -currentSlide * window.innerHeight });
+      updateProgress();
+      setActiveSlide(currentSlide);
+      resetIdle();
+
+      window.goSlide = goSlide;
+      window.goToSlide = goToSlide;
+      window.goFirst = goFirst;
+      window.goLast = goLast;
+    </script>
+  </body>
+</html>
