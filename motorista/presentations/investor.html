@@ -73,7 +73,7 @@
       }
 
       .slide {
-        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
         width: 100vw;
         display: flex;
         align-items: center;
@@ -467,41 +467,138 @@
 
       @media (max-width: 900px) {
         .slide {
-          padding: 3rem 2rem;
+          padding:
+            calc(4.5rem + env(safe-area-inset-top))
+            calc(2.5rem + env(safe-area-inset-right))
+            calc(4.5rem + env(safe-area-inset-bottom))
+            calc(2.5rem + env(safe-area-inset-left));
+          align-items: center;
+        }
+
+        .content {
+          max-width: 100%;
+        }
+
+        .slide--hero .slide-bg,
+        .slide--closing .slide-bg {
+          background-size: cover, cover, auto 100%;
+          background-position: center, center, center;
         }
 
         .hero-layout {
           grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .hero-copy {
+          gap: 0.5rem;
+        }
+
+        .hero-roi-card {
+          padding: 1.5rem;
+        }
+
+        .hero-roi-meta {
+          gap: 0.4rem;
+          margin-top: 1rem;
+        }
+
+        .glass.p-10 {
+          padding: 1.6rem;
+        }
+
+        .glass.p-8 {
+          padding: 1.25rem;
+        }
+
+        .glass.p-6 {
+          padding: 1rem;
+        }
+
+        .gap-12 {
+          gap: 1.75rem;
+        }
+
+        .gap-10 {
+          gap: 1.5rem;
+        }
+
+        .gap-8 {
+          gap: 1.25rem;
+        }
+
+        .mt-10 {
+          margin-top: 1.5rem;
+        }
+
+        .mt-8 {
+          margin-top: 1.25rem;
         }
 
         .lang-switch {
-          top: 16px;
-          left: 16px;
+          top: calc(16px + env(safe-area-inset-top));
+          left: calc(2.5rem + env(safe-area-inset-left));
         }
 
         .slide-indicator {
-          top: 16px;
-          right: 16px;
+          top: calc(16px + env(safe-area-inset-top));
+          right: calc(2.5rem + env(safe-area-inset-right));
+        }
+
+        .nav-btn {
+          bottom: calc(24px + env(safe-area-inset-bottom));
         }
 
         .nav-first {
-          left: 16px;
+          left: calc(2.5rem + env(safe-area-inset-left));
         }
 
         .nav-prev {
-          left: 88px;
+          left: calc(2.5rem + env(safe-area-inset-left) + 72px);
         }
 
         .nav-next {
-          right: 88px;
+          right: calc(2.5rem + env(safe-area-inset-right) + 72px);
         }
 
         .nav-last {
-          right: 16px;
+          right: calc(2.5rem + env(safe-area-inset-right));
+        }
+
+        .cycle-loop {
+          width: 100%;
+          margin-top: 1.5rem;
+          gap: 0.75rem;
         }
 
         .cycle-loop::before {
           display: none;
+        }
+
+        .cycle-step,
+        .cycle-output {
+          padding: 0.9rem;
+          border-radius: 20px;
+        }
+
+        .slide--case {
+          padding-top: calc(4rem + env(safe-area-inset-top));
+          padding-bottom: calc(3rem + env(safe-area-inset-bottom));
+        }
+
+        .slide--case .cycle-loop {
+          margin-top: 1rem;
+          gap: 0.5rem;
+        }
+
+        .slide--case .cycle-step,
+        .slide--case .cycle-output {
+          padding: 0.75rem;
+          border-radius: 18px;
+        }
+
+        #marketChart {
+          height: 200px !important;
         }
       }
     </style>
@@ -1241,7 +1338,7 @@
       </section>
 
       <!-- Slide 10: Case study -->
-      <section class="slide" data-slide>
+      <section class="slide slide--case" data-slide>
         <div class="slide-bg"></div>
         <div class="content">
           <div class="pill" data-animate data-i18n="case_pill">Case study</div>
@@ -1872,6 +1969,53 @@
         });
       };
 
+      let fitRaf = null;
+
+      const setViewportHeight = () => {
+        document.documentElement.style.setProperty(
+          "--vh",
+          `${window.innerHeight * 0.01}px`
+        );
+      };
+
+      const updateContentFit = () => {
+        if (fitRaf) {
+          cancelAnimationFrame(fitRaf);
+        }
+        fitRaf = requestAnimationFrame(() => {
+          fitRaf = null;
+          const slide = slides[currentSlide] || slides[0];
+          if (!slide) return;
+          const content = slide.querySelector(".content");
+          if (!content) return;
+          content.style.transform = "";
+          content.style.transformOrigin = "";
+          if (window.innerWidth > 900) return;
+
+          const style = window.getComputedStyle(slide);
+          const paddingTop = parseFloat(style.paddingTop) || 0;
+          const paddingBottom = parseFloat(style.paddingBottom) || 0;
+          const slideHeight =
+            slide.getBoundingClientRect().height || window.innerHeight;
+          const available = slideHeight - paddingTop - paddingBottom;
+          const contentHeight = Math.max(
+            content.scrollHeight,
+            content.getBoundingClientRect().height
+          );
+          if (available <= 0 || contentHeight <= 0) return;
+          const scale = Math.min(1, available / contentHeight);
+          let offset = 0;
+          if (scale < 1) {
+            const scaledHeight = contentHeight * scale;
+            offset = Math.round((contentHeight - scaledHeight) / 2);
+          }
+          if (scale < 1) {
+            content.style.transformOrigin = "top center";
+            content.style.transform = `translateY(${offset}px) scale(${scale})`;
+          }
+        });
+      };
+
       const formatNumber = (value, options = {}) => {
         const {
           decimals = 0,
@@ -1984,6 +2128,8 @@
           }
           marketChart.update();
         }
+
+        updateContentFit();
       };
 
       const measureCountWidth = (el, text) => {
@@ -2118,6 +2264,7 @@
           slide.classList.toggle("is-active", idx === index);
         });
         animateSlide(slides[index]);
+        updateContentFit();
       };
 
       const goToSlide = (index) => {
@@ -2358,7 +2505,9 @@
       window.addEventListener("mousemove", resetIdle, { passive: true });
       window.addEventListener("touchstart", resetIdle, { passive: true });
       window.addEventListener("resize", () => {
+        setViewportHeight();
         gsap.set(deck, { y: -currentSlide * window.innerHeight });
+        updateContentFit();
       });
 
       document.querySelectorAll(".lang-btn").forEach((btn) => {
@@ -2373,12 +2522,14 @@
         ((navigator.language || "").toLowerCase().startsWith("tr")
           ? "tr"
           : "en");
+      setViewportHeight();
       applyLanguage(defaultLang);
 
       initBackgrounds();
       prepareAnimationTargets();
       prepareCountElements();
       setupChart();
+      updateContentFit();
       currentSlide = getStoredSlide();
       saveSlide(currentSlide);
       gsap.set(deck, { y: -currentSlide * window.innerHeight });
