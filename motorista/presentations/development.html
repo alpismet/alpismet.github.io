@@ -1,0 +1,2103 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TVDE HUB | İş Planlama Sunumu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap");
+
+      :root {
+        --bg: #04070f;
+        --panel: rgba(10, 16, 28, 0.84);
+        --accent: #38bdf8;
+        --accent-2: #f97316;
+        --accent-3: #22c55e;
+        --accent-4: #a855f7;
+        --accent-5: #f43f5e;
+        --line: rgba(148, 163, 184, 0.22);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background: var(--bg);
+        color: #e2e8f0;
+        font-size: 17px;
+        line-height: 1.5;
+        margin: 0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 18% 18%,
+            rgba(56, 189, 248, 0.24),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 82% 24%,
+            rgba(34, 211, 238, 0.18),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 70% 82%,
+            rgba(16, 185, 129, 0.16),
+            transparent 46%
+          ),
+          linear-gradient(180deg, rgba(8, 16, 34, 0.94), rgba(2, 6, 20, 0.98));
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      main {
+        position: relative;
+        z-index: 1;
+      }
+
+      .slide {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .glass-panel {
+        background: var(--panel);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        box-shadow: 0 30px 80px -35px rgba(0, 0, 0, 0.6);
+      }
+
+      .nav-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(226, 232, 240, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .nav-dot.active {
+        background: var(--accent);
+        box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
+        transform: scale(1.3);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--accent);
+        background: rgba(56, 189, 248, 0.1);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+      }
+
+      .badge.orange {
+        color: var(--accent-2);
+        background: rgba(249, 115, 22, 0.1);
+        border-color: rgba(249, 115, 22, 0.35);
+      }
+
+      .badge.purple {
+        color: var(--accent-4);
+        background: rgba(168, 85, 247, 0.12);
+        border-color: rgba(168, 85, 247, 0.35);
+      }
+
+      .badge.emerald {
+        color: var(--accent-3);
+        background: rgba(34, 197, 94, 0.12);
+        border-color: rgba(34, 197, 94, 0.35);
+      }
+
+      .badge.rose {
+        color: var(--accent-5);
+        background: rgba(244, 63, 94, 0.12);
+        border-color: rgba(244, 63, 94, 0.35);
+      }
+
+      .hero-title {
+        font-size: clamp(3.8rem, 9.5vw, 9.2rem);
+        font-weight: 700;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+      }
+
+      .section-title {
+        font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+
+      .list-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1.05rem;
+      }
+
+      .list-stack.dense {
+        gap: 0.8rem;
+      }
+
+      .list-stack.dense .list-card {
+        padding: 0.9rem 1.1rem;
+      }
+
+      .list-stack.dense .list-title {
+        font-size: 1.02rem;
+      }
+
+      .list-stack.dense .list-desc {
+        font-size: 0.88rem;
+      }
+
+      .list-card {
+        display: flex;
+        gap: 0.9rem;
+        align-items: flex-start;
+        padding: 1.2rem 1.4rem;
+        border-radius: 1.2rem;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+      }
+
+      .list-card i {
+        width: 20px;
+        height: 20px;
+        margin-top: 0.2rem;
+      }
+
+      .list-title {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #f8fafc;
+      }
+
+      .list-desc {
+        font-size: 0.95rem;
+        color: #94a3b8;
+        margin-top: 0.2rem;
+        line-height: 1.5;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.8rem;
+      }
+
+      .summary-item {
+        padding: 0.75rem 0.9rem;
+        border-radius: 0.9rem;
+        background: rgba(15, 23, 42, 0.72);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        font-size: 0.95rem;
+        color: #e2e8f0;
+      }
+
+      .summary-note {
+        margin-top: 1.2rem;
+        font-size: 0.95rem;
+        color: #94a3b8;
+      }
+
+      .info-chip {
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #cbd5f5;
+      }
+
+      .info-chip.sky {
+        border-color: rgba(56, 189, 248, 0.4);
+        color: #7dd3fc;
+      }
+
+      .info-chip.orange {
+        border-color: rgba(249, 115, 22, 0.4);
+        color: #fdba74;
+      }
+
+      .info-chip.purple {
+        border-color: rgba(168, 85, 247, 0.4);
+        color: #d8b4fe;
+      }
+
+      .info-chip.emerald {
+        border-color: rgba(34, 197, 94, 0.4);
+        color: #86efac;
+      }
+
+      .info-chip.rose {
+        border-color: rgba(244, 63, 94, 0.4);
+        color: #fda4af;
+      }
+
+      .stat-card {
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 1.2rem;
+        padding: 1.2rem;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      .stat-label {
+        margin-top: 0.35rem;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #94a3b8;
+      }
+
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .click-indicator {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .lang-switch {
+        position: fixed;
+        top: 2rem;
+        left: 2rem;
+        z-index: 60;
+        display: inline-flex;
+        gap: 0.4rem;
+        padding: 0.35rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(12px);
+      }
+
+      .lang-switch button {
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        color: #94a3b8;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .lang-switch button.active {
+        background: rgba(56, 189, 248, 0.2);
+        color: #e2e8f0;
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+      }
+
+      .lang-switch button:focus-visible {
+        outline: 2px solid rgba(56, 189, 248, 0.6);
+        outline-offset: 2px;
+      }
+
+      [data-animate] {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-18px);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .list-card {
+          padding: 1rem 1.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="nav-dots"
+      class="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4"
+    ></div>
+
+    <div id="lang-switch" class="lang-switch mono" aria-label="Dil seçimi">
+      <button type="button" class="active" data-lang="tr" aria-pressed="true">
+        TR
+      </button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+
+    <main id="main-container">
+      <section class="slide">
+        <div class="relative z-10 text-center">
+          <h1 class="hero-title" data-animate>
+            TVDE <span class="text-sky-400">HUB</span><br />
+            <span data-i18n="hero_subtitle">İş Planlama Sunumu</span>
+          </h1>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-20 right-20 w-72 h-72 bg-sky-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-start"
+        >
+          <div>
+            <div class="badge mono" data-animate data-i18n="landing_badge">
+              Landing
+            </div>
+            <h2
+              class="section-title mt-4"
+              data-animate
+              data-i18n="landing_title"
+            >
+              Tanıtım Sayfası
+            </h2>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="landing_intro"
+            >
+              İlk temas ekranı, partner kazanımı ve güven için net bir giriş
+              kurgusu.
+            </p>
+          </div>
+          <div class="flex flex-col gap-6">
+            <div class="list-stack dense">
+              <div
+                class="mono text-xs uppercase tracking-[0.3em] text-slate-500"
+                data-animate
+                data-i18n="landing_content_label"
+              >
+                Landing İçeriği
+              </div>
+              <div class="list-card" data-animate>
+                <i data-lucide="sparkles" class="text-sky-400"></i>
+                <div>
+                  <div class="list-title" data-i18n="landing_item1_title">
+                    Ana mesaj ve harekete çağrı
+                  </div>
+                  <div class="list-desc" data-i18n="landing_item1_desc">
+                    Tek odaklı giriş + aksiyon
+                  </div>
+                </div>
+              </div>
+              <div class="list-card" data-animate>
+                <i data-lucide="compass" class="text-sky-400"></i>
+                <div>
+                  <div class="list-title" data-i18n="landing_item2_title">
+                    Hızlı gezinme
+                  </div>
+                  <div class="list-desc" data-i18n="landing_item2_desc">
+                    Sürücü, sahip, yatırımcı, fiyat
+                  </div>
+                </div>
+              </div>
+              <div class="list-card" data-animate>
+                <i data-lucide="languages" class="text-sky-400"></i>
+                <div>
+                  <div class="list-title" data-i18n="landing_item3_title">
+                    Dil seçenekleri
+                  </div>
+                  <div class="list-desc" data-i18n="landing_item3_desc">
+                    İngilizce, Portekizce, Türkçe
+                  </div>
+                </div>
+              </div>
+              <div class="list-card" data-animate>
+                <i data-lucide="link" class="text-sky-400"></i>
+                <div>
+                  <div class="list-title" data-i18n="landing_item4_title">
+                    Güven ve yasal bilgiler
+                  </div>
+                  <div class="list-desc" data-i18n="landing_item4_desc">
+                    İletişim, platform linkleri, sözleşmeler
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="list-stack dense">
+              <div
+                class="mono text-xs uppercase tracking-[0.3em] text-slate-500"
+                data-animate
+                data-i18n="how_it_works_label"
+              >
+                Nasıl Çalışır
+              </div>
+              <div class="list-card" data-animate>
+                <i data-lucide="route" class="text-sky-400"></i>
+                <div>
+                  <div class="list-title" data-i18n="how_it_works_title">
+                    6 adımda partner akışı
+                  </div>
+                  <div class="list-desc" data-i18n="how_it_works_desc">
+                    Telefon doğrulama -> belge kontrolü -> lisans onayı -> araç
+                    seçimi -> vardiya planı -> kazanç ve vergi
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-10 left-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div class="badge mono" data-animate data-i18n="driver_badge">
+              Driver
+            </div>
+            <h2
+              class="section-title mt-4"
+              data-animate
+              data-i18n="driver_title"
+            >
+              Sürücü Paneli
+            </h2>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="driver_intro"
+            >
+              Telefon doğrulamadan vergi beyanına kadar sürücünün tüm iş akışı.
+            </p>
+          </div>
+          <div class="list-stack dense">
+            <div class="list-card" data-animate>
+              <i data-lucide="smartphone" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item1_title">
+                  Hızlı giriş
+                </div>
+                <div class="list-desc" data-i18n="driver_item1_desc">
+                  Telefonla güvenli erişim
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="layout-dashboard" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item2_title">
+                  Genel durum
+                </div>
+                <div class="list-desc" data-i18n="driver_item2_desc">
+                  Kazanç ve performans özeti
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="id-card" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item3_title">
+                  Belge doğrulama
+                </div>
+                <div class="list-desc" data-i18n="driver_item3_desc">
+                  Kimlik ve sürücü evrakları
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="search" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item4_title">
+                  Araç seçimi
+                </div>
+                <div class="list-desc" data-i18n="driver_item4_desc">
+                  İhtiyaca göre filtreleme
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="calendar-check" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item5_title">
+                  Vardiya planı
+                </div>
+                <div class="list-desc" data-i18n="driver_item5_desc">
+                  Çalışma saatlerini düzenleme
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="wallet" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item6_title">
+                  Kazanç yönetimi
+                </div>
+                <div class="list-desc" data-i18n="driver_item6_desc">
+                  Geçmiş ve dışa aktarma
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="receipt" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item7_title">
+                  Vergi bildirimi
+                </div>
+                <div class="list-desc" data-i18n="driver_item7_desc">
+                  Makbuz ve beyan süreci
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="messages-square" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item8_title">
+                  Mesajlaşma
+                </div>
+                <div class="list-desc" data-i18n="driver_item8_desc">
+                  Hızlı iletişim
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="shield-check" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="driver_item9_title">
+                  Profil güvenliği
+                </div>
+                <div class="list-desc" data-i18n="driver_item9_desc">
+                  Lisans ve ödeme bilgileri
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-10 right-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div
+              class="badge mono emerald"
+              data-animate
+              data-i18n="owner_badge"
+            >
+              Owner
+            </div>
+            <h2 class="section-title mt-4" data-animate>
+              <span data-i18n="owner_title">Araç Sahibi Paneli</span>
+            </h2>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="owner_intro"
+            >
+              Filo gelirleri, canlı konumlar ve sürücü performansı tek panelde.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="layers" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="owner_item1_title">
+                  Filo genel bakış
+                </div>
+                <div class="list-desc" data-i18n="owner_item1_desc">
+                  Gelir ve talep özeti
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="map" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="owner_item2_title">
+                  Canlı harita
+                </div>
+                <div class="list-desc" data-i18n="owner_item2_desc">
+                  Araçların anlık konumu
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="bell" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="owner_item3_title">
+                  Bölge uyarıları
+                </div>
+                <div class="list-desc" data-i18n="owner_item3_desc">
+                  Giriş/çıkış bildirimleri
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="car" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="owner_item4_title">
+                  Filo yönetimi
+                </div>
+                <div class="list-desc" data-i18n="owner_item4_desc">
+                  Araç ekleme ve bakım
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="user-check" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="owner_item5_title">
+                  Sürücü takibi
+                </div>
+                <div class="list-desc" data-i18n="owner_item5_desc">
+                  Performans ve atamalar
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="bar-chart-3" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="owner_item6_title">
+                  Finans raporları
+                </div>
+                <div class="list-desc" data-i18n="owner_item6_desc">
+                  Vergi ve gelir raporu
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute bottom-10 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div class="badge mono purple" data-animate data-i18n="admin_badge">
+              Admin
+            </div>
+            <h2 class="section-title mt-4" data-animate data-i18n="admin_title">
+              Yönetim Paneli
+            </h2>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="admin_intro"
+            >
+              Finansal denetim, belge onayı ve sistem sağlığı merkezi.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="activity" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="admin_item1_title">
+                  Sistem sağlığı
+                </div>
+                <div class="list-desc" data-i18n="admin_item1_desc">
+                  Operasyon akışı takibi
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="file-check" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="admin_item2_title">
+                  Belge onayları
+                </div>
+                <div class="list-desc" data-i18n="admin_item2_desc">
+                  Kabul / red işlemleri
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="landmark" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="admin_item3_title">
+                  Finans merkezi
+                </div>
+                <div class="list-desc" data-i18n="admin_item3_desc">
+                  Emanet hesap kontrolü
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="life-buoy" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="admin_item4_title">
+                  Destek masası
+                </div>
+                <div class="list-desc" data-i18n="admin_item4_desc">
+                  Çağrı ve talep yönetimi
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="gift" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="admin_item5_title">
+                  Referans yönetimi
+                </div>
+                <div class="list-desc" data-i18n="admin_item5_desc">
+                  Davet kazancı takibi
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-10 right-10 w-72 h-72 bg-sky-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div class="badge mono" data-animate data-i18n="tech_badge">
+              Teknik Mimari
+            </div>
+            <h2 class="section-title mt-4" data-animate data-i18n="tech_title">
+              Teknoloji ve Entegrasyonlar
+            </h2>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="tech_intro"
+            >
+              Site planındaki ön yüz altyapısı ve şablondaki backend
+              uygulamaları temel alınır.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="layout-dashboard" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="tech_item1_title">
+                  Arayüz ve deneyim
+                </div>
+                <div class="list-desc" data-i18n="tech_item1_desc">
+                  Hızlı, modern ve arama motoru uyumlu
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="server" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="tech_item2_title">
+                  Sunucu altyapısı
+                </div>
+                <div class="list-desc" data-i18n="tech_item2_desc">
+                  Veri ve oturum yönetimi
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="map" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="tech_item3_title">
+                  Canlı takip
+                </div>
+                <div class="list-desc" data-i18n="tech_item3_desc">
+                  Harita ve gerçek zamanlı akış
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="credit-card" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="tech_item4_title">
+                  Ödeme ve doğrulama
+                </div>
+                <div class="list-desc" data-i18n="tech_item4_desc">
+                  Güvenli işlem akışı
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="shield" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="tech_item5_title">
+                  Güvenlik ve ölçek
+                </div>
+                <div class="list-desc" data-i18n="tech_item5_desc">
+                  Şifreleme ve saldırı koruması
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-10 left-10 w-72 h-72 bg-orange-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div class="badge mono orange" data-animate data-i18n="mvp_badge">
+              Geliştirme Stratejisi
+            </div>
+            <h2 class="section-title mt-4" data-animate data-i18n="mvp_title">
+              Geliştirme Stratejisi: Minimum Uygulanabilir Ürün (MVP)
+            </h2>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="mvp_intro"
+            >
+              Minimum Uygulanabilir Ürün, kullanıcıya temel değeri sunan en
+              küçük çalışır sürümdür. Bu sayede pazarı hızlı test edip riski
+              kontrol ederiz.
+            </p>
+            <div class="flex flex-wrap gap-3 mt-6" data-animate>
+              <span class="info-chip orange" data-i18n="mvp_chip1">
+                Hızlı Doğrulama
+              </span>
+              <span class="info-chip orange" data-i18n="mvp_chip2">
+                Kontrollü Risk
+              </span>
+              <span class="info-chip orange" data-i18n="mvp_chip3">
+                Erken Gelir
+              </span>
+            </div>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="target" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="mvp_item1_title">
+                  Hızlı doğrulama
+                </div>
+                <div class="list-desc" data-i18n="mvp_item1_desc">
+                  Gerçek kullanıcı geri bildirimi
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="shield" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="mvp_item2_title">
+                  Riski parçalara bölme
+                </div>
+                <div class="list-desc" data-i18n="mvp_item2_desc">
+                  Kademeli teslimat planı
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="trending-up" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="mvp_item3_title">
+                  Erken gelir
+                </div>
+                <div class="list-desc" data-i18n="mvp_item3_desc">
+                  Pazara daha hızlı çıkış
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="refresh-ccw" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="mvp_item4_title">
+                  Sürekli iyileştirme
+                </div>
+                <div class="list-desc" data-i18n="mvp_item4_desc">
+                  Geri bildirim ile gelişim
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="layers" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="mvp_item5_title">
+                  Sağlam temel
+                </div>
+                <div class="list-desc" data-i18n="mvp_item5_desc">
+                  Altyapı hazırlığı
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-12 right-12 w-72 h-72 bg-sky-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div class="relative z-10 w-full max-w-6xl">
+          <div class="badge mono" data-animate data-i18n="summary_badge">
+            Genel Başlıklar
+          </div>
+          <h2 class="section-title mt-4" data-animate data-i18n="summary_title">
+            Tüm Yapılacak İşlerin Genel Başlıkları
+          </h2>
+          <p class="summary-note" data-animate data-i18n="summary_note">
+            Hepsini aynı anda yapmak yerine işleri fazlara bölerek ilerliyoruz.
+          </p>
+          <div class="summary-grid mt-8">
+            <div class="summary-item" data-animate data-i18n="summary_item1">
+              Sistem mimarisi ve veri modeli
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item2">
+              Güvenli giriş ve doğrulama
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item3">
+              Tasarım sistemi ve tanıtım ekranı
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item4">
+              Sunucu iskeleti
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item5">
+              Sürücü profili ve belge yönetimi
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item6">
+              Araç pazarı ve kiralama akışı
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item7">
+              Araç sahibi paneli ve talep yönetimi
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item8">
+              Doküman depolama ve yönetimi
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item9">
+              Cüzdan ve işlem akışı
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item10">
+              Komisyon hesapları
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item11">
+              Ödeme altyapısı ve para çekme
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item12">
+              Yönetim finans kontrolü
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item13">
+              Belge onay merkezi
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item14">
+              Kullanıcı yönetimi
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item15">
+              Raporlama ve dışa aktarma
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item16">
+              Destek ve mesajlaşma
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item17">
+              Canlı takip ve harita
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item18">
+              Vergi otomasyonu
+            </div>
+            <div class="summary-item" data-animate data-i18n="summary_item19">
+              Bölge uyarıları
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-16 right-10 w-72 h-72 bg-sky-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div class="badge mono" data-animate data-i18n="phase1_badge">
+              Faz 1
+            </div>
+            <h2
+              class="section-title mt-4"
+              data-animate
+              data-i18n="phase1_title"
+            >
+              Altyapı ve İskelet
+            </h2>
+            <div class="flex flex-wrap gap-3 mt-6" data-animate>
+              <span class="info-chip sky" data-i18n="phase1_chip_days">
+                28 Gün
+              </span>
+              <span class="info-chip" data-i18n="phase1_chip_buffer">
+                +%20 Güven Payı
+              </span>
+            </div>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="phase1_intro"
+            >
+              Sisteme giriş ve temel yapıların kurulduğu başlangıç fazı.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="database" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase1_item1_title">
+                  Veri yapısı ve plan
+                </div>
+                <div class="list-desc" data-i18n="phase1_item1_desc">
+                  İlişkiler ve akış tasarımı
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="lock" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase1_item2_title">
+                  Güvenli giriş
+                </div>
+                <div class="list-desc" data-i18n="phase1_item2_desc">
+                  Kimlik doğrulama temeli
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="palette" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase1_item3_title">
+                  Tasarım temeli
+                </div>
+                <div class="list-desc" data-i18n="phase1_item3_desc">
+                  Bileşenler ve görsel dil
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="terminal" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase1_item4_title">
+                  Sunucu iskeleti
+                </div>
+                <div class="list-desc" data-i18n="phase1_item4_desc">
+                  Temel servis kurulumu
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-16 left-10 w-72 h-72 bg-orange-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div
+              class="badge mono orange"
+              data-animate
+              data-i18n="phase2_badge"
+            >
+              Faz 2
+            </div>
+            <h2
+              class="section-title mt-4"
+              data-animate
+              data-i18n="phase2_title"
+            >
+              Operasyonel Modüller (Çekirdek)
+            </h2>
+            <div class="flex flex-wrap gap-3 mt-6" data-animate>
+              <span class="info-chip orange" data-i18n="phase2_chip_days">
+                43 Gün
+              </span>
+              <span class="info-chip" data-i18n="phase2_chip_buffer">
+                +%20 Güven Payı
+              </span>
+            </div>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="phase2_intro"
+            >
+              Kiralama ve profil yönetimini çalışır hale getiren temel set.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="user-check" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase2_item1_title">
+                  Sürücü profili ve belgeler
+                </div>
+                <div class="list-desc" data-i18n="phase2_item1_desc">
+                  Kimlik ve lisans doğrulaması
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="car" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase2_item2_title">
+                  Araç pazarı
+                </div>
+                <div class="list-desc" data-i18n="phase2_item2_desc">
+                  Seçim ve kiralama akışı
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="clipboard-check" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase2_item3_title">
+                  Araç sahibi paneli
+                </div>
+                <div class="list-desc" data-i18n="phase2_item3_desc">
+                  Talepleri yönetme
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="cloud-upload" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase2_item4_title">
+                  Dosya depolama
+                </div>
+                <div class="list-desc" data-i18n="phase2_item4_desc">
+                  Güvenli yükleme alanı
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-16 right-10 w-72 h-72 bg-purple-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div
+              class="badge mono purple"
+              data-animate
+              data-i18n="phase3_badge"
+            >
+              Faz 3
+            </div>
+            <h2
+              class="section-title mt-4"
+              data-animate
+              data-i18n="phase3_title"
+            >
+              Finans ve Cüzdan Sistemi
+            </h2>
+            <div class="flex flex-wrap gap-3 mt-6" data-animate>
+              <span class="info-chip purple" data-i18n="phase3_chip_days">
+                42 Gün
+              </span>
+              <span class="info-chip" data-i18n="phase3_chip_buffer">
+                +%20 Güven Payı
+              </span>
+            </div>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="phase3_intro"
+            >
+              Ödeme akışı, komisyon hesapları ve finans yönetimi.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="wallet" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="phase3_item1_title">
+                  Cüzdan akışı
+                </div>
+                <div class="list-desc" data-i18n="phase3_item1_desc">
+                  Gelir ve hareket takibi
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="percent" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="phase3_item2_title">
+                  Paylaşım hesapları
+                </div>
+                <div class="list-desc" data-i18n="phase3_item2_desc">
+                  Komisyon dağılımı
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="credit-card" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="phase3_item3_title">
+                  Ödeme sistemi
+                </div>
+                <div class="list-desc" data-i18n="phase3_item3_desc">
+                  Para giriş-çıkış yönetimi
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="bar-chart-3" class="text-purple-300"></i>
+              <div>
+                <div class="list-title" data-i18n="phase3_item4_title">
+                  Finans kontrol ekranı
+                </div>
+                <div class="list-desc" data-i18n="phase3_item4_desc">
+                  Rapor ve denetim
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-16 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div
+              class="badge mono emerald"
+              data-animate
+              data-i18n="phase4_badge"
+            >
+              Faz 4
+            </div>
+            <h2
+              class="section-title mt-4"
+              data-animate
+              data-i18n="phase4_title"
+            >
+              Denetim ve Yönetim
+            </h2>
+            <div class="flex flex-wrap gap-3 mt-6" data-animate>
+              <span class="info-chip emerald" data-i18n="phase4_chip_days">
+                37 Gün
+              </span>
+              <span class="info-chip" data-i18n="phase4_chip_buffer">
+                +%20 Güven Payı
+              </span>
+            </div>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="phase4_intro"
+            >
+              Güvenlik ve yasal uyumluluk için kontrol katmanı.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="file-check" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase4_item1_title">
+                  Belge onay merkezi
+                </div>
+                <div class="list-desc" data-i18n="phase4_item1_desc">
+                  Kabul ve red akışı
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="users" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase4_item2_title">
+                  Kullanıcı yönetimi
+                </div>
+                <div class="list-desc" data-i18n="phase4_item2_desc">
+                  Sürücü ve sahip kontrolü
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="file-text" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase4_item3_title">
+                  Raporlama
+                </div>
+                <div class="list-desc" data-i18n="phase4_item3_desc">
+                  Özet ve çıktı yönetimi
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="messages-square" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="phase4_item4_title">
+                  Destek ve iletişim
+                </div>
+                <div class="list-desc" data-i18n="phase4_item4_desc">
+                  Talep ve mesaj takibi
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div
+          class="absolute top-16 right-10 w-72 h-72 bg-rose-500/10 rounded-full blur-[120px] floating"
+        ></div>
+        <div
+          class="relative z-10 w-full max-w-6xl grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center"
+        >
+          <div>
+            <div class="badge mono rose" data-animate data-i18n="phase5_badge">
+              Faz 5
+            </div>
+            <h2
+              class="section-title mt-4"
+              data-animate
+              data-i18n="phase5_title"
+            >
+              İleri Seviye Otomasyon
+            </h2>
+            <div class="flex flex-wrap gap-3 mt-6" data-animate>
+              <span class="info-chip rose" data-i18n="phase5_chip_days">
+                43 Gün
+              </span>
+              <span class="info-chip" data-i18n="phase5_chip_buffer">
+                +%20 Güven Payı
+              </span>
+            </div>
+            <p
+              class="text-slate-400 mt-4 max-w-xl"
+              data-animate
+              data-i18n="phase5_intro"
+            >
+              Ölçeklenebilir büyüme ve gerçek zamanlı otomasyon adımları.
+            </p>
+          </div>
+          <div class="list-stack">
+            <div class="list-card" data-animate>
+              <i data-lucide="map" class="text-rose-300"></i>
+              <div>
+                <div class="list-title" data-i18n="phase5_item1_title">
+                  Canlı takip
+                </div>
+                <div class="list-desc" data-i18n="phase5_item1_desc">
+                  Anlık konum izleme
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="receipt" class="text-rose-300"></i>
+              <div>
+                <div class="list-title" data-i18n="phase5_item2_title">
+                  Vergi otomasyonu
+                </div>
+                <div class="list-desc" data-i18n="phase5_item2_desc">
+                  Fatura ve beyan süreci
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="bell" class="text-rose-300"></i>
+              <div>
+                <div class="list-title" data-i18n="phase5_item3_title">
+                  Bölge uyarıları
+                </div>
+                <div class="list-desc" data-i18n="phase5_item3_desc">
+                  İhlal bildirimleri
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="relative z-10 w-full max-w-6xl text-center">
+          <div class="badge mono" data-animate data-i18n="final_badge">
+            Genel Sonuç
+          </div>
+          <h2 class="section-title mt-4" data-animate data-i18n="final_title">
+            Çıkış Takvimi
+          </h2>
+          <p
+            class="text-slate-400 mt-4 max-w-2xl mx-auto"
+            data-animate
+            data-i18n="final_intro"
+          >
+            Kademeli büyüme ile pazara kontrollü giriş ve tam ürünleşme.
+          </p>
+          <div class="list-stack mt-12 text-left max-w-3xl mx-auto">
+            <div class="list-card" data-animate>
+              <i data-lucide="rocket" class="text-sky-400"></i>
+              <div>
+                <div class="list-title" data-i18n="final_item1_title">
+                  3 - 4 ay: canlıya geçiş ve kayıtların başlaması
+                </div>
+                <div class="list-desc" data-i18n="final_item1_desc">
+                  İlk kullanıcı akışları aktif olur, kayıtlar toplanır
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="store" class="text-emerald-400"></i>
+              <div>
+                <div class="list-title" data-i18n="final_item2_title">
+                  5 - 6 ay: pazarda aktif büyüme
+                </div>
+                <div class="list-desc" data-i18n="final_item2_desc">
+                  Operasyon ölçeklenir, gelir akışı dengelenir
+                </div>
+              </div>
+            </div>
+            <div class="list-card" data-animate>
+              <i data-lucide="sparkles" class="text-orange-400"></i>
+              <div>
+                <div class="list-title" data-i18n="final_item3_title">
+                  9 - 10 ay: tüm özelliklerin tamamlanması
+                </div>
+                <div class="list-desc" data-i18n="final_item3_desc">
+                  Gelişmiş otomasyonlar ve tam ürün kapsamı devrede
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div
+      class="click-indicator mono text-[10px] tracking-[0.3em]"
+      data-i18n="click_hint"
+    >
+      TIKLA VEYA KAYDIR
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      const translations = {
+        tr: {
+          page_title: "TVDE HUB | İş Planı Sunumu",
+          hero_subtitle: "Mobiliteyi kazanca dönüştüren planı sunuyoruz.",
+          click_hint: "İLERLEMEK İÇİN TIKLA / KAYDIR",
+          landing_badge: "Tanıtım Bölümü",
+          landing_title: "Tanıtım sayfası ilk güveni kurar.",
+          landing_intro:
+            "İlk temas ekranı; değeri, güveni ve partner kazanımını net anlatır.",
+          landing_content_label: "Öne çıkanlar şöyle.",
+          landing_item1_title: "Tek mesajla net çağrı verilir.",
+          landing_item1_desc: "Odaklı giriş, hızlı karar.",
+          landing_item2_title: "Ziyaretçi doğru role yönlendirilir.",
+          landing_item2_desc:
+            "Sürücü, sahip, yatırımcı ve fiyatlandırma için net rota.",
+          landing_item3_title: "Dil seçeneği deneyimi güçlendirir.",
+          landing_item3_desc: "İngilizce, Portekizce ve Türkçe sunulur.",
+          landing_item4_title: "Güven ve yasal çerçeve görünürdür.",
+          landing_item4_desc:
+            "İletişim, platform bağlantıları ve sözleşmeler açıkça verilir.",
+          how_it_works_label: "Partnerlik akışı tek bakışta.",
+          how_it_works_title: "Partnerlik süreci 6 adımda tamamlanır.",
+          how_it_works_desc:
+            "Telefon doğrulama -> belge kontrolü -> lisans onayı -> araç seçimi -> vardiya planı -> kazanç ve vergi",
+          driver_badge: "Sürücü Bölümü",
+          driver_title: "Sürücü paneli tüm akışı tek ekranda toplar.",
+          driver_intro:
+            "Doğrulama, operasyon ve kazanç yönetimi uçtan uca ilerler.",
+          driver_item1_title: "Hızlı ve güvenli giriş sağlanır.",
+          driver_item1_desc: "Telefon doğrulamasıyla anında erişim.",
+          driver_item2_title: "Genel durum tek bakışta görülür.",
+          driver_item2_desc: "Kazanç ve performans özetlenir.",
+          driver_item3_title: "Kritik belgeler güvenle doğrulanır.",
+          driver_item3_desc: "Kimlik, ehliyet ve sicil tek yerde.",
+          driver_item4_title: "Doğru araç hızlıca bulunur.",
+          driver_item4_desc: "İhtiyaca göre akıllı filtreler.",
+          driver_item5_title: "Vardiyalar kolayca planlanır.",
+          driver_item5_desc: "Çalışma saatleri esnek yönetilir.",
+          driver_item6_title: "Kazançlar net şekilde izlenir.",
+          driver_item6_desc: "Geçmiş, rapor ve dışa aktarım.",
+          driver_item7_title: "Vergi süreci düzenli yürütülür.",
+          driver_item7_desc: "Makbuz kesimi ve beyan akışı.",
+          driver_item8_title: "İletişim tek kanalda toplanır.",
+          driver_item8_desc: "Sahip ve destekle hızlı mesajlaşma.",
+          driver_item9_title: "Profil bilgileri güvenle yönetilir.",
+          driver_item9_desc: "Lisans ve ödeme verileri korunur.",
+          owner_badge: "Araç Sahibi Bölümü",
+          owner_title: "Araç sahibi paneli filoyu görünür kılar.",
+          owner_intro:
+            "Gelir, canlı konum ve sürücü performansı tek panelde birleşir.",
+          owner_item1_title: "Filo durumu tek bakışta görülür.",
+          owner_item1_desc: "Gelir, kiralama ve talep görünümü.",
+          owner_item2_title: "Araçlar canlı haritada izlenir.",
+          owner_item2_desc: "Gerçek zamanlı konum takibi.",
+          owner_item3_title: "Bölge uyarıları otomatik gelir.",
+          owner_item3_desc: "Giriş-çıkış bildirimleri anında.",
+          owner_item4_title: "Filo yaşam döngüsü yönetilir.",
+          owner_item4_desc: "Araç ekleme, bakım ve pasifleme.",
+          owner_item5_title: "Sürücü performansı yönetilir.",
+          owner_item5_desc: "Aktiflik, performans ve atamalar.",
+          owner_item6_title: "Finans raporları netleşir.",
+          owner_item6_desc: "Vergi özetleri ve gelir raporları.",
+          admin_badge: "Yönetim Bölümü",
+          admin_title: "Yönetim paneli tüm kontrolü merkezileştirir.",
+          admin_intro: "Finans, belge ve sistem sağlığı tek merkezden kontrol edilir.",
+          admin_item1_title: "Sistem sağlığı sürekli izlenir.",
+          admin_item1_desc: "Kritik metrikler ve uyarılar.",
+          admin_item2_title: "Belgeler hızlıca onaylanır.",
+          admin_item2_desc: "Onay ve red işlemleri.",
+          admin_item3_title: "Finans akışı merkezden yönetilir.",
+          admin_item3_desc: "Emanet hesaplar ve toplu ödemeler.",
+          admin_item4_title: "Destek talepleri hızla çözülür.",
+          admin_item4_desc: "Talepler sınıflandırılır ve yanıtlanır.",
+          admin_item5_title: "Referans geliri şeffaf izlenir.",
+          admin_item5_desc: "Davet gelirlerinin takibi.",
+          tech_badge: "Teknoloji Bölümü",
+          tech_title: "Teknoloji ve entegrasyonlar sağlam temele bağlanır.",
+          tech_intro:
+            "Ön yüz planı ve şablondaki sunucu servisleri üzerine güvenli bir temel kurulur.",
+          tech_item1_title: "Arayüz hızlı ve modern tasarlanır.",
+          tech_item1_desc: "Arama motoru uyumu gözetilir.",
+          tech_item2_title: "Sunucu altyapısı ölçeklenir.",
+          tech_item2_desc: "Veri, oturum ve entegrasyonlar yönetilir.",
+          tech_item3_title: "Gerçek zamanlı takip sağlanır.",
+          tech_item3_desc: "Harita ve anlık akış.",
+          tech_item4_title: "Ödeme ve doğrulama güvenle yürür.",
+          tech_item4_desc: "İşlem akışı koruma altındadır.",
+          tech_item5_title: "Güvenlik ve ölçeklenebilirlik garanti edilir.",
+          tech_item5_desc: "Şifreleme, izleme ve saldırı koruması.",
+          mvp_badge: "Geliştirme Stratejisi",
+          mvp_title: "MVP ile hızlı doğrular, riski yönetiriz.",
+          mvp_intro:
+            "MVP, temel değeri taşıyan en küçük çalışan üründür; pazarı hızlı test eder ve riski kontrol altında tutar.",
+          mvp_chip1: "Hızlı doğrular",
+          mvp_chip2: "Riski kontrol eder",
+          mvp_chip3: "Erken gelir üretir",
+          mvp_item1_title: "Doğrulama erken yapılır.",
+          mvp_item1_desc: "Gerçek kullanıcı geri bildirimiyle.",
+          mvp_item2_title: "Risk fazlara bölünür.",
+          mvp_item2_desc: "Kademeli teslimat ve kontrol.",
+          mvp_item3_title: "Gelir daha erken başlar.",
+          mvp_item3_desc: "Pazara hızlı çıkış.",
+          mvp_item4_title: "Sürekli iyileştirme kültürü kurulur.",
+          mvp_item4_desc: "Geri bildirimle evrim.",
+          mvp_item5_title: "Sağlam temel hazırlanır.",
+          mvp_item5_desc: "Altyapı hazır hale gelir.",
+          summary_badge: "Kapsam Özeti",
+          summary_title: "Tüm kapsam tek sayfada netleşir.",
+          summary_note: "İşleri tek seferde değil, fazlara bölerek yönetiyoruz.",
+          summary_item1: "Sistem mimarisi ve veri modeli kurulur.",
+          summary_item2: "Güvenli giriş ve doğrulama altyapısı kurulur.",
+          summary_item3: "Tasarım sistemi ve tanıtım ekranları hazırlanır.",
+          summary_item4: "Sunucu iskeleti oluşturulur.",
+          summary_item5: "Sürücü profili ve belge yönetimi devreye alınır.",
+          summary_item6: "Araç pazarı ve kiralama akışı tasarlanır.",
+          summary_item7: "Araç sahibi paneli ve talep yönetimi kurulur.",
+          summary_item8: "Belge depolama ve yönetimi güvenli hale getirilir.",
+          summary_item9: "Cüzdan ve işlem akışı oluşturulur.",
+          summary_item10: "Komisyon ve paylaşım hesapları netleştirilir.",
+          summary_item11: "Ödeme altyapısı ve para çekme süreçleri kurulur.",
+          summary_item12: "Yönetim finans kontrol paneli kurulur.",
+          summary_item13: "Belge onay merkezi açılır.",
+          summary_item14: "Kullanıcı yönetimi yapılandırılır.",
+          summary_item15: "Raporlama ve dışa aktarma sağlanır.",
+          summary_item16: "Destek ve mesajlaşma kanalları kurulur.",
+          summary_item17: "Canlı takip ve harita sistemi devreye alınır.",
+          summary_item18: "Vergi otomasyonu hazırlanır.",
+          summary_item19: "Bölge uyarıları kurgulanır.",
+          phase1_badge: "Faz 1",
+          phase1_title: "Altyapı ve temel kurulum tamamlanır.",
+          phase1_chip_days: "28 günde tamamlanır",
+          phase1_chip_buffer: "Zaman payı: +%20",
+          phase1_intro: "Giriş ve temel yapılar bu fazda kurulur.",
+          phase1_item1_title: "Veri mimarisi planlanır.",
+          phase1_item1_desc: "İlişkiler ve akış tasarımı yapılır.",
+          phase1_item2_title: "Güvenli giriş kurulur.",
+          phase1_item2_desc: "Kimlik doğrulamanın temeli atılır.",
+          phase1_item3_title: "Tasarım temeli oluşturulur.",
+          phase1_item3_desc: "Bileşenler ve görsel dil netleşir.",
+          phase1_item4_title: "Sunucu iskeleti kurulur.",
+          phase1_item4_desc: "Temel servisler hazırlanır.",
+          phase2_badge: "Faz 2",
+          phase2_title: "Operasyonel çekirdek devreye alınır.",
+          phase2_chip_days: "43 günde tamamlanır",
+          phase2_chip_buffer: "Zaman payı: +%20",
+          phase2_intro: "Kiralama ve profil yönetimi çalışır hale gelir.",
+          phase2_item1_title: "Sürücü profili ve belgeler tamamlanır.",
+          phase2_item1_desc: "Kimlik ve lisans doğrulanır.",
+          phase2_item2_title: "Araç pazaryeri açılır.",
+          phase2_item2_desc: "Seçim ve kiralama akışı çalışır.",
+          phase2_item3_title: "Araç sahibi paneli devreye alınır.",
+          phase2_item3_desc: "Talepler hızlıca yönetilir.",
+          phase2_item4_title: "Belge depolama güvenle kurulur.",
+          phase2_item4_desc: "Güvenli yükleme alanı sağlanır.",
+          phase3_badge: "Faz 3",
+          phase3_title: "Finans ve cüzdan sistemi kurulur.",
+          phase3_chip_days: "42 günde tamamlanır",
+          phase3_chip_buffer: "Zaman payı: +%20",
+          phase3_intro: "Ödeme akışı ve komisyon hesapları bu fazda kurulur.",
+          phase3_item1_title: "Cüzdan akışı netleşir.",
+          phase3_item1_desc: "Gelir ve hareket izlenir.",
+          phase3_item2_title: "Paylaşım ve komisyon hesapları çalışır.",
+          phase3_item2_desc: "Komisyon dağılımı otomatikleşir.",
+          phase3_item3_title: "Ödeme sistemi devreye alınır.",
+          phase3_item3_desc: "Para giriş-çıkış yönetilir.",
+          phase3_item4_title: "Finans kontrol paneli kurulur.",
+          phase3_item4_desc: "Raporlama ve denetim sağlanır.",
+          phase4_badge: "Faz 4",
+          phase4_title: "Denetim ve yönetim süreçleri güçlenir.",
+          phase4_chip_days: "37 günde tamamlanır",
+          phase4_chip_buffer: "Zaman payı: +%20",
+          phase4_intro:
+            "Güvenlik ve uyumluluk için kontrol katmanı güçlendirilir.",
+          phase4_item1_title: "Belge onay merkezi işletilir.",
+          phase4_item1_desc: "Onay ve red akışı hızlanır.",
+          phase4_item2_title: "Kullanıcı yönetimi merkezileşir.",
+          phase4_item2_desc: "Sürücü ve sahip yönetimi kolaylaşır.",
+          phase4_item3_title: "Raporlama görünür kılınır.",
+          phase4_item3_desc: "Özet ve çıktı yönetimi sağlanır.",
+          phase4_item4_title: "Destek ve iletişim akışı kurulur.",
+          phase4_item4_desc: "Talep ve mesaj takibi yapılır.",
+          phase5_badge: "Faz 5",
+          phase5_title: "İleri seviye otomasyon devreye alınır.",
+          phase5_chip_days: "43 günde tamamlanır",
+          phase5_chip_buffer: "Zaman payı: +%20",
+          phase5_intro: "Ölçeklenebilir büyüme için ileri otomasyonlar uygulanır.",
+          phase5_item1_title: "Canlı takip aktif edilir.",
+          phase5_item1_desc: "Anlık konum izleme sağlanır.",
+          phase5_item2_title: "Vergi otomasyonu kurulur.",
+          phase5_item2_desc: "Fatura ve beyan süreçleri hızlanır.",
+          phase5_item3_title: "Bölge uyarıları otomatikleşir.",
+          phase5_item3_desc: "İhlal bildirimleri anında iletilir.",
+          final_badge: "Genel Özet",
+          final_title: "Yol haritası netleşir.",
+          final_intro:
+            "Kademeli büyüme ile kontrollü çıkış ve tam ürünleşme hedeflenir.",
+          final_item1_title: "3 - 4 ayda canlıya çıkılır, kayıtlar açılır.",
+          final_item1_desc:
+            "İlk kullanıcı akışları yayına alınır, kayıtlar başlar.",
+          final_item2_title: "5 - 6 ayda pazarda aktif büyüme sağlanır.",
+          final_item2_desc: "Operasyon büyür, gelir akışı istikrar kazanır.",
+          final_item3_title: "9 - 10 ayda tam ürün kapsamına geçilir.",
+          final_item3_desc:
+            "Gelişmiş otomasyonlar devreye alınır, ürün tamamlanır.",
+        },
+        en: {
+          page_title: "TVDE HUB | Business Plan Presentation",
+          hero_subtitle: "We present the plan that turns mobility into revenue.",
+          click_hint: "CLICK / SCROLL TO ADVANCE",
+          landing_badge: "Intro Section",
+          landing_title: "The landing page sets the first impression.",
+          landing_intro:
+            "It communicates value, trust, and partner growth at a glance.",
+          landing_content_label: "Key points at a glance.",
+          landing_item1_title: "A single message drives action.",
+          landing_item1_desc: "Focused entry, decisive next step.",
+          landing_item2_title: "Visitors are routed to the right role.",
+          landing_item2_desc:
+            "Clear paths for drivers, owners, investors, and pricing.",
+          landing_item3_title: "Language choice strengthens the experience.",
+          landing_item3_desc: "English, Portuguese, and Turkish are available.",
+          landing_item4_title: "Trust and legal context stay visible.",
+          landing_item4_desc:
+            "Contacts, platform links, and agreements are explicit.",
+          how_it_works_label: "Partner Flow at a Glance",
+          how_it_works_title: "Partner onboarding completes in 6 steps.",
+          how_it_works_desc:
+            "Phone verification -> document check -> license approval -> vehicle selection -> shift plan -> earnings & tax",
+          driver_badge: "Driver Section",
+          driver_title: "The driver dashboard centralizes the full journey.",
+          driver_intro:
+            "Verification, operations, and earnings are managed end to end.",
+          driver_item1_title: "Fast and secure access is provided.",
+          driver_item1_desc: "Phone verification unlocks instant entry.",
+          driver_item2_title: "Status is visible at a glance.",
+          driver_item2_desc: "Earnings and performance are summarized.",
+          driver_item3_title: "Critical documents are verified with confidence.",
+          driver_item3_desc: "ID, license, and records in one place.",
+          driver_item4_title: "The right vehicle is found quickly.",
+          driver_item4_desc: "Smart filters match the need.",
+          driver_item5_title: "Shifts are planned with ease.",
+          driver_item5_desc: "Working hours are managed flexibly.",
+          driver_item6_title: "Earnings are tracked clearly.",
+          driver_item6_desc: "History, reports, and exports.",
+          driver_item7_title: "Tax flow stays compliant.",
+          driver_item7_desc: "Receipts and filings are managed.",
+          driver_item8_title: "Communication is consolidated.",
+          driver_item8_desc: "Fast messaging with owners and support.",
+          driver_item9_title: "Profile data stays protected.",
+          driver_item9_desc: "License and payout details are secured.",
+          owner_badge: "Owner Section",
+          owner_title: "The owner dashboard makes the fleet visible.",
+          owner_intro:
+            "Revenue, live locations, and driver performance converge in one view.",
+          owner_item1_title: "Fleet status is clear at a glance.",
+          owner_item1_desc: "Revenue, rentals, and demand overview.",
+          owner_item2_title: "Vehicles are tracked live on the map.",
+          owner_item2_desc: "Real-time location monitoring.",
+          owner_item3_title: "Zone alerts arrive automatically.",
+          owner_item3_desc: "Entry and exit notifications in real time.",
+          owner_item4_title: "Fleet lifecycle is managed end to end.",
+          owner_item4_desc: "Add vehicles, maintain, deactivate.",
+          owner_item5_title: "Driver performance is managed.",
+          owner_item5_desc: "Activity, performance, and assignments.",
+          owner_item6_title: "Financial reporting becomes clear.",
+          owner_item6_desc: "Tax summaries and revenue reports.",
+          admin_badge: "Admin Section",
+          admin_title: "The admin panel centralizes control.",
+          admin_intro:
+            "Finance, documents, and system health are managed from one hub.",
+          admin_item1_title: "System health is monitored continuously.",
+          admin_item1_desc: "Critical metrics and alerts.",
+          admin_item2_title: "Documents are approved quickly.",
+          admin_item2_desc: "Approval and rejection workflows.",
+          admin_item3_title: "Financial flow is managed centrally.",
+          admin_item3_desc: "Escrow accounts and bulk payouts.",
+          admin_item4_title: "Support requests are resolved quickly.",
+          admin_item4_desc: "Requests are classified and handled.",
+          admin_item5_title: "Referral income stays transparent.",
+          admin_item5_desc: "Invite earnings are tracked.",
+          tech_badge: "Technology Section",
+          tech_title: "Technology and integrations rest on a solid base.",
+          tech_intro:
+            "We anchor the build on the front-end plan and the template's server services.",
+          tech_item1_title: "The interface is fast and modern.",
+          tech_item1_desc: "Search visibility is maintained.",
+          tech_item2_title: "The server foundation scales.",
+          tech_item2_desc: "Data, sessions, and integrations are managed.",
+          tech_item3_title: "Real-time tracking is enabled.",
+          tech_item3_desc: "Maps and live streams.",
+          tech_item4_title: "Payments and verification stay secure.",
+          tech_item4_desc: "Transaction flow is protected.",
+          tech_item5_title: "Security and scalability are enforced.",
+          tech_item5_desc: "Encryption, monitoring, and threat protection.",
+          mvp_badge: "Development Strategy",
+          mvp_title: "We start with an MVP to validate fast.",
+          mvp_intro:
+            "An MVP is the smallest working product that delivers core value; it tests the market quickly while keeping risk controlled.",
+          mvp_chip1: "Validates fast",
+          mvp_chip2: "Controls risk",
+          mvp_chip3: "Generates early revenue",
+          mvp_item1_title: "Validation happens early.",
+          mvp_item1_desc: "Guided by real user feedback.",
+          mvp_item2_title: "Risk is split into phases.",
+          mvp_item2_desc: "Delivery stays controlled.",
+          mvp_item3_title: "Revenue starts sooner.",
+          mvp_item3_desc: "Time to market is reduced.",
+          mvp_item4_title: "Improvement is continuous.",
+          mvp_item4_desc: "We iterate with feedback.",
+          mvp_item5_title: "The foundation is strengthened.",
+          mvp_item5_desc: "Infrastructure is made ready.",
+          summary_badge: "Scope Overview",
+          summary_title: "The full scope is summarized on one page.",
+          summary_note: "We manage the work in phases rather than all at once.",
+          summary_item1: "System architecture and data model are defined.",
+          summary_item2: "Secure access and verification are built.",
+          summary_item3: "The design system and intro screens are prepared.",
+          summary_item4: "The server skeleton is established.",
+          summary_item5: "Driver profiles and document handling go live.",
+          summary_item6: "The vehicle marketplace and rental flow are designed.",
+          summary_item7: "The owner dashboard and request handling are built.",
+          summary_item8: "Document storage and management are secured.",
+          summary_item9: "The wallet and transaction flow are established.",
+          summary_item10: "Commission and revenue splits are clarified.",
+          summary_item11: "Payments and payouts are implemented.",
+          summary_item12: "The admin finance control panel is built.",
+          summary_item13: "The document approval center is opened.",
+          summary_item14: "User management is configured.",
+          summary_item15: "Reporting and exports are delivered.",
+          summary_item16: "Support and messaging channels are set up.",
+          summary_item17: "Live tracking and map systems go live.",
+          summary_item18: "Tax automation is prepared.",
+          summary_item19: "Zone alerts are designed.",
+          phase1_badge: "Phase 1",
+          phase1_title: "Foundation and core setup are completed.",
+          phase1_chip_days: "Completed in 28 days",
+          phase1_chip_buffer: "Time buffer: +20%",
+          phase1_intro: "Access and core structures are established in this phase.",
+          phase1_item1_title: "Data architecture is designed.",
+          phase1_item1_desc: "Relationships and flow design are defined.",
+          phase1_item2_title: "Secure access is built.",
+          phase1_item2_desc: "The authentication baseline is set.",
+          phase1_item3_title: "The design foundation is formed.",
+          phase1_item3_desc: "Components and visual language are aligned.",
+          phase1_item4_title: "The server skeleton is built.",
+          phase1_item4_desc: "Core services are prepared.",
+          phase2_badge: "Phase 2",
+          phase2_title: "The operational core goes live.",
+          phase2_chip_days: "Completed in 43 days",
+          phase2_chip_buffer: "Time buffer: +20%",
+          phase2_intro: "Rental and profile management become fully operational.",
+          phase2_item1_title: "Driver profiles and documents are completed.",
+          phase2_item1_desc: "Identity and license verification are in place.",
+          phase2_item2_title: "The vehicle marketplace opens.",
+          phase2_item2_desc: "Selection and rental flow go live.",
+          phase2_item3_title: "The owner dashboard is launched.",
+          phase2_item3_desc: "Requests are handled quickly.",
+          phase2_item4_title: "Document storage is secured.",
+          phase2_item4_desc: "A safe upload space is provided.",
+          phase3_badge: "Phase 3",
+          phase3_title: "The finance and wallet system is built.",
+          phase3_chip_days: "Completed in 42 days",
+          phase3_chip_buffer: "Time buffer: +20%",
+          phase3_intro: "Payment flow and commission logic are established here.",
+          phase3_item1_title: "Wallet flow is clarified.",
+          phase3_item1_desc: "Earnings and activity are tracked.",
+          phase3_item2_title: "Revenue splits and commissions go live.",
+          phase3_item2_desc: "Distribution is automated.",
+          phase3_item3_title: "The payment system is activated.",
+          phase3_item3_desc: "Money in and out is managed.",
+          phase3_item4_title: "The finance control panel is built.",
+          phase3_item4_desc: "Reporting and audit are enabled.",
+          phase4_badge: "Phase 4",
+          phase4_title: "Audit and governance are strengthened.",
+          phase4_chip_days: "Completed in 37 days",
+          phase4_chip_buffer: "Time buffer: +20%",
+          phase4_intro:
+            "The control layer for security and compliance is reinforced.",
+          phase4_item1_title: "The document approval center goes live.",
+          phase4_item1_desc: "Approval and rejection flow is streamlined.",
+          phase4_item2_title: "User management is centralized.",
+          phase4_item2_desc: "Driver and owner management is simplified.",
+          phase4_item3_title: "Reporting becomes visible.",
+          phase4_item3_desc: "Summaries and exports are delivered.",
+          phase4_item4_title: "Support and communication are established.",
+          phase4_item4_desc: "Requests and messages are tracked.",
+          phase5_badge: "Phase 5",
+          phase5_title: "Advanced automation goes live.",
+          phase5_chip_days: "Completed in 43 days",
+          phase5_chip_buffer: "Time buffer: +20%",
+          phase5_intro: "Advanced automation is applied for scalable growth.",
+          phase5_item1_title: "Live tracking is activated.",
+          phase5_item1_desc: "Real-time location monitoring is enabled.",
+          phase5_item2_title: "Tax automation is implemented.",
+          phase5_item2_desc: "Invoicing and filing accelerate.",
+          phase5_item3_title: "Zone alerts are automated.",
+          phase5_item3_desc: "Violation notifications are delivered instantly.",
+          final_badge: "Overall Summary",
+          final_title: "The roadmap is clear.",
+          final_intro: "We launch in phases to reach full product maturity.",
+          final_item1_title:
+            "In 3 - 4 months, we go live and open registrations.",
+          final_item1_desc: "First user flows launch and registrations begin.",
+          final_item2_title:
+            "In 5 - 6 months, active market growth begins.",
+          final_item2_desc: "Operations scale and revenue stabilizes.",
+          final_item3_title:
+            "In 9 - 10 months, full product scope is reached.",
+          final_item3_desc:
+            "Advanced automations go live and the product reaches full scope.",
+        },
+      };
+
+const langSwitch = document.getElementById("lang-switch");
+            const langButtons = langSwitch.querySelectorAll("button[data-lang]");
+
+            function setLanguage(lang) {
+              const dictionary = translations[lang];
+              if (!dictionary) return;
+              document.documentElement.lang = lang;
+              document.title = dictionary.page_title;
+
+              document.querySelectorAll("[data-i18n]").forEach((element) => {
+                const key = element.dataset.i18n;
+                if (dictionary[key] !== undefined) {
+                  element.textContent = dictionary[key];
+                }
+              });
+
+              langButtons.forEach((button) => {
+                const isActive = button.dataset.lang === lang;
+                button.classList.toggle("active", isActive);
+                button.setAttribute("aria-pressed", isActive ? "true" : "false");
+              });
+
+              localStorage.setItem("tvdehub-lang", lang);
+            }
+
+            const savedLanguage = localStorage.getItem("tvdehub-lang");
+            setLanguage(savedLanguage && translations[savedLanguage] ? savedLanguage : "tr");
+
+            langButtons.forEach((button) => {
+              button.addEventListener("click", (event) => {
+                event.stopPropagation();
+                setLanguage(button.dataset.lang);
+              });
+            });
+
+            langSwitch.addEventListener("click", (event) => {
+              event.stopPropagation();
+            });
+
+            const slides = document.querySelectorAll(".slide");
+            const dotsContainer = document.getElementById("nav-dots");
+            const animatedSlides = new Set();
+            let currentSlide = 0;
+            let isAnimating = false;
+
+            slides.forEach((_, idx) => {
+              const dot = document.createElement("div");
+              dot.className = "nav-dot";
+              dot.dataset.index = idx;
+              if (idx === 0) dot.classList.add("active");
+              dot.addEventListener("click", (event) => {
+                event.stopPropagation();
+                goToSlide(idx);
+              });
+              dotsContainer.appendChild(dot);
+            });
+
+            const dots = document.querySelectorAll(".nav-dot");
+            const totalSlides = slides.length;
+
+            gsap.set("[data-animate]", { opacity: 0, y: 30 });
+
+            function animateSlide(index) {
+              if (animatedSlides.has(index)) return;
+              const elements = slides[index].querySelectorAll("[data-animate]");
+              if (!elements.length) return;
+              gsap.to(elements, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.08,
+                ease: "power3.out",
+              });
+              animatedSlides.add(index);
+            }
+
+            window.onload = () => {
+              animateSlide(0);
+            };
+
+            function goToSlide(targetIndex) {
+              if (isAnimating) return;
+              if (targetIndex < 0 || targetIndex >= totalSlides) return;
+              if (targetIndex === currentSlide) return;
+              currentSlide = targetIndex;
+              updateSlide();
+            }
+
+            function nextSlide() {
+              goToSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+              goToSlide(currentSlide - 1);
+            }
+
+            document.addEventListener("click", (event) => {
+              if (
+                event.target.closest("#lang-switch") ||
+                event.target.closest("#nav-dots") ||
+                event.target.closest("button")
+              ) {
+                return;
+              }
+              nextSlide();
+            });
+
+            function updateSlide() {
+              if (isAnimating) return;
+              isAnimating = true;
+              gsap.to(window, {
+                duration: 1,
+                scrollTo: currentSlide * window.innerHeight,
+                ease: "power4.inOut",
+                onComplete: () => {
+                  isAnimating = false;
+                },
+              });
+
+              dots.forEach((dot, idx) => {
+                dot.classList.toggle("active", idx === currentSlide);
+              });
+
+              animateSlide(currentSlide);
+            }
+
+            window.addEventListener("keydown", (event) => {
+              if (
+                event.key === "ArrowDown" ||
+                event.key === "ArrowRight" ||
+                event.key === " "
+              ) {
+                nextSlide();
+              }
+              if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+                prevSlide();
+              }
+            });
+
+            window.addEventListener(
+              "wheel",
+              (event) => {
+                event.preventDefault();
+                if (event.deltaY > 0) nextSlide();
+                else prevSlide();
+              },
+              { passive: false }
+            );
+
+            window.addEventListener("resize", () => {
+              gsap.set(window, { scrollTo: currentSlide * window.innerHeight });
+            });
+    </script>
+  </body>
+</html>
