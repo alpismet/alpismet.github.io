@@ -2330,6 +2330,17 @@
       const wheelCooldown = 1200;
       const reverseGuard = 1600;
       let suppressClick = false;
+      let touchStartY = 0;
+      let touchStartX = 0;
+      let touchStartTime = 0;
+      const touchThreshold = 40;
+      const tapThreshold = 10;
+      const suppressClickForTouch = () => {
+        suppressClick = true;
+        window.setTimeout(() => {
+          suppressClick = false;
+        }, 400);
+      };
       const onWheel = (event) => {
         const now = Date.now();
         if (isAnimating || now < wheelLockUntil) return;
@@ -2369,6 +2380,43 @@
           return;
         }
         goSlide(1);
+      };
+
+      const onTouchStart = (event) => {
+        if (!event.touches || event.touches.length !== 1) return;
+        const touch = event.touches[0];
+        touchStartY = touch.clientY;
+        touchStartX = touch.clientX;
+        touchStartTime = Date.now();
+      };
+
+      const onTouchEnd = (event) => {
+        if (isAnimating) return;
+        const touch = event.changedTouches && event.changedTouches[0];
+        if (!touch) return;
+        const target = event.target;
+        if (
+          target &&
+          target.closest(
+            "a, button, input, textarea, select, [data-no-advance]"
+          )
+        ) {
+          return;
+        }
+        const deltaY = touch.clientY - touchStartY;
+        const deltaX = touch.clientX - touchStartX;
+        const absY = Math.abs(deltaY);
+        const absX = Math.abs(deltaX);
+        const elapsed = Date.now() - touchStartTime;
+        if (absY < tapThreshold && absX < tapThreshold && elapsed < 600) {
+          suppressClickForTouch();
+          goSlide(1);
+          return;
+        }
+        if (absY > absX && absY > touchThreshold) {
+          suppressClickForTouch();
+          goSlide(deltaY < 0 ? 1 : -1);
+        }
       };
 
       const onMouseUp = () => {
@@ -2504,6 +2552,8 @@
       window.addEventListener("mouseup", onMouseUp);
       window.addEventListener("mousemove", resetIdle, { passive: true });
       window.addEventListener("touchstart", resetIdle, { passive: true });
+      window.addEventListener("touchstart", onTouchStart, { passive: true });
+      window.addEventListener("touchend", onTouchEnd, { passive: true });
       window.addEventListener("resize", () => {
         setViewportHeight();
         gsap.set(deck, { y: -currentSlide * window.innerHeight });
