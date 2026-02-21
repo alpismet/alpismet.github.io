@@ -354,8 +354,151 @@
       }
 
       @media (max-width: 900px) {
+        body {
+          font-size: 14px;
+        }
+        .slide {
+          padding: 3rem 1rem 1rem;
+        }
+        .hero-title {
+          font-size: clamp(2.2rem, 8vw, 3.5rem);
+        }
+        .section-title {
+          font-size: clamp(1.5rem, 5vw, 2rem);
+        }
         .list-card {
-          padding: 1rem 1.1rem;
+          padding: 0.7rem 0.9rem;
+          gap: 0.5rem;
+        }
+        .list-title {
+          font-size: 0.95rem;
+        }
+        .list-desc {
+          font-size: 0.8rem;
+          line-height: 1.25;
+        }
+        .list-stack {
+          gap: 0.5rem;
+        }
+        .list-stack.dense {
+          gap: 0.4rem;
+        }
+        .gap-12 {
+          gap: 1.2rem;
+        }
+        .summary-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.4rem;
+        }
+        .summary-item {
+          padding: 0.4rem 0.5rem;
+          font-size: 0.7rem;
+        }
+        .badge {
+          font-size: 0.6rem;
+          padding: 0.2rem 0.6rem;
+        }
+        .info-chip {
+          font-size: 0.6rem;
+          padding: 0.2rem 0.6rem;
+        }
+        .click-indicator {
+          bottom: 0.8rem;
+          font-size: 8px;
+        }
+        .text-slate-400 {
+          font-size: 0.85rem;
+          margin-top: 0.4rem !important;
+        }
+        .floating {
+          transform: scale(0.5);
+        }
+        .list-card i {
+          width: 15px;
+          height: 15px;
+        }
+        .w-72.h-72 {
+          width: 10rem;
+          height: 10rem;
+        }
+        br {
+          content: "";
+          display: block;
+          margin-top: -0.4rem;
+        }
+      }
+
+      @media (max-height: 850px) and (max-width: 900px) {
+        .slide {
+          padding: 3.5rem 0.8rem 0.5rem;
+        }
+        .section-title {
+          font-size: clamp(1.2rem, 5vw, 1.6rem);
+          margin-top: 0.1rem !important;
+        }
+        .list-card {
+          padding: 0.4rem 0.6rem;
+          border-radius: 0.6rem;
+          gap: 0.4rem;
+        }
+        .list-card i {
+          width: 13px !important;
+          height: 13px !important;
+        }
+        .list-title {
+          font-size: 0.8rem;
+        }
+        .list-desc {
+          font-size: 0.7rem;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          margin-top: 0.1rem;
+        }
+        .list-stack {
+          gap: 0.35rem;
+        }
+        .list-stack.dense {
+          gap: 0.25rem;
+        }
+        .text-slate-400 {
+          font-size: 0.75rem;
+          margin-top: 0.2rem !important;
+          line-height: 1.15;
+          margin-bottom: 0.2rem;
+        }
+        .gap-12 {
+          gap: 0.6rem;
+        }
+        .summary-grid {
+          gap: 0.3rem;
+          margin-top: 0.5rem !important;
+        }
+        .summary-item {
+          font-size: 0.65rem;
+          padding: 0.3rem;
+        }
+        .mt-4 {
+          margin-top: 0.2rem !important;
+        }
+        .mt-6 {
+          margin-top: 0.3rem !important;
+        }
+        .mt-8 {
+          margin-top: 0.4rem !important;
+        }
+        .mt-12 {
+          margin-top: 0.5rem !important;
+        }
+        .badge {
+          font-size: 0.55rem;
+          padding: 0.15rem 0.4rem;
+        }
+        .info-chip {
+          font-size: 0.55rem;
+          padding: 0.15rem 0.4rem;
         }
       }
     </style>
@@ -996,58 +1139,58 @@
               Sistem mimarisi ve veri modeli
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item2">
-              Güvenli giriş ve doğrulama
+              Güvenli giriş ve doğrulama altyapısı kurulur.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item3">
-              Tasarım sistemi ve tanıtım ekranı
+              Tasarım sistemi ve tanıtım ekranları hazırlanır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item4">
-              Sunucu iskeleti
+              Sunucu iskeleti oluşturulur.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item5">
-              Sürücü profili ve belge yönetimi
+              Sürücü profili ve belge yönetimi devreye alınır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item6">
-              Araç pazarı ve kiralama akışı
+              Araç pazarı ve kiralama akışı tasarlanır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item7">
-              Araç sahibi paneli ve talep yönetimi
+              Araç sahibi paneli ve talep yönetimi kurulur.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item8">
-              Doküman depolama ve yönetimi
+              Belge depolama ve yönetimi güvenli hale getirilir.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item9">
-              Cüzdan ve işlem akışı
+              Cüzdan ve işlem akışı oluşturulur.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item10">
-              Komisyon hesapları
+              Komisyon ve paylaşım hesapları netleştirilir.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item11">
-              Ödeme altyapısı ve para çekme
+              Ödeme altyapısı ve para çekme süreçleri kurulur.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item12">
-              Yönetim finans kontrolü
+              Yönetim finans kontrol paneli kurulur.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item13">
-              Belge onay merkezi
+              Belge onay merkezi açılır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item14">
-              Kullanıcı yönetimi
+              Kullanıcı yönetimi yapılandırılır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item15">
-              Raporlama ve dışa aktarma
+              Raporlama ve dışa aktarma sağlanır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item16">
-              Destek ve mesajlaşma
+              Destek ve mesajlaşma kanalları kurulur.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item17">
-              Canlı takip ve harita
+              Canlı takip ve harita sistemi devreye alınır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item18">
-              Vergi otomasyonu
+              Vergi otomasyonu hazırlanır.
             </div>
             <div class="summary-item" data-animate data-i18n="summary_item19">
-              Bölge uyarıları
+              Bölge uyarıları kurgulanır.
             </div>
           </div>
         </div>
@@ -1073,7 +1216,7 @@
             </h2>
             <div class="flex flex-wrap gap-3 mt-6" data-animate>
               <span class="info-chip sky" data-i18n="phase1_chip_days">
-                28 Gün
+                28 İş Günü
               </span>
               <span class="info-chip" data-i18n="phase1_chip_buffer">
                 +%20 Güven Payı
@@ -1084,7 +1227,9 @@
               data-animate
               data-i18n="phase1_intro"
             >
-              Sisteme giriş ve temel yapıların kurulduğu başlangıç fazı.
+              Tüm var olan proje yapısının tamamen devredilmesinden sonra , yeni
+              projenin ilk commit işleminin yapılması proje başlangıcı sayılır.
+              Giriş ve temel yapılar bu fazda kurulur.
             </p>
           </div>
           <div class="list-stack">
@@ -1160,7 +1305,7 @@
             </h2>
             <div class="flex flex-wrap gap-3 mt-6" data-animate>
               <span class="info-chip orange" data-i18n="phase2_chip_days">
-                43 Gün
+                43 İş Günü
               </span>
               <span class="info-chip" data-i18n="phase2_chip_buffer">
                 +%20 Güven Payı
@@ -1247,7 +1392,7 @@
             </h2>
             <div class="flex flex-wrap gap-3 mt-6" data-animate>
               <span class="info-chip purple" data-i18n="phase3_chip_days">
-                42 Gün
+                42 İş Günü
               </span>
               <span class="info-chip" data-i18n="phase3_chip_buffer">
                 +%20 Güven Payı
@@ -1334,7 +1479,7 @@
             </h2>
             <div class="flex flex-wrap gap-3 mt-6" data-animate>
               <span class="info-chip emerald" data-i18n="phase4_chip_days">
-                37 Gün
+                37 İş Günü
               </span>
               <span class="info-chip" data-i18n="phase4_chip_buffer">
                 +%20 Güven Payı
@@ -1417,7 +1562,7 @@
             </h2>
             <div class="flex flex-wrap gap-3 mt-6" data-animate>
               <span class="info-chip rose" data-i18n="phase5_chip_days">
-                43 Gün
+                43 İş Günü
               </span>
               <span class="info-chip" data-i18n="phase5_chip_buffer">
                 +%20 Güven Payı
@@ -1597,7 +1742,8 @@
           owner_item6_desc: "Vergi özetleri ve gelir raporları.",
           admin_badge: "Yönetim Bölümü",
           admin_title: "Yönetim paneli tüm kontrolü merkezileştirir.",
-          admin_intro: "Finans, belge ve sistem sağlığı tek merkezden kontrol edilir.",
+          admin_intro:
+            "Finans, belge ve sistem sağlığı tek merkezden kontrol edilir.",
           admin_item1_title: "Sistem sağlığı sürekli izlenir.",
           admin_item1_desc: "Kritik metrikler ve uyarılar.",
           admin_item2_title: "Belgeler hızlıca onaylanır.",
@@ -1641,7 +1787,8 @@
           mvp_item5_desc: "Altyapı hazır hale gelir.",
           summary_badge: "Kapsam Özeti",
           summary_title: "Tüm kapsam tek sayfada netleşir.",
-          summary_note: "İşleri tek seferde değil, fazlara bölerek yönetiyoruz.",
+          summary_note:
+            "İşleri tek seferde değil, fazlara bölerek yönetiyoruz.",
           summary_item1: "Sistem mimarisi ve veri modeli kurulur.",
           summary_item2: "Güvenli giriş ve doğrulama altyapısı kurulur.",
           summary_item3: "Tasarım sistemi ve tanıtım ekranları hazırlanır.",
@@ -1663,9 +1810,10 @@
           summary_item19: "Bölge uyarıları kurgulanır.",
           phase1_badge: "Faz 1",
           phase1_title: "Altyapı ve temel kurulum tamamlanır.",
-          phase1_chip_days: "28 günde tamamlanır",
+          phase1_chip_days: "28 iş gününde tamamlanır",
           phase1_chip_buffer: "Zaman payı: +%20",
-          phase1_intro: "Giriş ve temel yapılar bu fazda kurulur.",
+          phase1_intro:
+            "Tüm var olan proje yapısının tamamen devredilmesinden sonra , yeni projenin ilk commit işleminin yapılması proje başlangıcı sayılır. Giriş ve temel yapılar bu fazda kurulur.",
           phase1_item1_title: "Veri mimarisi planlanır.",
           phase1_item1_desc: "İlişkiler ve akış tasarımı yapılır.",
           phase1_item2_title: "Güvenli giriş kurulur.",
@@ -1676,7 +1824,7 @@
           phase1_item4_desc: "Temel servisler hazırlanır.",
           phase2_badge: "Faz 2",
           phase2_title: "Operasyonel çekirdek devreye alınır.",
-          phase2_chip_days: "43 günde tamamlanır",
+          phase2_chip_days: "43 iş gününde tamamlanır",
           phase2_chip_buffer: "Zaman payı: +%20",
           phase2_intro: "Kiralama ve profil yönetimi çalışır hale gelir.",
           phase2_item1_title: "Sürücü profili ve belgeler tamamlanır.",
@@ -1689,7 +1837,7 @@
           phase2_item4_desc: "Güvenli yükleme alanı sağlanır.",
           phase3_badge: "Faz 3",
           phase3_title: "Finans ve cüzdan sistemi kurulur.",
-          phase3_chip_days: "42 günde tamamlanır",
+          phase3_chip_days: "42 iş gününde tamamlanır",
           phase3_chip_buffer: "Zaman payı: +%20",
           phase3_intro: "Ödeme akışı ve komisyon hesapları bu fazda kurulur.",
           phase3_item1_title: "Cüzdan akışı netleşir.",
@@ -1702,7 +1850,7 @@
           phase3_item4_desc: "Raporlama ve denetim sağlanır.",
           phase4_badge: "Faz 4",
           phase4_title: "Denetim ve yönetim süreçleri güçlenir.",
-          phase4_chip_days: "37 günde tamamlanır",
+          phase4_chip_days: "37 iş gününde tamamlanır",
           phase4_chip_buffer: "Zaman payı: +%20",
           phase4_intro:
             "Güvenlik ve uyumluluk için kontrol katmanı güçlendirilir.",
@@ -1716,9 +1864,10 @@
           phase4_item4_desc: "Talep ve mesaj takibi yapılır.",
           phase5_badge: "Faz 5",
           phase5_title: "İleri seviye otomasyon devreye alınır.",
-          phase5_chip_days: "43 günde tamamlanır",
+          phase5_chip_days: "43 iş gününde tamamlanır",
           phase5_chip_buffer: "Zaman payı: +%20",
-          phase5_intro: "Ölçeklenebilir büyüme için ileri otomasyonlar uygulanır.",
+          phase5_intro:
+            "Ölçeklenebilir büyüme için ileri otomasyonlar uygulanır.",
           phase5_item1_title: "Canlı takip aktif edilir.",
           phase5_item1_desc: "Anlık konum izleme sağlanır.",
           phase5_item2_title: "Vergi otomasyonu kurulur.",
@@ -1740,7 +1889,8 @@
         },
         en: {
           page_title: "TVDE HUB | Business Plan Presentation",
-          hero_subtitle: "We present the plan that turns mobility into revenue.",
+          hero_subtitle:
+            "We present the plan that turns mobility into revenue.",
           click_hint: "CLICK / SCROLL TO ADVANCE",
           landing_badge: "Intro Section",
           landing_title: "The landing page sets the first impression.",
@@ -1769,7 +1919,8 @@
           driver_item1_desc: "Phone verification unlocks instant entry.",
           driver_item2_title: "Status is visible at a glance.",
           driver_item2_desc: "Earnings and performance are summarized.",
-          driver_item3_title: "Critical documents are verified with confidence.",
+          driver_item3_title:
+            "Critical documents are verified with confidence.",
           driver_item3_desc: "ID, license, and records in one place.",
           driver_item4_title: "The right vehicle is found quickly.",
           driver_item4_desc: "Smart filters match the need.",
@@ -1852,7 +2003,8 @@
           summary_item3: "The design system and intro screens are prepared.",
           summary_item4: "The server skeleton is established.",
           summary_item5: "Driver profiles and document handling go live.",
-          summary_item6: "The vehicle marketplace and rental flow are designed.",
+          summary_item6:
+            "The vehicle marketplace and rental flow are designed.",
           summary_item7: "The owner dashboard and request handling are built.",
           summary_item8: "Document storage and management are secured.",
           summary_item9: "The wallet and transaction flow are established.",
@@ -1868,9 +2020,10 @@
           summary_item19: "Zone alerts are designed.",
           phase1_badge: "Phase 1",
           phase1_title: "Foundation and core setup are completed.",
-          phase1_chip_days: "Completed in 28 days",
+          phase1_chip_days: "Completed in 28 business days",
           phase1_chip_buffer: "Time buffer: +20%",
-          phase1_intro: "Access and core structures are established in this phase.",
+          phase1_intro:
+            "After the complete handover of all existing project structures, the first commit of the new project is considered the project start. Access and core structures are established in this phase.",
           phase1_item1_title: "Data architecture is designed.",
           phase1_item1_desc: "Relationships and flow design are defined.",
           phase1_item2_title: "Secure access is built.",
@@ -1881,9 +2034,10 @@
           phase1_item4_desc: "Core services are prepared.",
           phase2_badge: "Phase 2",
           phase2_title: "The operational core goes live.",
-          phase2_chip_days: "Completed in 43 days",
+          phase2_chip_days: "Completed in 43 business days",
           phase2_chip_buffer: "Time buffer: +20%",
-          phase2_intro: "Rental and profile management become fully operational.",
+          phase2_intro:
+            "Rental and profile management become fully operational.",
           phase2_item1_title: "Driver profiles and documents are completed.",
           phase2_item1_desc: "Identity and license verification are in place.",
           phase2_item2_title: "The vehicle marketplace opens.",
@@ -1894,9 +2048,10 @@
           phase2_item4_desc: "A safe upload space is provided.",
           phase3_badge: "Phase 3",
           phase3_title: "The finance and wallet system is built.",
-          phase3_chip_days: "Completed in 42 days",
+          phase3_chip_days: "Completed in 42 business days",
           phase3_chip_buffer: "Time buffer: +20%",
-          phase3_intro: "Payment flow and commission logic are established here.",
+          phase3_intro:
+            "Payment flow and commission logic are established here.",
           phase3_item1_title: "Wallet flow is clarified.",
           phase3_item1_desc: "Earnings and activity are tracked.",
           phase3_item2_title: "Revenue splits and commissions go live.",
@@ -1907,7 +2062,7 @@
           phase3_item4_desc: "Reporting and audit are enabled.",
           phase4_badge: "Phase 4",
           phase4_title: "Audit and governance are strengthened.",
-          phase4_chip_days: "Completed in 37 days",
+          phase4_chip_days: "Completed in 37 business days",
           phase4_chip_buffer: "Time buffer: +20%",
           phase4_intro:
             "The control layer for security and compliance is reinforced.",
@@ -1921,7 +2076,7 @@
           phase4_item4_desc: "Requests and messages are tracked.",
           phase5_badge: "Phase 5",
           phase5_title: "Advanced automation goes live.",
-          phase5_chip_days: "Completed in 43 days",
+          phase5_chip_days: "Completed in 43 business days",
           phase5_chip_buffer: "Time buffer: +20%",
           phase5_intro: "Advanced automation is applied for scalable growth.",
           phase5_item1_title: "Live tracking is activated.",
@@ -1936,168 +2091,177 @@
           final_item1_title:
             "In 3 - 4 months, we go live and open registrations.",
           final_item1_desc: "First user flows launch and registrations begin.",
-          final_item2_title:
-            "In 5 - 6 months, active market growth begins.",
+          final_item2_title: "In 5 - 6 months, active market growth begins.",
           final_item2_desc: "Operations scale and revenue stabilizes.",
-          final_item3_title:
-            "In 9 - 10 months, full product scope is reached.",
+          final_item3_title: "In 9 - 10 months, full product scope is reached.",
           final_item3_desc:
             "Advanced automations go live and the product reaches full scope.",
         },
       };
 
-const langSwitch = document.getElementById("lang-switch");
-            const langButtons = langSwitch.querySelectorAll("button[data-lang]");
+      const langSwitch = document.getElementById("lang-switch");
+      const langButtons = langSwitch.querySelectorAll("button[data-lang]");
 
-            function setLanguage(lang) {
-              const dictionary = translations[lang];
-              if (!dictionary) return;
-              document.documentElement.lang = lang;
-              document.title = dictionary.page_title;
+      function setLanguage(lang) {
+        const dictionary = translations[lang];
+        if (!dictionary) return;
+        document.documentElement.lang = lang;
+        document.title = dictionary.page_title;
 
-              document.querySelectorAll("[data-i18n]").forEach((element) => {
-                const key = element.dataset.i18n;
-                if (dictionary[key] !== undefined) {
-                  element.textContent = dictionary[key];
-                }
-              });
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.dataset.i18n;
+          if (dictionary[key] !== undefined) {
+            element.textContent = dictionary[key];
+          }
+        });
 
-              langButtons.forEach((button) => {
-                const isActive = button.dataset.lang === lang;
-                button.classList.toggle("active", isActive);
-                button.setAttribute("aria-pressed", isActive ? "true" : "false");
-              });
+        langButtons.forEach((button) => {
+          const isActive = button.dataset.lang === lang;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
 
-              localStorage.setItem("tvdehub-lang", lang);
-            }
+        localStorage.setItem("tvdehub-lang", lang);
+      }
 
-            const savedLanguage = localStorage.getItem("tvdehub-lang");
-            setLanguage(savedLanguage && translations[savedLanguage] ? savedLanguage : "tr");
+      const savedLanguage = localStorage.getItem("tvdehub-lang");
+      setLanguage(
+        savedLanguage && translations[savedLanguage] ? savedLanguage : "tr",
+      );
 
-            langButtons.forEach((button) => {
-              button.addEventListener("click", (event) => {
-                event.stopPropagation();
-                setLanguage(button.dataset.lang);
-              });
-            });
+      langButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          setLanguage(button.dataset.lang);
+        });
+      });
 
-            langSwitch.addEventListener("click", (event) => {
-              event.stopPropagation();
-            });
+      langSwitch.addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
 
-            const slides = document.querySelectorAll(".slide");
-            const dotsContainer = document.getElementById("nav-dots");
-            const animatedSlides = new Set();
-            let currentSlide = 0;
-            let isAnimating = false;
+      const slides = document.querySelectorAll(".slide");
+      const dotsContainer = document.getElementById("nav-dots");
+      const animatedSlides = new Set();
+      let currentSlide = 0;
+      let isAnimating = false;
 
-            slides.forEach((_, idx) => {
-              const dot = document.createElement("div");
-              dot.className = "nav-dot";
-              dot.dataset.index = idx;
-              if (idx === 0) dot.classList.add("active");
-              dot.addEventListener("click", (event) => {
-                event.stopPropagation();
-                goToSlide(idx);
-              });
-              dotsContainer.appendChild(dot);
-            });
+      slides.forEach((_, idx) => {
+        const dot = document.createElement("div");
+        dot.className = "nav-dot";
+        dot.dataset.index = idx;
+        if (idx === 0) dot.classList.add("active");
+        dot.addEventListener("click", (event) => {
+          event.stopPropagation();
+          goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+      });
 
-            const dots = document.querySelectorAll(".nav-dot");
-            const totalSlides = slides.length;
+      const dots = document.querySelectorAll(".nav-dot");
+      const totalSlides = slides.length;
 
-            gsap.set("[data-animate]", { opacity: 0, y: 30 });
+      gsap.set("[data-animate]", { opacity: 0, y: 30 });
 
-            function animateSlide(index) {
-              if (animatedSlides.has(index)) return;
-              const elements = slides[index].querySelectorAll("[data-animate]");
-              if (!elements.length) return;
-              gsap.to(elements, {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.08,
-                ease: "power3.out",
-              });
-              animatedSlides.add(index);
-            }
+      function animateSlide(index) {
+        if (animatedSlides.has(index)) return;
+        const elements = slides[index].querySelectorAll("[data-animate]");
+        if (!elements.length) return;
+        gsap.to(elements, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.08,
+          ease: "power3.out",
+        });
+        animatedSlides.add(index);
+      }
 
-            window.onload = () => {
-              animateSlide(0);
-            };
+      window.onload = () => {
+        animateSlide(0);
+      };
 
-            function goToSlide(targetIndex) {
-              if (isAnimating) return;
-              if (targetIndex < 0 || targetIndex >= totalSlides) return;
-              if (targetIndex === currentSlide) return;
-              currentSlide = targetIndex;
-              updateSlide();
-            }
+      function goToSlide(targetIndex) {
+        if (isAnimating) return;
+        if (targetIndex < 0 || targetIndex >= totalSlides) return;
+        if (targetIndex === currentSlide) return;
+        currentSlide = targetIndex;
+        updateSlide();
+      }
 
-            function nextSlide() {
-              goToSlide(currentSlide + 1);
-            }
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
 
-            function prevSlide() {
-              goToSlide(currentSlide - 1);
-            }
+      function prevSlide() {
+        goToSlide(currentSlide - 1);
+      }
 
-            document.addEventListener("click", (event) => {
-              if (
-                event.target.closest("#lang-switch") ||
-                event.target.closest("#nav-dots") ||
-                event.target.closest("button")
-              ) {
-                return;
-              }
-              nextSlide();
-            });
+      document.addEventListener("click", (event) => {
+        if (
+          event.target.closest("#lang-switch") ||
+          event.target.closest("#nav-dots") ||
+          event.target.closest("button")
+        ) {
+          return;
+        }
+        nextSlide();
+      });
 
-            function updateSlide() {
-              if (isAnimating) return;
-              isAnimating = true;
-              gsap.to(window, {
-                duration: 1,
-                scrollTo: currentSlide * window.innerHeight,
-                ease: "power4.inOut",
-                onComplete: () => {
-                  isAnimating = false;
-                },
-              });
+      function updateSlide() {
+        if (isAnimating) return;
+        isAnimating = true;
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: currentSlide * window.innerHeight,
+          ease: "power4.inOut",
+          onComplete: () => {
+            isAnimating = false;
+          },
+        });
 
-              dots.forEach((dot, idx) => {
-                dot.classList.toggle("active", idx === currentSlide);
-              });
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle("active", idx === currentSlide);
+        });
 
-              animateSlide(currentSlide);
-            }
+        animateSlide(currentSlide);
+      }
 
-            window.addEventListener("keydown", (event) => {
-              if (
-                event.key === "ArrowDown" ||
-                event.key === "ArrowRight" ||
-                event.key === " "
-              ) {
-                nextSlide();
-              }
-              if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
-                prevSlide();
-              }
-            });
+      window.addEventListener("keydown", (event) => {
+        if (
+          event.key === "ArrowDown" ||
+          event.key === "ArrowRight" ||
+          event.key === " "
+        ) {
+          nextSlide();
+        }
+        if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+          prevSlide();
+        }
+      });
 
-            window.addEventListener(
-              "wheel",
-              (event) => {
-                event.preventDefault();
-                if (event.deltaY > 0) nextSlide();
-                else prevSlide();
-              },
-              { passive: false }
-            );
+      let scrollTimeout;
+      window.addEventListener(
+        "wheel",
+        (event) => {
+          event.preventDefault();
+          if (scrollTimeout) return;
 
-            window.addEventListener("resize", () => {
-              gsap.set(window, { scrollTo: currentSlide * window.innerHeight });
-            });
+          if (Math.abs(event.deltaY) > 10) {
+            if (event.deltaY > 0) nextSlide();
+            else prevSlide();
+
+            scrollTimeout = setTimeout(() => {
+              scrollTimeout = null;
+            }, 800);
+          }
+        },
+        { passive: false },
+      );
+
+      window.addEventListener("resize", () => {
+        gsap.set(window, { scrollTo: currentSlide * window.innerHeight });
+      });
     </script>
   </body>
 </html>
