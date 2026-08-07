@@ -5419,7 +5419,13 @@ body[data-yardim='1'] .yardim { opacity: 1; visibility: visible; }
   govde.dataset.yardim = '0';
   govde.dataset.ozet = '0';
   ozetKur();
-  dilUygula(dilBelirle(), { url: false, kaydet: false });
+  /* Açılışta seçim kaydedilmez (tarayıcı dili tercihi bozulmasın) ama adres
+     çubuğu normalize EDİLİR: eski `?dil=` bağlantısı `?lang=` olarak yeniden
+     yazılır, böylece paylaşılan her adres İngilizce parametre taşır. */
+  dilUygula(dilBelirle(), {
+    url: new URLSearchParams(window.location.search).has('dil'),
+    kaydet: false,
+  });
 
   /* Açılıştaki gizleme de aynı zamanlayıcıyı kullanır; aksi hâlde imleç
      kontrollerin üzerindeyken bile tetikleniyordu. */
