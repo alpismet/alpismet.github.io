@@ -4588,7 +4588,7 @@ body[data-yardim='1'] .yardim { opacity: 1; visibility: visible; }
   let kilitSaat = 0;
   let girisSaat = 0;
 
-  const GECIS_MS = () => (azHareket.matches ? 160 : 740);
+  const GECIS_MS = () => (document.documentElement.dataset.hafif === '1' ? 160 : 740);
 
   /* ======================================================= analitik === */
   /* Vercel Web Analytics — yalnız deck.motorista.club'ta yüklenir (bkz.
@@ -4794,8 +4794,18 @@ body[data-yardim='1'] .yardim { opacity: 1; visibility: visible; }
     /* Sıçramalarda hedef önce boyanır, sonra bir kare beklenip durum yazılır;
        böylece geçiş her zaman animasyonlu başlar. */
     const uzak = Math.abs(hedef - eski) > 1;
-    slaytlar[hedef].dataset.mount = '1';
-    if (eski >= 0) slaytlar[eski].dataset.mount = '1';
+
+    /* Bağlama ANINDA sınırlanır: yalnız hedef ve çıkan slayt boyalı kalır.
+       Eskiden hedef+eski eklenip temizlik `pencereGuncelle` ile geçiş
+       sonuna bırakılıyordu; ama her yeni git() temizlik zamanlayıcısını
+       sıfırladığı için hızlı kaydırmada temizlik hiç çalışmıyordu ve
+       ziyaret edilen her slayt boyalı kalıyordu. Yirmi slayt × 1556×806
+       kompozit katman ≈ 96 MB — iOS Safari sekmeyi öldürüyordu. Kullanıcı
+       bunu "kaydırınca sayfa kendini yeniden yüklüyor" olarak görüyordu. */
+    for (let i = 0; i < toplam; i += 1) {
+      if (i === hedef || i === eski) slaytlar[i].dataset.mount = '1';
+      else slaytlar[i].removeAttribute('data-mount');
+    }
 
     const uygula = () => {
       slaytlar.forEach((s) => s.removeAttribute('data-enter'));
